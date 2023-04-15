@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,41 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBmeYTZVPxFNLcfPOzy7ASAPnMn3aKx2to',
-    appId: '1:32975817049:web:6393c740de1b6eb80a6448',
-    messagingSenderId: '32975817049',
-    projectId: 'repege-project',
-    authDomain: 'repege-project.firebaseapp.com',
-    storageBucket: 'repege-project.appspot.com',
-    measurementId: 'G-8PYMHY22R0',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA_trwQBvtlZ4S_trlWGIDRQCpGpAlbKGA',
     appId: '1:32975817049:android:3f64b36c8d304ace0a6448',
     messagingSenderId: '32975817049',
     projectId: 'repege-project',
     storageBucket: 'repege-project.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDT_W-YM9JH_poWjj5pA2uIHzRPlhP_odc',
-    appId: '1:32975817049:ios:9f1672c1630141d90a6448',
-    messagingSenderId: '32975817049',
-    projectId: 'repege-project',
-    storageBucket: 'repege-project.appspot.com',
-    iosClientId: '32975817049-tbhlj7hv44im3l06dr40naie35ua890i.apps.googleusercontent.com',
-    iosBundleId: 'com.example.tcc',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDT_W-YM9JH_poWjj5pA2uIHzRPlhP_odc',
-    appId: '1:32975817049:ios:9f1672c1630141d90a6448',
-    messagingSenderId: '32975817049',
-    projectId: 'repege-project',
-    storageBucket: 'repege-project.appspot.com',
-    iosClientId: '32975817049-tbhlj7hv44im3l06dr40naie35ua890i.apps.googleusercontent.com',
-    iosBundleId: 'com.example.tcc',
   );
 }

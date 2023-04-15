@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/pages/home_page.dart';
-import 'package:tcc/pages/login_page.dart';
-import 'package:tcc/pages/register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tcc/pages/login_page.dart';
+import 'package:tcc/themes/dark_theme.dart';
+import 'package:tcc/themes/light_theme.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -22,6 +22,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LoginPage();
+    return MaterialApp(
+      title: 'RepeGe',
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
+      home: const LoginPage(),
+    );
   }
 }
