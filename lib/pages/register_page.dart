@@ -1,12 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tcc/components/app_title.dart';
 import 'package:tcc/components/full_screen_scroll.dart';
 import 'package:tcc/components/handlers/error_handler.dart';
-import 'package:tcc/components/helpers/auth_stream_helper.dart';
+import 'package:tcc/components/helpers/loading_stream_helper.dart';
+import 'package:tcc/pages/home_page.dart';
 import 'package:tcc/pages/login_page.dart';
 import 'package:tcc/services/auth_service.dart';
+import 'package:tcc/utils/not_verified_snackbar.dart';
 import 'package:tcc/utils/validations/email_validation.dart';
-import 'package:tcc/utils/validations/password_validation.dart';
 import 'package:tcc/utils/validations/required_validation.dart';
 import 'package:tcc/utils/validations/validations.dart';
 
@@ -24,6 +26,26 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Exception? _error;
 
+  StreamSubscription? _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = AuthService().userChanges.listen((user) {
+      if (user != null) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (ctx) => const HomePage(),
+        ));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
   Future<void> _handleSubmit() async {
     if (_formKey.currentState == null) return;
     _formKey.currentState!.save();
@@ -38,37 +60,19 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _formData['password'] as String,
       );
 
-      _openModal();
+      if (context.mounted) {
+        notVerifiedSnackBar(context, _formData['email'] as String);
+      }
     } on Exception catch (e) {
       setState(() => _error = e);
     }
   }
 
-  _openModal() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(minutes: 1),
-        content: RichText(
-          text: TextSpan(
-            children: [
-              const TextSpan(
-                text: "Uma verificação de email foi enviada para: ",
-              ),
-              TextSpan(
-                text: _formData['email'] as String,
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthStreamHelper(
+      body: LoadingStreamHelper(
+        stream: AuthService().userChanges,
         child: FullScreenScroll(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),

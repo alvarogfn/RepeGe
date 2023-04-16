@@ -4,11 +4,13 @@ class AuthException implements Exception {
 
   @override
   String toString() {
-    return msg ?? "Não foi possível te autenticar ao serviço.";
+    return msg ??
+        "Alguma coisa deu errado na conexão com o servidor. Tente novamente.";
   }
 }
 
-class AuthMismatchLoginException implements Exception {
+class AuthMismatchLoginException implements AuthException {
+  @override
   final String? msg;
   const AuthMismatchLoginException([this.msg]);
 
@@ -18,7 +20,8 @@ class AuthMismatchLoginException implements Exception {
   }
 }
 
-class AuthEmailAlreadyUsedException implements Exception {
+class AuthEmailAlreadyUsedException implements AuthException {
+  @override
   final String? msg;
   const AuthEmailAlreadyUsedException([this.msg]);
 
@@ -28,7 +31,8 @@ class AuthEmailAlreadyUsedException implements Exception {
   }
 }
 
-class AuthWeakPasswordException implements Exception {
+class AuthWeakPasswordException implements AuthException {
+  @override
   final String? msg;
   const AuthWeakPasswordException([this.msg]);
 
@@ -36,5 +40,16 @@ class AuthWeakPasswordException implements Exception {
   String toString() {
     return msg ??
         "Essa senha é muito fraca, tente fortalece-lá com letras, números e caracteres especiais e um tamanho minimo de 6 caracteres.";
+  }
+}
+
+class AuthEmailNotVerifiedException implements AuthException {
+  @override
+  final String? msg;
+  const AuthEmailNotVerifiedException([this.msg]);
+
+  @override
+  String toString() {
+    return msg ?? "Esse email já está cadastrado na plataforma.";
   }
 }

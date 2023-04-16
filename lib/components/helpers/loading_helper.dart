@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LoadingHandler extends StatelessWidget {
-  const LoadingHandler(
+class LoadingHelper extends StatelessWidget {
+  const LoadingHelper(
     this.connectionState, {
     required this.onActive,
     required this.onLoading,

@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tcc/components/handlers/error_handler.dart';
-import 'package:tcc/components/helpers/auth_stream_helper.dart';
+import 'package:tcc/components/helpers/loading_stream_helper.dart';
+import 'package:tcc/exceptions/auth_exceptions.dart';
+import 'package:tcc/pages/home_page.dart';
 import 'package:tcc/pages/register_page.dart';
 import 'package:tcc/services/auth_service.dart';
 import 'package:tcc/utils/validations/email_validation.dart';
@@ -18,6 +22,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  StreamSubscription? _subscription;
 
   final Map<String, String> _formData = {};
 
@@ -36,17 +41,48 @@ class _LoginPageState extends State<LoginPage> {
         email: _formData['email'] as String,
         password: _formData['password'] as String,
       );
-    } on Exception catch (e) {
-      setState(() => _error = e);
+    } on AuthEmailNotVerifiedException catch (_) {
+      _openEmailNotVerifiedAlert();
     } catch (e) {
-      print(e);
+      setState(() => _error = e as Exception);
     }
+  }
+
+  _openEmailNotVerifiedAlert() {
+    showDialog(
+      context: context,
+      builder: (ctx) => const AlertDialog(
+        title: Text("Verifique seu e-mail!"),
+        content: Text(
+          "Por favor, verifique seu e-mail para confirmar sua conta. Algumas funcionalidades podem ficar indisponíveis.",
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = AuthService().userChanges.listen((user) {
+      if (user != null) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (ctx) => const HomePage(),
+        ));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthStreamHelper(
+      body: LoadingStreamHelper(
+        stream: AuthService().userChanges,
         child: FullScreenScroll(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),

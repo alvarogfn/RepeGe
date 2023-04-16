@@ -5,21 +5,21 @@ import 'package:tcc/models/user_model.dart';
 
 class AuthService {
   static FirebaseAuth instance = FirebaseAuth.instance;
-  static final _stream = Stream<UserModel?>.multi((controller) {
+  static final _stream = Stream<LoggedUser?>.multi((controller) {
     instance.idTokenChanges().listen((user) {
-      UserModel? userModel;
+      LoggedUser? loggedUser;
 
       if (user != null) {
-        userModel = _toUserModel(user);
+        loggedUser = _toUserModel(user);
       }
 
-      currentUser = userModel;
+      currentUser = loggedUser;
       controller.add(currentUser);
     });
   });
-  static UserModel? currentUser;
+  static LoggedUser? currentUser;
 
-  Stream<UserModel?> get userChanges {
+  Stream<LoggedUser?> get userChanges {
     return _stream;
   }
 
@@ -56,8 +56,16 @@ class AuthService {
     required String password,
   }) async {
     try {
-      await instance.signInWithEmailAndPassword(
+      final credential = await instance.signInWithEmailAndPassword(
           email: email, password: password);
+
+      final user = credential.user;
+
+      if (user != null && !user.emailVerified) {
+        throw const AuthEmailNotVerifiedException();
+      }
+    } on AuthEmailNotVerifiedException catch (_) {
+      rethrow;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
@@ -74,8 +82,8 @@ class AuthService {
     await instance.signOut();
   }
 
-  static UserModel _toUserModel(User user) {
-    return UserModel(
+  static LoggedUser _toUserModel(User user) {
+    return LoggedUser(
       uid: user.uid,
       email: user.email!,
     );
