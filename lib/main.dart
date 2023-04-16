@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tcc/pages/login_page.dart';
-import 'package:tcc/themes/dark_theme.dart';
-import 'package:tcc/themes/light_theme.dart';
+import 'package:repege/pages/login_page.dart';
+import 'package:repege/themes/dark_theme.dart';
+import 'package:repege/themes/light_theme.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

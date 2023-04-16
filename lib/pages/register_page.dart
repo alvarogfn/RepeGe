@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:tcc/components/app_title.dart';
-import 'package:tcc/components/full_screen_scroll.dart';
-import 'package:tcc/components/handlers/error_handler.dart';
-import 'package:tcc/components/helpers/loading_stream_helper.dart';
-import 'package:tcc/pages/home_page.dart';
-import 'package:tcc/pages/login_page.dart';
-import 'package:tcc/services/auth_service.dart';
-import 'package:tcc/utils/not_verified_snackbar.dart';
-import 'package:tcc/utils/validations/email_validation.dart';
-import 'package:tcc/utils/validations/required_validation.dart';
-import 'package:tcc/utils/validations/validations.dart';
+import 'package:repege/components/app_title.dart';
+import 'package:repege/components/full_screen_scroll.dart';
+import 'package:repege/components/handlers/error_handler.dart';
+import 'package:repege/components/helpers/loading_stream_helper.dart';
+import 'package:repege/pages/home_page.dart';
+import 'package:repege/pages/login_page.dart';
+import 'package:repege/services/auth_service.dart';
+import 'package:repege/utils/not_verified_snackbar.dart';
+import 'package:repege/utils/validations/email_validation.dart';
+import 'package:repege/utils/validations/required_validation.dart';
+import 'package:repege/utils/validations/validations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

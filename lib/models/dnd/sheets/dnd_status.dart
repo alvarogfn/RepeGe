@@ -1,4 +1,4 @@
-import 'package:tcc/models/dices/dice_type.dart';
+import 'package:repege/models/dices/dice_type.dart';
 
 class DnDSheetStatus {
   final int currentHp;

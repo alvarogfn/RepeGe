@@ -1,7 +1,7 @@
-import 'package:tcc/models/dnd/sheets/dnd_attributes.dart';
-import 'package:tcc/models/dnd/sheets/dnd_bag.dart';
-import 'package:tcc/models/dnd/sheets/dnd_spells.dart';
-import 'package:tcc/models/dnd/sheets/dnd_status.dart';
+import 'package:repege/models/dnd/sheets/dnd_attributes.dart';
+import 'package:repege/models/dnd/sheets/dnd_bag.dart';
+import 'package:repege/models/dnd/sheets/dnd_spells.dart';
+import 'package:repege/models/dnd/sheets/dnd_status.dart';
 
 class DnDSheet {
   final String characterName;

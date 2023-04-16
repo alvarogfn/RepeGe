@@ -1,4 +1,4 @@
-import 'package:tcc/utils/validations/validations.dart';
+import 'package:repege/utils/validations/validations.dart';
 
 class RequiredValidation extends Validation {
   RequiredValidation({super.message = 'Esse campo é obrigátorio.'});

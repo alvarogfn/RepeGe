@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:32975817049:android:3f64b36c8d304ace0a6448",
         "android_client_info": {
-          "package_name": "com.example.tcc"
+          "package_name": "com.example.repege"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "32975817049-tbhlj7hv44im3l06dr40naie35ua890i.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.tcc"
+                "bundle_id": "com.example.repege"
               }
             }
           ]

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tcc/components/custom_drawer.dart';
-import 'package:tcc/pages/login_page.dart';
-import 'package:tcc/services/auth_service.dart';
+import 'package:repege/components/custom_drawer.dart';
+import 'package:repege/pages/login_page.dart';
+import 'package:repege/services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

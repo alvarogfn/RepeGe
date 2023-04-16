@@ -1,4 +1,4 @@
-import 'package:tcc/models/dnd/sheets/dnd_utils.dart';
+import 'package:repege/models/dnd/sheets/dnd_utils.dart';
 
 enum DndSpellLevels { l0, l1, l2, l3, l4, l5, l6, l7, l8, l9 }
 

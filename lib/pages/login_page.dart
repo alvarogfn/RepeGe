@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tcc/components/handlers/error_handler.dart';
-import 'package:tcc/components/helpers/loading_stream_helper.dart';
-import 'package:tcc/exceptions/auth_exceptions.dart';
-import 'package:tcc/pages/home_page.dart';
-import 'package:tcc/pages/register_page.dart';
-import 'package:tcc/services/auth_service.dart';
-import 'package:tcc/utils/validations/email_validation.dart';
-import 'package:tcc/utils/validations/required_validation.dart';
-import 'package:tcc/utils/validations/validations.dart';
+import 'package:repege/components/handlers/error_handler.dart';
+import 'package:repege/components/helpers/loading_stream_helper.dart';
+import 'package:repege/exceptions/auth_exceptions.dart';
+import 'package:repege/pages/home_page.dart';
+import 'package:repege/pages/register_page.dart';
+import 'package:repege/services/auth_service.dart';
+import 'package:repege/utils/validations/email_validation.dart';
+import 'package:repege/utils/validations/required_validation.dart';
+import 'package:repege/utils/validations/validations.dart';
 import '../components/app_title.dart';
 import '../components/full_screen_scroll.dart';
 

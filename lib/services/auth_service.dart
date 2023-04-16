@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tcc/exceptions/auth_exceptions.dart';
-import 'package:tcc/models/user_model.dart';
+import 'package:repege/exceptions/auth_exceptions.dart';
+import 'package:repege/models/user_model.dart';
 
 class AuthService {
   static FirebaseAuth instance = FirebaseAuth.instance;

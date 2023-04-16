@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/models/user_model.dart';
-import 'package:tcc/pages/sheets/sheet_home_page.dart';
-import 'package:tcc/pages/user_config_page.dart';
-import 'package:tcc/services/auth_service.dart';
+import 'package:repege/models/user_model.dart';
+import 'package:repege/pages/sheets/sheet_home_page.dart';
+import 'package:repege/pages/user_config_page.dart';
+import 'package:repege/services/auth_service.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});

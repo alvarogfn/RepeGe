@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/components/custom_drawer.dart';
-import 'package:tcc/utils/images.dart';
+import 'package:repege/components/custom_drawer.dart';
+import 'package:repege/utils/images.dart';
 
 class SheetHomePage extends StatelessWidget {
   SheetHomePage({super.key});
