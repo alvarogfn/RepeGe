@@ -20,6 +20,15 @@ final lightTheme = ThemeData(
       ),
     ),
   ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: Colors.black87,
+  ),
+  tabBarTheme: TabBarTheme(
+    labelColor: Colors.white,
+    unselectedLabelColor: Colors.white54,
+    indicatorColor: Colors.transparent,
+    indicator: BoxDecoration(),
+  ),
   textTheme: const TextTheme(
     titleLarge: TextStyle(
       fontSize: 23,

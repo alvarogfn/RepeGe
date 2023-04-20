@@ -15,14 +15,15 @@ class DnDSheetAttributes {
   final int wisdom;
   final int charisma;
 
-  final List<DndAttributes> savingThrows = [];
+  final List<DndAttributes> savingThrows;
 
   DnDSheetAttributes({
-    required this.strength,
-    required this.dextery,
-    required this.constitution,
-    required this.intelligence,
-    required this.wisdom,
-    required this.charisma,
+    this.strength = 0,
+    this.dextery = 0,
+    this.constitution = 0,
+    this.intelligence = 0,
+    this.wisdom = 0,
+    this.charisma = 0,
+    this.savingThrows = const [],
   });
 }

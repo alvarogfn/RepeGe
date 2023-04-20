@@ -1,11 +1,15 @@
+import 'dart:math';
+
 import 'package:repege/models/dnd/sheets/dnd_attributes.dart';
 import 'package:repege/models/dnd/sheets/dnd_bag.dart';
 import 'package:repege/models/dnd/sheets/dnd_spells.dart';
 import 'package:repege/models/dnd/sheets/dnd_status.dart';
 
 class DnDSheet {
+  final String id = Random().nextInt(20000).toString();
   final String characterName;
   final String characterClass;
+  final String characterRace;
   final int level;
   final String background;
   final String aligment;
@@ -22,6 +26,7 @@ class DnDSheet {
   DnDSheet({
     required this.characterName,
     required this.characterClass,
+    required this.characterRace,
     this.level = 1,
     required this.background,
     required this.aligment,

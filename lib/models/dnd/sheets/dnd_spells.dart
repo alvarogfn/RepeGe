@@ -33,10 +33,10 @@ class DndSheetSpells {
   final List<DnDSpell> spells;
 
   const DndSheetSpells({
-    required this.spellAttackBonus,
-    required this.spellCastingHability,
-    required this.spellSaveDc,
-    required this.spellCastingClass,
+    this.spellAttackBonus = 0,
+    this.spellCastingHability = 0,
+    this.spellSaveDc = 0,
+    this.spellCastingClass = 0,
     this.spells = const [],
   });
 }

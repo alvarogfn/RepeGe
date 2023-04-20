@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:repege/components/custom_drawer.dart';
 import 'package:repege/pages/login_page.dart';
 import 'package:repege/services/auth_service.dart';
+import 'package:repege/utils/not_verified_snackbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,12 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (ctx) => const LoginPage(),
         ));
+
+        return;
+      }
+
+      if (AuthService.instance.currentUser?.emailVerified != true) {
+        notVerifiedSnackBar(context, user.email);
       }
     });
   }

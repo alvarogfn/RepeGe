@@ -59,10 +59,6 @@ class _RegisterPageState extends State<RegisterPage> {
         email: _formData['email'] as String,
         password: _formData['password'] as String,
       );
-
-      if (context.mounted) {
-        notVerifiedSnackBar(context, _formData['email'] as String);
-      }
     } on Exception catch (e) {
       setState(() => _error = e);
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repege/models/user_model.dart';
-import 'package:repege/pages/sheets/sheet_home_page.dart';
+import 'package:repege/pages/sheets/sheets_list_page.dart';
 import 'package:repege/pages/user_config_page.dart';
 import 'package:repege/services/auth_service.dart';
 
