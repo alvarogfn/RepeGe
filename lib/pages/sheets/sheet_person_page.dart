@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/editable_field.dart';
+import 'package:repege/components/shared/editable_field.dart';
 
 class SheetPersonPage extends StatelessWidget {
   const SheetPersonPage({super.key});

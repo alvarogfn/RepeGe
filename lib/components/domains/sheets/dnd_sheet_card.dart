@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
-import 'package:repege/pages/sheets/sheet/sheet_home_page.dart';
+import 'package:repege/pages/sheets/sheet_home_page.dart';
 import 'package:repege/utils/images.dart';
 
 class DndSheetCard extends StatelessWidget {

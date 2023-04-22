@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/custom_drawer.dart';
-import 'package:repege/components/dnd_sheet_card.dart';
+import 'package:repege/components/domains/sheets/dnd_sheet_card.dart';
+import 'package:repege/components/shared/custom_drawer.dart';
 import 'package:repege/models/dices/dice_type.dart';
 import 'package:repege/models/dnd/sheets/dnd_attributes.dart';
 import 'package:repege/models/dnd/sheets/dnd_bag.dart';
@@ -9,8 +9,8 @@ import 'package:repege/models/dnd/sheets/dnd_spells.dart';
 import 'package:repege/models/dnd/sheets/dnd_status.dart';
 import 'package:repege/models/dnd/sheets/dnd_utils.dart';
 
-class SheetHomePage extends StatelessWidget {
-  SheetHomePage({super.key});
+class SheetsPage  extends StatelessWidget {
+  SheetsPage ({super.key});
 
   final List<DnDSheet> sheets = [
     DnDSheet(

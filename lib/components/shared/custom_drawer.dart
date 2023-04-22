@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/models/user_model.dart';
-import 'package:repege/pages/sheets/sheets_list_page.dart';
+import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 
@@ -46,12 +46,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
               NavigationListItem(
                 icon: Icons.article,
                 text: "Fichas",
-                page: SheetHomePage(),
+                route: RoutesName.sheets,
               ),
               NavigationListItem(
                 icon: Icons.groups,
-                text: "Campanhas",
-                page: SheetHomePage(),
+                text: "Mesas",
+                route: RoutesName.tables,
               ),
             ],
           ),
@@ -65,11 +65,11 @@ class NavigationListItem extends StatelessWidget {
   const NavigationListItem({
     required this.icon,
     required this.text,
-    required this.page,
+    required this.route,
     super.key,
   });
 
-  final Widget page;
+  final RoutesName route;
   final String text;
   final IconData icon;
 
@@ -77,18 +77,11 @@ class NavigationListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       style: ListTileStyle.drawer,
-      leading: Icon(
-        icon,
-        color: Theme.of(context).primaryColor,
-      ),
+      leading: Icon(icon, color: Theme.of(context).primaryColor),
       minLeadingWidth: 30,
       visualDensity: VisualDensity.compact,
       title: Text(text),
-      onTap: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (ctx) => page,
-        ));
-      },
+      onTap: () => context.goNamed(route.name),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/custom_drawer.dart';
-import 'package:repege/pages/sheets/sheet/sheet_person_page.dart';
+import 'package:repege/components/shared/custom_drawer.dart';
+import 'package:repege/pages/sheets/sheet_person_page.dart';
 
 class SheetSociabilityPage extends StatelessWidget {
   const SheetSociabilityPage({required this.id, super.key});

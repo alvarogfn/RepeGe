@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repege/pages/utils/loading_page.dart';
-import 'package:repege/components/helpers/loading_helper.dart';
+import 'package:repege/components/shared/helpers/loading_helper.dart';
 
 class LoadingStreamHelper extends StatelessWidget {
   const LoadingStreamHelper(

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/handlers/error_handler.dart';
+import 'package:repege/components/shared/handlers/error_handler.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/pages/register_page.dart';
 import 'package:repege/route.dart';
@@ -10,8 +10,8 @@ import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
 import 'package:repege/utils/validations/validations.dart';
-import '../components/app_title.dart';
-import '../components/full_screen_scroll.dart';
+import '../components/shared/app_title.dart';
+import '../components/shared/full_screen_scroll.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

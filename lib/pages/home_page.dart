@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:repege/components/custom_drawer.dart';
+import 'package:repege/components/shared/custom_drawer.dart';
 import 'package:repege/pages/login_page.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/not_verified_snackbar.dart';
