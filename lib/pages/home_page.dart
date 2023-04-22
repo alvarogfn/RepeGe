@@ -14,30 +14,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  StreamSubscription? _subscription;
-
   @override
   void initState() {
     super.initState();
-    _subscription = AuthService().userChanges.listen((user) {
-      if (user == null) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (ctx) => const LoginPage(),
-        ));
-
-        return;
-      }
-
-      if (AuthService.instance.currentUser?.emailVerified != true) {
-        notVerifiedSnackBar(context, user.email);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
   }
 
   @override

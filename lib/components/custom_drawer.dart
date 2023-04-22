@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:repege/models/user_model.dart';
 import 'package:repege/pages/sheets/sheets_list_page.dart';
-import 'package:repege/pages/user_config_page.dart';
+import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -12,21 +14,26 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  final LoggedUser user = AuthService.currentUser!;
-
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     return Drawer(
       child: Column(children: [
         AppBar(
           automaticallyImplyLeading: false,
-          title: UserLeading(user: user),
+          title: Consumer<AuthService>(builder: (context, value, _) {
+            return UserLeading(user: value.currentUser!);
+          }),
           actions: [
             PopupMenuButton(
               itemBuilder: (ctx) => [
-                const PopupMenuItem(
-                  onTap: AuthService.logout,
-                  child: IconTextButton(icon: Icons.logout, text: "Sair"),
+                PopupMenuItem(
+                  onTap: () {
+                    context.goNamed(RoutesName.login.name);
+                    authService.logout();
+                  },
+                  child: const IconTextButton(icon: Icons.logout, text: "Sair"),
                 ),
               ],
             ),
@@ -49,9 +56,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ],
           ),
         )
-        // ListView(
-        //   children: [Text('hehe')],
-        // )
       ]),
     );
   }
@@ -98,11 +102,7 @@ class UserLeading extends StatelessWidget {
   final LoggedUser user;
 
   Future<void> navigateToProfile(BuildContext context) async {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const UserConfigPage(),
-      ),
-    );
+    context.pushNamed(RoutesName.profile.name);
   }
 
   @override

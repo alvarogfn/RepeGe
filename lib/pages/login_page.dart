@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:repege/components/handlers/error_handler.dart';
-import 'package:repege/components/helpers/loading_stream_helper.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
-import 'package:repege/pages/home_page.dart';
 import 'package:repege/pages/register_page.dart';
+import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
@@ -22,7 +22,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  StreamSubscription? _subscription;
 
   final Map<String, String> _formData = {};
 
@@ -37,12 +36,12 @@ class _LoginPageState extends State<LoginPage> {
     if (!isValid) return;
 
     try {
-      await AuthService.signin(
+      await AuthService().signin(
         email: _formData['email'] as String,
         password: _formData['password'] as String,
       );
     } on AuthEmailNotVerifiedException catch (_) {
-      _openEmailNotVerifiedAlert();
+      if (context.mounted) _openEmailNotVerifiedAlert();
     } catch (e) {
       setState(() => _error = e as Exception);
     }
@@ -61,90 +60,68 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _subscription = AuthService().userChanges.listen((user) {
-      if (user != null) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (ctx) => const HomePage(),
-        ));
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LoadingStreamHelper(
-        stream: AuthService().userChanges,
-        child: FullScreenScroll(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const AppTitle(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 25),
-                  child: Text(
-                    'Login',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+      body: FullScreenScroll(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const AppTitle(),
+              Padding(
+                padding: const EdgeInsets.only(top: 25),
+                child: Text(
+                  'Login',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                const SizedBox(height: 40),
-                const SignUpButton(),
-                const SizedBox(height: 20),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        onSaved: (value) =>
-                            _formData['email'] = value as String,
-                        validator: (value) => Validator.validateWith(value, [
-                          RequiredValidation(),
-                          EmailValidation(),
-                        ]),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Senha'),
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.done,
-                        obscureText: true,
-                        onSaved: (value) =>
-                            _formData['password'] = value as String,
-                        onFieldSubmitted: (_) => _handleSubmit,
-                        validator: (value) => Validator.validateWith(value, [
-                          RequiredValidation(),
-                        ]),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            onPressed: _handleSubmit,
-                            child: const Text("Entrar"),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+              ),
+              const SizedBox(height: 40),
+              const SignUpButton(),
+              const SizedBox(height: 20),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Email'),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      onSaved: (value) => _formData['email'] = value as String,
+                      validator: (value) => Validator.validateWith(value, [
+                        RequiredValidation(),
+                        EmailValidation(),
+                      ]),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Senha'),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
+                      obscureText: true,
+                      onSaved: (value) =>
+                          _formData['password'] = value as String,
+                      onFieldSubmitted: (_) => _handleSubmit,
+                      validator: (value) => Validator.validateWith(value, [
+                        RequiredValidation(),
+                      ]),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _handleSubmit,
+                          child: const Text("Entrar"),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-                ErrorHandler(error: _error)
-              ],
-            ),
+              ),
+              ErrorHandler(error: _error)
+            ],
           ),
         ),
       ),
@@ -164,9 +141,7 @@ class SignUpButton extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (_) => const RegisterPage(),
-            ));
+            context.goNamed(RoutesName.register.name);
           },
           child: RichText(
             text: TextSpan(

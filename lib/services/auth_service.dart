@@ -1,29 +1,36 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/models/user_model.dart';
 
-class AuthService {
-  static FirebaseAuth instance = FirebaseAuth.instance;
-  static final _stream = Stream<LoggedUser?>.multi((controller) {
-    instance.idTokenChanges().listen((user) {
+enum AuthState { auth, unauth }
+
+class AuthService with ChangeNotifier {
+  final FirebaseAuth instance = FirebaseAuth.instance;
+  AuthState state = AuthState.unauth;
+  late StreamSubscription _subscription;
+
+  AuthService() {
+    _subscription = instance.idTokenChanges().listen((user) {
       LoggedUser? loggedUser;
 
       if (user != null) {
         loggedUser = _toUserModel(user);
+        state = AuthState.auth;
+      } else {
+        state = AuthState.unauth;
       }
 
       currentUser = loggedUser;
-      controller.add(currentUser);
+      notifyListeners();
     });
-  });
-  static LoggedUser? currentUser;
-
-  Stream<LoggedUser?> get userChanges {
-    return _stream;
   }
 
-  static Future<void> signup({
+  LoggedUser? currentUser;
+
+  Future<void> signup({
     required String email,
     required String password,
   }) async {
@@ -51,7 +58,7 @@ class AuthService {
     }
   }
 
-  static Future<void> signin({
+  Future<void> signin({
     required String email,
     required String password,
   }) async {
@@ -78,14 +85,20 @@ class AuthService {
     }
   }
 
-  static Future<void> logout() async {
+  Future<void> logout() async {
     await instance.signOut();
   }
 
-  static LoggedUser _toUserModel(User user) {
+  LoggedUser _toUserModel(User user) {
     return LoggedUser(
       uid: user.uid,
       email: user.email!,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.cancel();
   }
 }
