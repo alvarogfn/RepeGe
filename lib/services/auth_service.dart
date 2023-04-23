@@ -2,17 +2,26 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:repege/database/users_db.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/models/user_model.dart';
 
 enum AuthState { auth, unauth }
 
 class AuthService with ChangeNotifier {
+  final UsersDB _usersDB = UsersDB();
+
   final FirebaseAuth instance = FirebaseAuth.instance;
-  AuthState state = AuthState.unauth;
+
+  late AuthState state;
+
   late StreamSubscription _subscription;
 
+  LoggedUser? currentUser;
+
   AuthService() {
+    state = instance.currentUser != null ? AuthState.auth : AuthState.unauth;
+
     _subscription = instance.idTokenChanges().listen((user) {
       LoggedUser? loggedUser;
 
@@ -24,26 +33,44 @@ class AuthService with ChangeNotifier {
       }
 
       currentUser = loggedUser;
+      print("Notifying all AuthService listeners");
       notifyListeners();
     });
   }
 
-  LoggedUser? currentUser;
-
   Future<void> signup({
     required String email,
     required String password,
+    required String username,
   }) async {
     try {
+      final usernameExists = await _usersDB.checkIfUsernameExists(username);
+
+      if (usernameExists) throw const AuthUsernameAlreadyUsedException();
+
       final credential = await instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      final user = credential.user;
-      if (user == null) throw const AuthException();
+      final credentialUser = credential.user;
 
-      await user.sendEmailVerification();
+      if (credentialUser == null) throw const AuthException();
+
+      try {
+        await _usersDB.create(
+          username: username,
+          email: email,
+          uid: credentialUser.uid,
+          avatarURL: credentialUser.photoURL ?? '',
+        );
+      } catch (e) {
+        await credentialUser.delete();
+
+        throw const AuthException();
+      }
+
+      await credentialUser.sendEmailVerification();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':
@@ -53,6 +80,8 @@ class AuthService with ChangeNotifier {
         default:
           throw const AuthException();
       }
+    } on AuthException catch (_) {
+      rethrow;
     } catch (e) {
       throw const AuthException();
     }
@@ -64,7 +93,9 @@ class AuthService with ChangeNotifier {
   }) async {
     try {
       final credential = await instance.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
 
       final user = credential.user;
 

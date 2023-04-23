@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:repege/pages/home_page.dart';
 import 'package:repege/pages/login_page.dart';
 import 'package:repege/pages/profile/profile_page.dart';
 import 'package:repege/pages/register_page.dart';
+import 'package:repege/pages/sheets/sheet_home_page.dart';
 import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/services/auth_service.dart';
 
@@ -15,6 +17,8 @@ enum RoutesName {
   profile(state: AuthState.auth, name: 'profile', path: 'profile'),
 
   sheets(state: AuthState.auth, name: 'sheets', path: '/sheets'),
+  sheet(state: AuthState.auth, name: 'sheet', path: 'sheet/:id'),
+
   tables(state: AuthState.auth, name: 'tables', path: '/tables');
 
   const RoutesName({
@@ -28,8 +32,7 @@ enum RoutesName {
   final String path;
 }
 
-class CustomRouter with ChangeNotifier {
-  final AuthState authState;
+class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -63,9 +66,18 @@ class CustomRouter with ChangeNotifier {
         path: RoutesName.sheets.path,
         name: RoutesName.sheets.name,
         builder: (context, state) => SheetsPage(),
+        routes: [
+          GoRoute(
+            path: RoutesName.sheet.path,
+            name: RoutesName.sheet.name,
+            builder: (context, state) => SheetHomePage(id: state.params['id']!),
+          ),
+        ],
       ),
     ],
-    redirect: (context, state) {
+    redirect: (context, state) async {
+      final authState = context.read<AuthService>().state;
+
       final bool toUnauth = RoutesName.values
           .where((element) => element.state == AuthState.unauth)
           .map((e) => e.path)
@@ -80,16 +92,16 @@ class CustomRouter with ChangeNotifier {
       }
 
       if (authState == AuthState.auth && toUnauth) {
-        return RoutesName.home.path;
+        return null;
       }
 
       if (authState == AuthState.auth && !toUnauth) {
         return null;
       }
 
-      return RoutesName.home.path;
+      return null;
     },
   );
 
-  CustomRouter({required this.authState});
+  CustomRouter();
 }

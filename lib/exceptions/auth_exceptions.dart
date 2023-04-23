@@ -53,3 +53,14 @@ class AuthEmailNotVerifiedException implements AuthException {
     return msg ?? "Esse email já está cadastrado na plataforma.";
   }
 }
+
+class AuthUsernameAlreadyUsedException implements AuthException {
+  @override
+  final String? msg;
+  const AuthUsernameAlreadyUsedException([this.msg]);
+
+  @override
+  String toString() {
+    return msg ?? "Esse nome de usuário já está em uso. Escolha outro.";
+  }
+}

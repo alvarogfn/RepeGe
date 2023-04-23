@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
-import 'package:repege/pages/sheets/sheet_home_page.dart';
+import 'package:repege/route.dart';
 import 'package:repege/utils/images.dart';
 
 class DndSheetCard extends StatelessWidget {
@@ -18,9 +19,7 @@ class DndSheetCard extends StatelessWidget {
       child: Card(
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (ctx) => SheetSociabilityPage(id: sheet.id),
-            ));
+            context.goNamed(RoutesName.sheet.name, params: {'id': sheet.id});
           },
           child: Row(
             children: [

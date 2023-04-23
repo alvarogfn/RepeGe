@@ -38,6 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
       await AuthService().signup(
         email: _formData['email'] as String,
         password: _formData['password'] as String,
+        username: _formData['username'] as String,
       );
     } on Exception catch (e) {
       setState(() => _error = e);
@@ -67,6 +68,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    UsernameField(formData: _formData),
+                    const SizedBox(height: 20),
                     EmailField(formData: _formData),
                     const SizedBox(height: 20),
                     PasswordField(formData: _formData),
@@ -105,6 +108,32 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class UsernameField extends StatelessWidget {
+  const UsernameField({
+    super.key,
+    required Map<String, String> formData,
+  }) : _formData = formData;
+
+  final Map<String, String> _formData;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: const InputDecoration(
+        labelText: 'Nome de usuário',
+      ),
+      keyboardType: TextInputType.name,
+      textInputAction: TextInputAction.next,
+      onSaved: (value) {
+        _formData['username'] = value as String;
+      },
+      validator: (value) => Validator.validateWith(value, [
+        RequiredValidation(),
+      ]),
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/components/shared/loading.dart';
+import 'package:repege/database/users_db.dart';
 import 'package:repege/models/user_model.dart';
-import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 
@@ -23,7 +24,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
         AppBar(
           automaticallyImplyLeading: false,
           title: Consumer<AuthService>(builder: (context, value, _) {
-            return UserLeading(user: value.currentUser!);
+            if (value.currentUser != null) {
+              return UserLeading(user: value.currentUser!);
+            }
+            return const SizedBox();
           }),
           actions: [
             PopupMenuButton(
@@ -42,7 +46,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         Expanded(
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            children: [
+            children: const [
               NavigationListItem(
                 icon: Icons.article,
                 text: "Fichas",
@@ -103,11 +107,16 @@ class UserLeading extends StatelessWidget {
     return Row(children: [
       InkWell(
         borderRadius: BorderRadius.circular(20),
-        child: const CircleAvatar(
-          backgroundImage: NetworkImage(
-            'https://www.pngkit.com/png/detail/112-1120367_d-d-elf-png-male-half-elf-bard.png',
-          ),
-        ),
+        child: FutureBuilder<LoggedUserWithData>(
+            future: UsersDB().findByUID(user.uid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Loading();
+              }
+              return CircleAvatar(
+                backgroundImage: NetworkImage(snapshot.data!.avatarURL),
+              );
+            }),
         onTap: () => navigateToProfile(context),
       ),
       const SizedBox(width: 10),

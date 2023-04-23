@@ -25,37 +25,48 @@ Future<void> main() async {
   FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
   await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-  runApp(const MyApp());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final CustomRouter router = CustomRouter();
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
-        ChangeNotifierProxyProvider<AuthService, CustomRouter>(
-          create: (_) => CustomRouter(authState: AuthState.unauth),
-          update: (ctx, auth, previous) {
-            return CustomRouter(authState: auth.state);
-          },
-        )
+        // ChangeNotifierProxyProvider<AuthService, CustomRouter>(
+        //   create: (_) => CustomRouter(authState: AuthState.auth),
+        //   update: (_, auth, __) {
+        //     return CustomRouter(authState: auth.state);
+        //   },
+        // )
       ],
-      child: Consumer<AuthService>(
-        builder: (context, _, child) {
-          final CustomRouter router = Provider.of(context, listen: false);
+      // child: Consumer<AuthService>(
+      //   builder: (context, _, child) {
+      //     final CustomRouter router = Provider.of(context, listen: false);
 
-          return MaterialApp.router(
-            routerConfig: router.routes,
-            title: 'RepeGe',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeMode.system,
-            debugShowCheckedModeBanner: false,
-          );
-        },
+      //     return MaterialApp.router(
+      //       routerConfig: router.routes,
+      //       title: 'RepeGe',
+      //       theme: lightTheme,
+      //       darkTheme: darkTheme,
+      //       themeMode: ThemeMode.system,
+      //       debugShowCheckedModeBanner: false,
+      //     );
+      //   },
+      // ),
+      child: MaterialApp.router(
+        routerConfig: router.routes,
+        title: 'RepeGe',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

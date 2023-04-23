@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:repege/components/shared/custom_drawer.dart';
 import 'package:repege/pages/sheets/sheet_person_page.dart';
 
-class SheetSociabilityPage extends StatelessWidget {
-  const SheetSociabilityPage({required this.id, super.key});
+class SheetHomePage extends StatelessWidget {
+  const SheetHomePage({required this.id, super.key});
   final String id;
   @override
   Widget build(BuildContext context) {
@@ -11,6 +11,7 @@ class SheetSociabilityPage extends StatelessWidget {
       length: 5,
       child: Scaffold(
         appBar: AppBar(
+          title: Text('Lyra, a cantora.'),
           bottom: const TabBar(
             labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
             isScrollable: true,
