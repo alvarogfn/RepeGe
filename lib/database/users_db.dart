@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:repege/models/user_model.dart';
-import 'package:repege/utils/images.dart';
 
 class UsersDB {
   final _instance = FirebaseFirestore.instance;

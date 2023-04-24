@@ -15,6 +15,17 @@ class DnDSheetStatus {
     this.iniative = 0,
     this.speed = 0,
     this.armorClass = 0,
-    required this.hitDice,
+    this.hitDice = const [],
   });
+
+  factory DnDSheetStatus.fromMap(Map<String, Object> data) {
+    return DnDSheetStatus(
+      currentHp: data['currentHp'] as int,
+      temporaryHp: data['temporaryHp'] as int,
+      iniative: data['iniative'] as int,
+      speed: data['speed'] as int,
+      armorClass: data['armorClass'] as int,
+      hitDice: data['hitDice'] as List<DiceType>,
+    );
+  }
 }

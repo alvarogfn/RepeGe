@@ -60,14 +60,17 @@ class MyApp extends StatelessWidget {
       //     );
       //   },
       // ),
-      child: MaterialApp.router(
-        routerConfig: router.routes,
-        title: 'RepeGe',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
-        debugShowCheckedModeBanner: false,
-      ),
+      child: Builder(builder: (context) {
+        router.routes.refresh();
+        return MaterialApp.router(
+          routerConfig: router.routes,
+          title: 'RepeGe',
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.system,
+          debugShowCheckedModeBanner: false,
+        );
+      }),
     );
   }
 }
