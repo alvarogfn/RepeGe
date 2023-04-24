@@ -97,7 +97,6 @@ class CustomRouter {
     refreshListenable: refreshListenable,
     redirect: (context, state) async {
       final authState = context.read<AuthService>().state;
-
       final bool toUnauth = RoutesName.values
           .where((element) => element.state == AuthState.unauth)
           .map((e) => e.path)
@@ -112,7 +111,7 @@ class CustomRouter {
       }
 
       if (authState == AuthState.auth && toUnauth) {
-        return null;
+        return RoutesName.home.path;
       }
 
       if (authState == AuthState.auth && !toUnauth) {

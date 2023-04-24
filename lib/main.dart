@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:repege/route.dart';
@@ -60,9 +61,9 @@ class MyApp extends StatelessWidget {
       //     );
       //   },
       // ),
-      child: Builder(builder: (context) {
+      child: Consumer<AuthService>(builder: (context, value, _) {
         router.routes.refresh();
-        return MaterialApp.router(
+        var app = MaterialApp.router(
           routerConfig: router.routes,
           title: 'RepeGe',
           theme: lightTheme,
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.system,
           debugShowCheckedModeBanner: false,
         );
+        return app;
       }),
     );
   }
