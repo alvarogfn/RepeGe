@@ -8,6 +8,7 @@ import 'package:repege/pages/register_page.dart';
 import 'package:repege/pages/sheets/sheet_home_page.dart';
 import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/services/auth_service.dart';
+import 'package:repege/environment_variables.dart';
 
 enum RoutesName {
   login(state: AuthState.unauth, name: 'login', path: '/login'),
@@ -37,7 +38,7 @@ class CustomRouter {
       GlobalKey<NavigatorState>(debugLabel: 'root');
 
   late final routes = GoRouter(
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: !EnvironmentVariables.production,
     initialLocation: '/',
     navigatorKey: _rootNavigatorKey,
     routes: [

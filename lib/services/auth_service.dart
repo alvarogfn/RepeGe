@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:repege/database/users_db.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/models/user_model.dart';
+import 'package:repege/environment_variables.dart';
+
 
 enum AuthState { auth, unauth }
 
@@ -70,7 +72,9 @@ class AuthService with ChangeNotifier {
         throw const AuthException();
       }
 
-      await credentialUser.sendEmailVerification();
+      if(EnvironmentVariables.production) {
+        await credentialUser.sendEmailVerification();
+      }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':

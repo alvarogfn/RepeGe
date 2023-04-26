@@ -15,6 +15,8 @@ import 'package:repege/themes/light_theme.dart';
 
 import 'firebase_options.dart';
 
+import 'package:repege/environment_variables.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -22,9 +24,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-  await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  if (EnvironmentVariables.production == false) {
+    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+    await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  }
 
   runApp(MyApp());
 }
