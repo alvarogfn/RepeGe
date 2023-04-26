@@ -108,7 +108,7 @@ class UserLeading extends StatelessWidget {
       InkWell(
         borderRadius: BorderRadius.circular(20),
         child: FutureBuilder<LoggedUserWithData>(
-            future: UsersDB().findByUID(user.uid),
+            future: UsersDB.findByUID(user.uid),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Loading();

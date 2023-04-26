@@ -38,4 +38,8 @@ class DndSheetBag {
     this.wallet = const DndSheetWallet(),
     this.items = const [],
   });
+
+  factory DndSheetBag.fromMap(Map<String, Object> data) {
+    return const DndSheetBag();
+  }
 }

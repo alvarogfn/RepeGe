@@ -26,4 +26,16 @@ class DnDSheetAttributes {
     this.charisma = 0,
     this.savingThrows = const [],
   });
+
+  factory DnDSheetAttributes.fromMap(Map<String, Object> data) {
+    return DnDSheetAttributes(
+      charisma: data['charisma'] as int,
+      constitution: data['constitution'] as int,
+      dextery: data['dextery'] as int,
+      intelligence: data['intelligence'] as int,
+      strength: data['strength'] as int,
+      wisdom: data['wisdom'] as int,
+      savingThrows: data['savingThrows'] as List<DndAttributes>,
+    );
+  }
 }

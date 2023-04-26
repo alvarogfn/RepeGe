@@ -64,14 +64,18 @@ class MyApp extends StatelessWidget {
       //     );
       //   },
       // ),
-      child: MaterialApp.router(
-        routerConfig: router.routes,
-        title: 'RepeGe',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
-        debugShowCheckedModeBanner: false,
-      ),
+      child: Consumer<AuthService>(builder: (context, value, _) {
+        router.routes.refresh();
+        var app = MaterialApp.router(
+          routerConfig: router.routes,
+          title: 'RepeGe',
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.system,
+          debugShowCheckedModeBanner: false,
+        );
+        return app;
+      }),
     );
   }
 }

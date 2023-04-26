@@ -19,7 +19,7 @@ class DndSheetCard extends StatelessWidget {
       child: Card(
         child: InkWell(
           onTap: () {
-            context.goNamed(RoutesName.sheet.name, params: {'id': sheet.id});
+            context.pushNamed(RoutesName.sheet.name, params: {'id': sheet.id});
           },
           child: Row(
             children: [

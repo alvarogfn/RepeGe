@@ -5,8 +5,10 @@ import 'package:repege/pages/home_page.dart';
 import 'package:repege/pages/login_page.dart';
 import 'package:repege/pages/profile/profile_page.dart';
 import 'package:repege/pages/register_page.dart';
-import 'package:repege/pages/sheets/sheet_home_page.dart';
+import 'package:repege/pages/sheets/sheet_create_page.dart';
+import 'package:repege/pages/sheets/sheet_page.dart';
 import 'package:repege/pages/sheets/sheets_page.dart';
+import 'package:repege/pages/tables/tables_home_page.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/environment_variables.dart';
 
@@ -19,6 +21,11 @@ enum RoutesName {
 
   sheets(state: AuthState.auth, name: 'sheets', path: '/sheets'),
   sheet(state: AuthState.auth, name: 'sheet', path: 'sheet/:id'),
+  sheetCreate(
+    state: AuthState.auth,
+    name: 'sheet-create',
+    path: 'create',
+  ),
 
   tables(state: AuthState.auth, name: 'tables', path: '/tables');
 
@@ -36,6 +43,8 @@ enum RoutesName {
 class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'root');
+
+  Listenable? refreshListenable;
 
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
@@ -69,16 +78,26 @@ class CustomRouter {
         builder: (context, state) => SheetsPage(),
         routes: [
           GoRoute(
+            path: RoutesName.sheetCreate.path,
+            name: RoutesName.sheetCreate.name,
+            builder: (context, state) => const SheetCreatePage(),
+          ),
+          GoRoute(
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
-            builder: (context, state) => SheetHomePage(id: state.params['id']!),
+            builder: (context, state) => SheetPage(id: state.params['id']!),
           ),
         ],
       ),
+      GoRoute(
+        path: RoutesName.tables.path,
+        name: RoutesName.tables.name,
+        builder: (context, state) => const TablesHomePage(),
+      )
     ],
+    refreshListenable: refreshListenable,
     redirect: (context, state) async {
       final authState = context.read<AuthService>().state;
-
       final bool toUnauth = RoutesName.values
           .where((element) => element.state == AuthState.unauth)
           .map((e) => e.path)
@@ -93,7 +112,7 @@ class CustomRouter {
       }
 
       if (authState == AuthState.auth && toUnauth) {
-        return null;
+        return RoutesName.home.path;
       }
 
       if (authState == AuthState.auth && !toUnauth) {
@@ -103,6 +122,4 @@ class CustomRouter {
       return null;
     },
   );
-
-  CustomRouter();
 }

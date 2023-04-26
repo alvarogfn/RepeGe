@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/database/users_db.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
@@ -11,8 +12,6 @@ import 'package:repege/environment_variables.dart';
 enum AuthState { auth, unauth }
 
 class AuthService with ChangeNotifier {
-  final UsersDB _usersDB = UsersDB();
-
   final FirebaseAuth instance = FirebaseAuth.instance;
 
   late AuthState state;
@@ -45,8 +44,10 @@ class AuthService with ChangeNotifier {
     required String password,
     required String username,
   }) async {
+    User? credentialUser;
+
     try {
-      final usernameExists = await _usersDB.checkIfUsernameExists(username);
+      final usernameExists = await UsersDB.checkIfUsernameExists(username);
 
       if (usernameExists) throw const AuthUsernameAlreadyUsedException();
 
@@ -55,22 +56,16 @@ class AuthService with ChangeNotifier {
         password: password,
       );
 
-      final credentialUser = credential.user;
+      credentialUser = credential.user;
 
       if (credentialUser == null) throw const AuthException();
 
-      try {
-        await _usersDB.create(
-          username: username,
-          email: email,
-          uid: credentialUser.uid,
-          avatarURL: credentialUser.photoURL ?? '',
-        );
-      } catch (e) {
-        await credentialUser.delete();
-
-        throw const AuthException();
-      }
+      await UsersDB.create(
+        username: username,
+        email: email,
+        uid: credentialUser.uid,
+        avatarURL: credentialUser.photoURL,
+      );
 
       if(EnvironmentVariables.production) {
         await credentialUser.sendEmailVerification();
@@ -87,6 +82,7 @@ class AuthService with ChangeNotifier {
     } on AuthException catch (_) {
       rethrow;
     } catch (e) {
+      await credentialUser?.delete();
       throw const AuthException();
     }
   }
