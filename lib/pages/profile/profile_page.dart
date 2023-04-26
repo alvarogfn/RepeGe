@@ -19,7 +19,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Future<LoggedUserWithData> fetchUser() async {
     final AuthService auth = Provider.of(context, listen: false);
-    return UsersDB().findByUID(auth.currentUser!.uid);
+    return UsersDB.findByUID(auth.currentUser!.uid);
   }
 
   bool _editMode = false;

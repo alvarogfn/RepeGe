@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/database/sheets_db.dart';
 import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
 import 'package:repege/pages/sheets/sheet_person_page.dart';
 import 'package:repege/pages/utils/loading_page.dart';
 import 'package:repege/route.dart';
-import 'package:repege/services/auth_service.dart';
 
 class SheetPage extends StatefulWidget {
   const SheetPage({required this.id, super.key});
@@ -54,9 +52,9 @@ class _SheetHomePageState extends State<SheetPage> {
               length: 5,
               child: Scaffold(
                 appBar: _AppBar(characterName: sheet.characterName),
-                body: const TabBarView(
+                body: TabBarView(
                   children: [
-                    SheetPersonPage(),
+                    SheetPersonPage(sheet),
                     Text('Status'),
                     Text('Inventário'),
                     Text('Itens'),

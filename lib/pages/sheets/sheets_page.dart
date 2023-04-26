@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/domains/sheets/dnd_sheet_card.dart';
+import 'package:repege/components/domains/sheets/empty_sheet_list.dart';
 import 'package:repege/components/shared/custom_drawer.dart';
 import 'package:repege/components/shared/handlers/error_handler.dart';
 import 'package:repege/components/shared/loading.dart';
@@ -41,6 +42,10 @@ class SheetsPage extends StatelessWidget {
             final sheets = snapshot.data!.docs
                 .map((doc) => DndSheetCard(sheet: doc.data()!))
                 .toList();
+
+            if (sheets.isEmpty) {
+              return const EmptySheetList();
+            }
 
             return ListView(
               children: sheets,
