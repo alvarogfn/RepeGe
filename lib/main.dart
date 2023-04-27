@@ -43,12 +43,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
-        // ChangeNotifierProxyProvider<AuthService, CustomRouter>(
-        //   create: (_) => CustomRouter(authState: AuthState.auth),
-        //   update: (_, auth, __) {
-        //     return CustomRouter(authState: auth.state);
-        //   },
-        // )
       ],
       // child: Consumer<AuthService>(
       //   builder: (context, _, child) {

@@ -13,6 +13,8 @@ class DnDSpell {
   final Duration castingTime;
   final int range;
   final DndDamage damageType;
+  final String name;
+  final String description;
 
   DnDSpell({
     required this.level,
@@ -21,6 +23,8 @@ class DnDSpell {
     required this.castingTime,
     required this.range,
     required this.damageType,
+    required this.name,
+    required this.description,
   });
 
   factory DnDSpell.fromMap(Map<String, Object> data) {
@@ -31,6 +35,8 @@ class DnDSpell {
       castingTime: data['castingTime'] as Duration,
       range: data['range'] as int,
       damageType: data['damageType'] as DndDamage,
+      name: data['name'] as String,
+      description: data['description'] as String,
     );
   }
 }

@@ -16,13 +16,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    final authService = Provider.of<AuthService>(context);
-    final user = authService.instance.currentUser!;
-
-    if (!user.emailVerified & EnvironmentVariables.production) {
-      notVerifiedSnackBar(context, user.email!);
-    }
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/database/sheets_db.dart';
 import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
 import 'package:repege/pages/sheets/sheet_person_page.dart';
+import 'package:repege/pages/sheets/sheet_spells_page.dart';
 import 'package:repege/pages/utils/loading_page.dart';
 import 'package:repege/route.dart';
 
@@ -57,8 +58,8 @@ class _SheetHomePageState extends State<SheetPage> {
                     SheetPersonPage(sheet),
                     Text('Status'),
                     Text('Inventário'),
-                    Text('Itens'),
-                    Text('Magias'),
+                    Text('Itens'),  
+                    SheetSpellsPage(sheet.spells),
                   ],
                 ),
               ),
