@@ -2,17 +2,30 @@ import 'package:repege/models/dnd/sheets/dnd_utils.dart';
 
 enum DndSpellLevels { l0, l1, l2, l3, l4, l5, l6, l7, l8, l9 }
 
-enum DndSpellTypes { necromancy }
+enum DnDSpellTypes {
+  abjuration(name: 'Abjuração'),
+  alteration(name: 'Transmutação'),
+  conjuration(name: 'Conjuração'),
+  divination(name: 'Adivinhação'),
+  enchantment(name: 'Encantamento'),
+  illusion(name: 'Ilusão'),
+  invocation(name: 'Evocação'),
+  necromancy(name: 'Necromancia');
+
+  const DnDSpellTypes({required this.name});
+
+  final String name;
+}
 
 enum DndSpellCatalyts { verbal, somantic, material }
 
 class DnDSpell {
   final DndSpellLevels level;
-  final DndSpellTypes type;
+  final DnDSpellTypes type;
   final List<DndSpellCatalyts> catalyts;
   final Duration castingTime;
   final int range;
-  final DndDamage damageType;
+  final DnDDamage damageType;
   final String name;
   final String description;
 
@@ -30,11 +43,11 @@ class DnDSpell {
   factory DnDSpell.fromMap(Map<String, Object> data) {
     return DnDSpell(
       level: data['level'] as DndSpellLevels,
-      type: data['type'] as DndSpellTypes,
+      type: data['type'] as DnDSpellTypes,
       catalyts: data['catalyts'] as List<DndSpellCatalyts>,
       castingTime: data['castingTime'] as Duration,
       range: data['range'] as int,
-      damageType: data['damageType'] as DndDamage,
+      damageType: data['damageType'] as DnDDamage,
       name: data['name'] as String,
       description: data['description'] as String,
     );

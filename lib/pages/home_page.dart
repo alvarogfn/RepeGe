@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/components/shared/custom_drawer.dart';
-import 'package:repege/environment_variables.dart';
-import 'package:repege/services/auth_service.dart';
-import 'package:repege/utils/not_verified_snackbar.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
