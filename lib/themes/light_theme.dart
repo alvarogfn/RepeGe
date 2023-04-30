@@ -23,7 +23,7 @@ final lightTheme = ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.black87,
   ),
-  tabBarTheme: TabBarTheme(
+  tabBarTheme: const TabBarTheme(
     labelColor: Colors.white,
     unselectedLabelColor: Colors.white54,
     indicatorColor: Colors.transparent,

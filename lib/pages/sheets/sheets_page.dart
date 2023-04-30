@@ -7,52 +7,99 @@ import 'package:repege/components/domains/sheets/empty_sheet_list.dart';
 import 'package:repege/components/shared/custom_drawer.dart';
 import 'package:repege/components/shared/handlers/error_handler.dart';
 import 'package:repege/components/shared/loading.dart';
-import 'package:repege/database/sheets_db.dart';
 import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
+import 'package:repege/models/dnd/sheets/sheet.dart';
 
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 
-class SheetsPage extends StatelessWidget {
+class SheetsPage extends StatefulWidget {
   SheetsPage({super.key});
 
-  final List<DnDSheet> sheets = [];
+  @override
+  State<SheetsPage> createState() => _SheetsPageState();
+}
+
+class _SheetsPageState extends State<SheetsPage> {
+  Future<List<Sheet>>? futureSheets;
+
+  Future<void> _refreshSheets() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    setState(() {
+      futureSheets = authService.user?.sheets() ?? Future.value([]);
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant SheetsPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _refreshSheets();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshSheets();
+  }
+
+  Future<void> _deleteSheet(Sheet sheet) async {
+    String message = '';
+
+    try {
+      await sheet.delete();
+      message = 'A ficha de ${sheet.characterName} foi deletada com sucesso.';
+    } catch (e) {
+      message = 'Não foi possível deletar a ficha de ${sheet.characterName}.';
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }
+    _refreshSheets();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       drawer: const CustomDrawer(),
-      body: Consumer<AuthService>(builder: (context, authService, value) {
-        return StreamBuilder<QuerySnapshot<DnDSheet?>>(
-          stream: SheetsDB.streamOfCreator(authService.currentUser!.uid),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return ErrorHandler(error: snapshot.error as Exception);
-            }
+      body: FutureBuilder<List<Sheet>>(
+        future: futureSheets,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loading();
+          }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loading();
-            }
-
-            if (!snapshot.hasData) {
-              return const Center(child: Text("Vazio"));
-            }
-
-            final sheets = snapshot.data!.docs
-                .map((doc) => DndSheetCard(sheet: doc.data()!))
-                .toList();
-
-            if (sheets.isEmpty) {
-              return const EmptySheetList();
-            }
-
-            return ListView(
-              children: sheets,
+          if (snapshot.data != null && snapshot.data!.isEmpty) {
+            return RefreshIndicator(
+              onRefresh: _refreshSheets,
+              child: ListView(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: EmptySheetList(),
+                  )
+                ],
+              ),
             );
-          },
-        );
-      }),
+          }
+
+          return RefreshIndicator(
+            onRefresh: _refreshSheets,
+            child: ListView.builder(
+              itemCount: snapshot.data?.length ?? 0,
+              itemBuilder: (context, index) {
+                return SheetCard(
+                  sheet: snapshot.data![index],
+                  deleteSheet: _deleteSheet,
+                );
+              },
+            ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.pushNamed(RoutesName.sheetCreate.name);

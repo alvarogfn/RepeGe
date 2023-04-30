@@ -1,39 +1,35 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:repege/database/users_db.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
-import 'package:repege/models/user_model.dart';
+import 'package:repege/models/user.dart' as local;
 import 'package:repege/environment_variables.dart';
-
 
 enum AuthState { auth, unauth }
 
 class AuthService with ChangeNotifier {
-  final FirebaseAuth instance = FirebaseAuth.instance;
+  final FirebaseAuth _instance = FirebaseAuth.instance;
 
   late AuthState state;
 
   late StreamSubscription _subscription;
 
-  LoggedUser? currentUser;
+  local.User? user;
 
   AuthService() {
-    state = instance.currentUser != null ? AuthState.auth : AuthState.unauth;
+    state = _instance.currentUser != null ? AuthState.auth : AuthState.unauth;
 
-    _subscription = instance.idTokenChanges().listen((user) {
-      LoggedUser? loggedUser;
+    _subscription = _instance.idTokenChanges().listen((current) {
+      local.User.get(current!.uid).then((value) => user = value);
 
       if (user != null) {
-        loggedUser = _toUserModel(user);
         state = AuthState.auth;
       } else {
         state = AuthState.unauth;
       }
 
-      currentUser = loggedUser;
       print("Notifying all AuthService listeners");
       notifyListeners();
     });
@@ -47,11 +43,11 @@ class AuthService with ChangeNotifier {
     User? credentialUser;
 
     try {
-      final usernameExists = await UsersDB.checkIfUsernameExists(username);
+      final usernameExists = await checkIfUsernameExists(username);
 
       if (usernameExists) throw const AuthUsernameAlreadyUsedException();
 
-      final credential = await instance.createUserWithEmailAndPassword(
+      final credential = await _instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -60,14 +56,14 @@ class AuthService with ChangeNotifier {
 
       if (credentialUser == null) throw const AuthException();
 
-      await UsersDB.create(
+      await local.User.create(
         username: username,
         email: email,
         uid: credentialUser.uid,
         avatarURL: credentialUser.photoURL,
       );
 
-      if(EnvironmentVariables.production) {
+      if (EnvironmentVariables.production) {
         await credentialUser.sendEmailVerification();
       }
     } on FirebaseAuthException catch (e) {
@@ -92,7 +88,7 @@ class AuthService with ChangeNotifier {
     required String password,
   }) async {
     try {
-      final credential = await instance.signInWithEmailAndPassword(
+      final credential = await _instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -117,19 +113,25 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await instance.signOut();
-  }
-
-  LoggedUser _toUserModel(User user) {
-    return LoggedUser(
-      uid: user.uid,
-      email: user.email!,
-    );
+    await _instance.signOut();
   }
 
   @override
   void dispose() {
     super.dispose();
     _subscription.cancel();
+  }
+
+  static Future<bool> checkIfUsernameExists(String username) async {
+    try {
+      final usernameDoc = await FirebaseFirestore.instance
+          .collection("usernames")
+          .doc(username)
+          .get();
+
+      return usernameDoc.exists;
+    } catch (e) {
+      return false;
+    }
   }
 }

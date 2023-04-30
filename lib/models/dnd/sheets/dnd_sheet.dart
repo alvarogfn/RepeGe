@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:repege/models/dnd/sheets/dnd_attributes.dart';
 import 'package:repege/models/dnd/sheets/dnd_bag.dart';
 import 'package:repege/models/dnd/sheets/dnd_spells.dart';
@@ -41,7 +39,7 @@ class DnDSheet {
     required this.inspiration,
   });
 
-  factory DnDSheet.fromMap(Map<String, Object> data) {
+  factory DnDSheet.fromMap(Map<String, dynamic> data) {
     final DnDSheetAttributes attributes = DnDSheetAttributes.fromMap(
       data['attributes'] as Map<String, Object>,
     );

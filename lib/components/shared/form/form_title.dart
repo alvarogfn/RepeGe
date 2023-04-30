@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FormTitle extends StatelessWidget {
   const FormTitle({
     required this.title,
-    required this.subtitle,
+    this.subtitle = '',
     super.key,
   });
 

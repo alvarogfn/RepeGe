@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/components/shared/form/form_title.dart';
+import 'package:repege/components/shared/form/picture_form_field.dart';
 import 'package:repege/components/shared/full_screen_scroll.dart';
-import 'package:repege/components/shared/handlers/error_handler.dart';
-import 'package:repege/database/sheets_db.dart';
-import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
-import 'package:repege/models/user_model.dart';
+import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/route.dart';
-import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/required_validation.dart';
 import 'package:repege/utils/validations/validations.dart';
 
@@ -20,45 +16,34 @@ class SheetCreatePage extends StatefulWidget {
 }
 
 class _SheetCreatePageState extends State<SheetCreatePage> {
-  final Map<String, String> _form = {};
+  final Map<String, Object> _form = {};
 
   final _formKey = GlobalKey<FormState>();
 
-  Exception? error;
   bool loading = false;
 
   Future<void> _handleSubmit() async {
-    if (_formKey.currentState == null) return;
+    final currentState = _formKey.currentState;
+    if (currentState == null) return;
 
-    final isValid = _formKey.currentState!.validate();
-
+    final isValid = currentState.validate();
     if (!isValid) return;
 
     try {
       setState(() => loading = true);
 
-      _formKey.currentState!.save();
+      currentState.save();
 
-      final String user = Provider.of<AuthService>(
-        context,
-        listen: false,
-      ).currentUser!.uid;
-
-      final sheet = DnDSheet.blank(
-        characterName: _form['characterName']!,
-        characterClass: _form['characterClass']!,
-        characterRace: _form['characterRace']!,
-        background: _form['background']!,
-        aligment: _form['aligment']!,
-      );
-
-      final sheetID = await SheetsDB.create(user, sheet);
+      final Sheet sheet = await Sheet.create(_form);
 
       if (context.mounted) {
-        return context.goNamed(RoutesName.sheet.name, params: {'id': sheetID});
+        return context.goNamed(RoutesName.sheet.name, params: {'id': sheet.id});
       }
     } catch (e) {
-      setState(() => error = e as Exception);
+      rethrow;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
     } finally {
       setState(() => loading = false);
     }
@@ -85,12 +70,18 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: 20),
                   child: FormTitle(
                     title: "Dados do Personagem",
                     subtitle:
                         "Você poderá preencher outras informações na própria ficha.",
                   ),
+                ),
+                PictureFormField(
+                  label: "Foto do Personagem",
+                  onChange: (picture) {
+                    if (picture != null) _form['picture'] = picture;
+                  },
                 ),
                 _TextField(
                   label: 'Nome',
@@ -132,7 +123,6 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                   textAction: TextInputAction.done,
                   helperText: "Neutro/Bom",
                 ),
-                ErrorHandler(error: error),
               ],
             ),
           ),
@@ -146,15 +136,15 @@ class _TextField extends StatelessWidget {
   const _TextField({
     super.key,
     required this.label,
-    required Map<String, String> form,
+    required this.form,
     required this.formKey,
     required this.keyboardType,
     required this.textAction,
     this.helperText,
-  }) : _form = form;
+  });
 
   final String label;
-  final Map<String, String> _form;
+  final Map<dynamic, dynamic> form;
   final String formKey;
   final TextInputType keyboardType;
   final TextInputAction textAction;
@@ -172,7 +162,7 @@ class _TextField extends StatelessWidget {
         validator: (value) => Validator.validateWith(value, [
           RequiredValidation(),
         ]),
-        onSaved: (value) => _form[formKey] = value as String,
+        onSaved: (value) => form[formKey] = value as String,
         keyboardType: keyboardType,
         textInputAction: textAction,
       ),

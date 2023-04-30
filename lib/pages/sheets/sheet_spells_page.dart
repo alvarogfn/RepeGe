@@ -1,116 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/shared/form/form_title.dart';
-import 'package:repege/components/shared/form/select_form_field.dart';
+import 'package:go_router/go_router.dart';
+import 'package:repege/components/domains/sheets/input_field.dart';
 import 'package:repege/components/shared/stack_floating_button.dart';
+import 'package:repege/models/dnd/sheets/dnd_sheet.dart';
 import 'package:repege/models/dnd/sheets/dnd_spells.dart';
+import 'package:repege/route.dart';
 
 class SheetSpellsPage extends StatelessWidget {
-  const SheetSpellsPage(this.sheetSpells, {super.key});
+  const SheetSpellsPage(this.sheet, {super.key});
 
-  final DnDSheetSpells sheetSpells;
+  final DnDSheet sheet;
 
+  DnDSheetSpells get sheetSpells => sheet.spells;
   List<DnDSpell> get spells => sheetSpells.spells;
+
+  Future<void> _pushToAddNewSpell(BuildContext context) async {
+    final spell = await context.pushNamed<DnDSpell?>(
+      RoutesName.sheetSpellCreate.name,
+      params: {'id': sheet.id},
+    );
+
+    if (spell != null) {
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StackFloatingButton(
       floatingButton: FloatingActionButton(
-        onPressed: () => _showModalBottomSheet(context),
+        onPressed: () => _pushToAddNewSpell(context),
         child: const Icon(Icons.add),
       ),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.all(8.0),
-            height: 200,
+          SizedBox(
+            height: 100,
             child: Card(
-              child: Text(''),
+              elevation: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InputField(
+                        initialValue: sheetSpells.spellAttackBonus.toString(),
+                        propertyKey: 'spellAttacKBonus',
+                        label: 'Bonus de Ataque de Magia',
+                        editMode: false,
+                        updateSheetField: (a, b) {},
+                      ),
+                    ),
+                    Expanded(
+                      child: InputField(
+                        initialValue: sheetSpells.spellAttackBonus.toString(),
+                        propertyKey: 'spellAttacKBonus',
+                        label: 'Bonus de Ataque de Magia',
+                        editMode: false,
+                        updateSheetField: (a, b) {},
+                      ),
+                    ),
+                    Expanded(
+                      child: InputField(
+                        initialValue: sheetSpells.spellAttackBonus.toString(),
+                        propertyKey: 'spellAttacKBonus',
+                        label: 'Bonus de Ataque de Magia',
+                        editMode: false,
+                        updateSheetField: (a, b) {},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          _SpellsList(spells: spells),
+          Expanded(
+            child: ListView.builder(
+              itemCount: spells.length,
+              itemBuilder: (context, index) {
+                return Container();
+              },
+            ),
+          )
         ],
-      ),
-    );
-  }
-
-  Future<dynamic> _showModalBottomSheet(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: false,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10.0),
-          topRight: Radius.circular(10.0),
-        ),
-      ),
-      builder: (context) {
-        final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-        return Padding(
-          padding: EdgeInsets.only(bottom: keyboardHeight),
-          child: const SpellForm(),
-        );
-      },
-    );
-  }
-}
-
-class SpellForm extends StatefulWidget {
-  const SpellForm({super.key});
-
-  @override
-  State<SpellForm> createState() => _SpellFormState();
-}
-
-class _SpellFormState extends State<SpellForm> {
-  final _spellFormKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(10.0),
-        topRight: Radius.circular(10.0),
-      ),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _spellFormKey,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FormTitle(title: "Adicionar Nova Magia  ", subtitle: ""),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Nome"),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Descrição"),
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  maxLines: 4,
-                ),
-                SizedBox(height: 20),
-                SelectFormField(
-                  items: DnDSpellTypes.values.map((e) => e.name).toList(),
-                  onChanged: (value) {
-                    print(value);
-                  },
-                  label: 'Tipo',
-                ),
-                SizedBox(height: 20),
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Adicionar'),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

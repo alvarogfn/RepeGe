@@ -5,12 +5,14 @@ class SelectFormField extends StatefulWidget {
     required this.items,
     required this.onChanged,
     required this.label,
+    this.onSaved,
     super.key,
   });
 
   final List items;
   final void Function(String?) onChanged;
   final String label;
+  final void Function(String?)? onSaved;
 
   @override
   State<SelectFormField> createState() => _SelectFormFieldState();
@@ -21,9 +23,9 @@ class _SelectFormFieldState extends State<SelectFormField> {
 
   final FocusNode _inputFocus = FocusNode();
 
-  List<DropdownMenuItem> get dropdownItems {
+  List<DropdownMenuItem<String>> get dropdownItems {
     final widgets = widget.items.map((item) {
-      return DropdownMenuItem(
+      return DropdownMenuItem<String>(
         value: item,
         child: Text(item.toString()),
       );
@@ -34,7 +36,7 @@ class _SelectFormFieldState extends State<SelectFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField(
+    return DropdownButtonFormField<String>(
       items: dropdownItems,
       onChanged: (value) {
         setState(() => selectedItem = value);
@@ -42,9 +44,10 @@ class _SelectFormFieldState extends State<SelectFormField> {
         widget.onChanged(value);
       },
       value: selectedItem,
-      decoration: const InputDecoration(
-        labelText: "Tipo",
+      decoration: InputDecoration(
+        labelText: widget.label,
       ),
+      onSaved: widget.onSaved,
     );
   }
 }

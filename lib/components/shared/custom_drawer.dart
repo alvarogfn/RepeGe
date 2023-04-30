@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/shared/loading.dart';
-import 'package:repege/database/users_db.dart';
-import 'package:repege/models/user_model.dart';
+import 'package:repege/models/user.dart' as local;
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 
@@ -17,50 +17,46 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
-
     return Drawer(
-      child: Column(children: [
-        AppBar(
-          automaticallyImplyLeading: false,
-          title: Consumer<AuthService>(builder: (context, value, _) {
-            if (value.currentUser != null) {
-              return UserLeading(user: value.currentUser!);
-            }
-            return const SizedBox();
-          }),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (ctx) => [
-                PopupMenuItem(
-                  onTap: () {
-                    context.goNamed(RoutesName.login.name);
-                    authService.logout();
-                  },
-                  child: const IconTextButton(icon: Icons.logout, text: "Sair"),
-                ),
-              ],
-            ),
-          ],
-        ),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            children: const [
-              NavigationListItem(
-                icon: Icons.article,
-                text: "Fichas",
-                route: RoutesName.sheets,
-              ),
-              NavigationListItem(
-                icon: Icons.groups,
-                text: "Mesas",
-                route: RoutesName.tables,
+      child: Consumer<AuthService>(builder: (context, authService, child) {
+        return Column(children: [
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: UserLeading(user: authService.user!),
+            actions: [
+              PopupMenuButton(
+                itemBuilder: (ctx) => [
+                  PopupMenuItem(
+                    onTap: () {
+                      context.goNamed(RoutesName.login.name);
+                      authService.logout();
+                    },
+                    child:
+                        const IconTextButton(icon: Icons.logout, text: "Sair"),
+                  ),
+                ],
               ),
             ],
           ),
-        )
-      ]),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              children: const [
+                NavigationListItem(
+                  icon: Icons.article,
+                  text: "Fichas",
+                  route: RoutesName.sheets,
+                ),
+                NavigationListItem(
+                  icon: Icons.groups,
+                  text: "Mesas",
+                  route: RoutesName.tables,
+                ),
+              ],
+            ),
+          )
+        ]);
+      }),
     );
   }
 }
@@ -96,7 +92,7 @@ class UserLeading extends StatelessWidget {
     required this.user,
   });
 
-  final LoggedUser user;
+  final local.User user;
 
   Future<void> navigateToProfile(BuildContext context) async {
     context.pushNamed(RoutesName.profile.name);
@@ -104,27 +100,31 @@ class UserLeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      InkWell(
-        borderRadius: BorderRadius.circular(20),
-        child: FutureBuilder<LoggedUserWithData>(
-            future: UsersDB.findByUID(user.uid),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Loading();
-              }
-              return CircleAvatar(
-                backgroundImage: NetworkImage(snapshot.data!.avatarURL),
-              );
-            }),
-        onTap: () => navigateToProfile(context),
-      ),
-      const SizedBox(width: 10),
-      Text(
-        user.email,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-      )
-    ]);
+    if (user == null) {
+      return const Loading(color: Colors.white);
+    }
+    return Row(
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(100),
+          onTap: () => navigateToProfile(context),
+          child: CircleAvatar(backgroundImage: avatar(user.avatarURL)),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          user.username,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
+
+  ImageProvider avatar(String? avatarURL) {
+    if (avatarURL != null) {
+      return NetworkImage(avatarURL);
+    }
+
+    return const AssetImage("assets/images/default_profile_picture.png");
   }
 }
 

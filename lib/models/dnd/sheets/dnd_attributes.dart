@@ -1,11 +1,4 @@
-enum DndAttributes {
-  strength,
-  dextery,
-  constitution,
-  intelligence,
-  wisdom,
-  charisma,
-}
+import 'package:repege/models/dnd/sheets/dnd_utils.dart';
 
 class DnDSheetAttributes {
   final int strength;
@@ -15,7 +8,7 @@ class DnDSheetAttributes {
   final int wisdom;
   final int charisma;
 
-  final List<DndAttributes> savingThrows;
+  final List<DnDAttributes> savingThrows;
 
   DnDSheetAttributes({
     this.strength = 0,
@@ -35,7 +28,7 @@ class DnDSheetAttributes {
       intelligence: data['intelligence'] as int,
       strength: data['strength'] as int,
       wisdom: data['wisdom'] as int,
-      savingThrows: data['savingThrows'] as List<DndAttributes>,
+      savingThrows: data['savingThrows'] as List<DnDAttributes>,
     );
   }
 }

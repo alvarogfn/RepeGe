@@ -7,6 +7,7 @@ import 'package:repege/pages/profile/profile_page.dart';
 import 'package:repege/pages/register_page.dart';
 import 'package:repege/pages/sheets/sheet_create_page.dart';
 import 'package:repege/pages/sheets/sheet_page.dart';
+import 'package:repege/pages/sheets/sheet_spell_create.dart';
 import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/pages/tables/tables_home_page.dart';
 import 'package:repege/services/auth_service.dart';
@@ -21,6 +22,13 @@ enum RoutesName {
 
   sheets(state: AuthState.auth, name: 'sheets', path: '/sheets'),
   sheet(state: AuthState.auth, name: 'sheet', path: 'sheet/:id'),
+
+  sheetSpellCreate(
+    state: AuthState.auth,
+    name: 'sheet-spell-create',
+    path: 'spell-create',
+  ),
+
   sheetCreate(
     state: AuthState.auth,
     name: 'sheet-create',
@@ -86,6 +94,13 @@ class CustomRouter {
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
             builder: (context, state) => SheetPage(id: state.params['id']!),
+            routes: [
+              GoRoute(
+                path: RoutesName.sheetSpellCreate.path,
+                name: RoutesName.sheetSpellCreate.name,
+                builder: (context, state) => const SheetSpellCreate(),
+              ),
+            ],
           ),
         ],
       ),
