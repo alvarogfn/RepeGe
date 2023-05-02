@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/services/auth_service.dart';
-import 'package:repege/utils/get_image_file_from_assets.dart';
 
 class User {
   final _firestone = FirebaseFirestore.instance;
@@ -151,7 +150,7 @@ class User {
       email: userDoc['email'],
       uid: userDoc['uid'],
       username: userDoc['username'],
-      createdAt: userDoc['createdAt'],
+      createdAt: userDoc['createdAt'] ?? Timestamp.fromDate(DateTime.now()),
     );
   }
 }

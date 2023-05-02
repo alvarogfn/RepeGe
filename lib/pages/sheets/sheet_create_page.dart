@@ -40,7 +40,6 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
         return context.goNamed(RoutesName.sheet.name, params: {'id': sheet.id});
       }
     } catch (e) {
-      rethrow;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
@@ -134,7 +133,6 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
 
 class _TextField extends StatelessWidget {
   const _TextField({
-    super.key,
     required this.label,
     required this.form,
     required this.formKey,

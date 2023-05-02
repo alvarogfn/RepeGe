@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
           title: 'RepeGe',
           theme: lightTheme,
           darkTheme: darkTheme,
-          themeMode: ThemeMode.system,
+          themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
         );
         return app;

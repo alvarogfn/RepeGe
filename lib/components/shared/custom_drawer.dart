@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/components/shared/loading.dart';
-import 'package:repege/models/user.dart' as local;
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 
@@ -21,7 +18,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: Column(children: [
       AppBar(
         automaticallyImplyLeading: false,
-        title: UserLeading(),
+        title: const UserLeading(),
         actions: [
           Consumer<AuthService>(
             builder: (context, authService, child) {

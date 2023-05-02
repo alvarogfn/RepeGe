@@ -34,8 +34,8 @@ class _SheetHomePageState extends State<SheetPage> {
                 children: [
                   SheetCharacterDetailsPage(sheet: sheet),
                   SheetStatusDetailsPage(sheet: sheet),
-                  Text('Inventário'),
-                  Text('Itens'),
+                  const Text('Inventário'),
+                  const Text('Itens'),
                   SheetSpellsDetailsPage(sheet: sheet),
                 ],
               ),

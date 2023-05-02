@@ -64,7 +64,7 @@ class CharacterPicture extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           image: DecorationImage(image: NetworkImage(picture)),
         ),
-        child: SizedBox(),
+        child: const SizedBox(),
       ),
     );
   }

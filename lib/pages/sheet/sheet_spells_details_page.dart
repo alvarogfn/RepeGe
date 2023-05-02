@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:repege/components/domains/sheets/list_spell_card.dart';
 import 'package:repege/components/shared/circle_icon.dart';
 import 'package:repege/components/shared/loading.dart';
-import 'package:repege/components/shared/stack_floating_button.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/models/dnd/sheets/sheet_spells.dart';
 import 'package:repege/models/dnd/spell.dart';
@@ -105,7 +105,7 @@ class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
                     itemCount: spells.length,
                     itemBuilder: (context, index) {
                       final Spell spell = spells[index];
-                      return SpellListTile(spell);
+                      return ListSpellCard(spell: spell);
                     },
                   ),
                 ),
@@ -142,33 +142,6 @@ class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SpellListTile extends StatelessWidget {
-  const SpellListTile(
-    this.spell, {
-    super.key,
-  });
-
-  final Spell spell;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(spell.name),
-        subtitle: Text(spell.description),
-        leading: CircleAvatar(
-          backgroundColor: spell.damageType?.color ?? Colors.grey,
-          child: Text(spell.damageType?.name ?? 'Outro'),
-        ),
-        trailing: Text(
-          "${spell.catalyts.map((e) => '${e.abbreviation},')} ${spell.castingTime}, ${spell.level.name}",
-        ),
-        isThreeLine: true,
       ),
     );
   }

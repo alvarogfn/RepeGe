@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:repege/components/shared/custom_drawer.dart';
-import 'package:repege/components/shared/full_screen_scroll.dart';
 
 class TablesHomePage extends StatelessWidget {
   const TablesHomePage({super.key});

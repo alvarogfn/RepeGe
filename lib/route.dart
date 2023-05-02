@@ -90,7 +90,7 @@ class CustomRouter {
       GoRoute(
         path: RoutesName.sheets.path,
         name: RoutesName.sheets.name,
-        builder: (context, state) => SheetsPage(),
+        builder: (context, state) => const SheetsPage(),
         routes: [
           GoRoute(
             path: RoutesName.sheetCreate.path,

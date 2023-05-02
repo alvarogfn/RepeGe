@@ -8,7 +8,6 @@ import 'package:repege/models/utils/field.dart';
 
 class Sheet {
   final _firestone = FirebaseFirestore.instance;
-  final _bucket = FirebaseStorage.instance;
 
   late final _ref = _firestone.collection("sheets").doc(id).withConverter(
         fromFirestore: fromFirestore,
@@ -20,7 +19,7 @@ class Sheet {
   final String characterName;
   final String characterClass;
   final String characterRace;
-  final String characterPicture;
+  final String? characterPicture;
   final String background;
   final String aligment;
   final List<String> notes;
@@ -36,7 +35,7 @@ class Sheet {
     required this.characterName,
     required this.characterClass,
     required this.characterRace,
-    required this.characterPicture,
+    this.characterPicture,
     required this.background,
     required this.aligment,
     required this.createdAt,
@@ -84,20 +83,23 @@ class Sheet {
           toFirestore: toFirestore,
         );
 
-    final File pictureFile = data['picture'];
-
+    late String? pictureURL;
     final pictureRef = bucket.ref(
       "users/$userID/sheets/${sheetRef.id}/picture",
     );
+    if (data['picture'] != null) {
+      final File pictureFile = data['picture'];
 
-    await pictureRef.putFile(
-      pictureFile,
-      SettableMetadata(
-        contentType: "image/${pictureFile.path.split('.').last}",
-      ),
-    );
+      await pictureRef.putFile(
+        pictureFile,
+        SettableMetadata(
+          contentType: "image/${pictureFile.path.split('.').last}",
+        ),
+      );
+      pictureURL = await pictureRef.getDownloadURL();
+    }
 
-    final pictureURL = await pictureRef.getDownloadURL();
+    pictureURL = null;
 
     try {
       final sheet = Sheet(
@@ -173,7 +175,7 @@ class Sheet {
       characterPicture: sheetDoc['characterPicture'],
       background: sheetDoc['background'],
       aligment: sheetDoc['aligment'],
-      createdAt: sheetDoc['createdAt'],
+      createdAt: sheetDoc['createdAt'] ?? Timestamp.fromDate(DateTime.now()),
       ownerID: sheetDoc['ownerID'],
       ownerRef: sheetDoc['ownerRef'],
       notes: List<String>.from(sheetDoc['notes']),

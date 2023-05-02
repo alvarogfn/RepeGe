@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/shared/handlers/error_handler.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
-import 'package:repege/pages/register_page.dart';
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';

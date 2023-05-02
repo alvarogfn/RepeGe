@@ -49,7 +49,7 @@ class _FormCardBottomEditableState extends State<FormCardBottomEditable> {
                     height: 30,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
-                      child: Icon(Icons.edit),
+                      child: const Icon(Icons.edit),
                       onTap: () {
                         _showModalBottomSheet(context);
                       },

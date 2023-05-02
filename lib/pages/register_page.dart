@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/components/shared/app_title.dart';
 import 'package:repege/components/shared/full_screen_scroll.dart';
 import 'package:repege/components/shared/handlers/error_handler.dart';
-import 'package:repege/components/shared/helpers/loading_stream_helper.dart';
-import 'package:repege/pages/login_page.dart';
+import 'package:repege/environment_variables.dart';
 import 'package:repege/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
+import 'package:repege/utils/validations/password_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
 import 'package:repege/utils/validations/validations.dart';
 
@@ -158,8 +158,7 @@ class PasswordField extends StatelessWidget {
       },
       validator: (value) => Validator.validateWith(value, [
         RequiredValidation(),
-        // FIXME
-        // PasswordValidation(),
+        if (EnvironmentVariables.production) PasswordValidation()
       ]),
     );
   }
