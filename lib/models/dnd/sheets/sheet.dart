@@ -3,46 +3,14 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:repege/models/dices/dice_type.dart';
-
-class SheetStatus {
-  final DocumentReference<Sheet> ref;
-
-  final int currentHp;
-  final int temporaryHp;
-  final int iniative;
-  final int speed;
-  final int armorClass;
-  final List<DiceType> hitDice;
-  final Map<String, int> deathSaves = {"sucesses": 0, "failures": 0};
-
-  SheetStatus({
-    required this.ref,
-    this.currentHp = 0,
-    this.temporaryHp = 0,
-    this.iniative = 0,
-    this.speed = 0,
-    this.armorClass = 0,
-    this.hitDice = const [],
-  });
-
-  toMap() {
-    return {
-      'currentHp': currentHp,
-      'temporaryHp': temporaryHp,
-      'iniative': iniative,
-      'speed': speed,
-      'armorClass': armorClass,
-      'hitDice': hitDice,
-    };
-  }
-}
+import 'package:repege/models/dnd/sheets/sheet_spells.dart';
+import 'package:repege/models/utils/field.dart';
 
 class Sheet {
-  final firestone = FirebaseFirestore.instance;
-  final bucket = FirebaseStorage.instance;
+  final _firestone = FirebaseFirestore.instance;
+  final _bucket = FirebaseStorage.instance;
 
-  late final _ref = firestone.collection("sheets").doc(id).withConverter(
+  late final _ref = _firestone.collection("sheets").doc(id).withConverter(
         fromFirestore: fromFirestore,
         toFirestore: toFirestore,
       );
@@ -56,6 +24,8 @@ class Sheet {
   final String background;
   final String aligment;
   final List<String> notes;
+
+  final SheetSpells sheetSpells;
 
   final Timestamp createdAt;
   final DocumentReference ownerRef;
@@ -72,11 +42,36 @@ class Sheet {
     required this.createdAt,
     required this.ownerRef,
     required this.ownerID,
+    required this.sheetSpells,
     this.notes = const [],
   });
 
   Future<void> delete() async {
     return _ref.delete();
+  }
+
+  Future<void> updateOne({
+    required String property,
+    required String value,
+  }) async {
+    await _ref.update({property: value});
+  }
+
+  Future<void> updateMany(Map<String, Object> data) async {
+    await _ref.update(data);
+  }
+
+  List<Field> fields() {
+    return [
+      Field(label: "Nome", value: characterName, propertyKey: "characterName"),
+      Field(
+        label: "Classe",
+        value: characterClass,
+        propertyKey: "characterClass",
+      ),
+      Field(label: "Alinhamento", value: aligment, propertyKey: "aligment"),
+      Field(label: "Background", value: background, propertyKey: "background"),
+    ];
   }
 
   static Future<Sheet> create(Map<String, dynamic> data) async {
@@ -113,6 +108,7 @@ class Sheet {
         characterPicture: pictureURL,
         background: data['background'],
         aligment: data['aligment'],
+        sheetSpells: SheetSpells(id: sheetRef.id),
         createdAt: Timestamp(0, 0),
         ownerRef: firestone.collection("users").doc(userID),
         ownerID: userID,
@@ -130,6 +126,15 @@ class Sheet {
     return sheet.data()!;
   }
 
+  static Stream<Sheet?> get(String id) {
+    return FirebaseFirestore.instance
+        .collection("sheets")
+        .doc(id)
+        .withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore)
+        .snapshots()
+        .asyncMap((doc) => doc.data());
+  }
+
   static Map<String, Object?> toFirestore(Sheet? sheet, SetOptions? options) {
     if (sheet == null) return {};
     return {
@@ -143,16 +148,13 @@ class Sheet {
       'ownerID': sheet.ownerID,
       'ownerRef': sheet.ownerRef,
       'notes': sheet.notes,
+      'sheetSpells': {
+        'spellAttackBonus': sheet.sheetSpells.spellAttackBonus,
+        'spellCastingClass': sheet.sheetSpells.spellCastingClass?.name,
+        'spellCastingHability': sheet.sheetSpells.spellCastingHability,
+        'spellSaveDc': sheet.sheetSpells.spellSaveDc,
+      }
     };
-  }
-
-  static Stream<Sheet?> get(String id) {
-    return FirebaseFirestore.instance
-        .collection("sheets")
-        .doc(id)
-        .withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore)
-        .snapshots()
-        .asyncMap((doc) => doc.data());
   }
 
   static Sheet? fromFirestore(
@@ -160,11 +162,11 @@ class Sheet {
     SnapshotOptions? options,
   ) {
     final sheetDoc = doc.data();
-
     if (sheetDoc == null) return null;
 
     return Sheet(
       id: doc.id,
+      sheetSpells: SheetSpells(id: doc.id),
       characterName: sheetDoc['characterName'],
       characterClass: sheetDoc['characterClass'],
       characterRace: sheetDoc['characterRace'],

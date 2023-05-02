@@ -18,46 +18,49 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Consumer<AuthService>(builder: (context, authService, child) {
-        return Column(children: [
-          AppBar(
-            automaticallyImplyLeading: false,
-            title: UserLeading(user: authService.user!),
-            actions: [
-              PopupMenuButton(
+        child: Column(children: [
+      AppBar(
+        automaticallyImplyLeading: false,
+        title: UserLeading(),
+        actions: [
+          Consumer<AuthService>(
+            builder: (context, authService, child) {
+              return PopupMenuButton(
                 itemBuilder: (ctx) => [
                   PopupMenuItem(
                     onTap: () {
                       context.goNamed(RoutesName.login.name);
                       authService.logout();
                     },
-                    child:
-                        const IconTextButton(icon: Icons.logout, text: "Sair"),
+                    child: const IconTextButton(
+                      icon: Icons.logout,
+                      text: "Sair",
+                    ),
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              children: const [
-                NavigationListItem(
-                  icon: Icons.article,
-                  text: "Fichas",
-                  route: RoutesName.sheets,
-                ),
-                NavigationListItem(
-                  icon: Icons.groups,
-                  text: "Mesas",
-                  route: RoutesName.tables,
-                ),
-              ],
+        ],
+      ),
+      Expanded(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          children: const [
+            NavigationListItem(
+              icon: Icons.article,
+              text: "Fichas",
+              route: RoutesName.sheets,
             ),
-          )
-        ]);
-      }),
-    );
+            NavigationListItem(
+              icon: Icons.groups,
+              text: "Mesas",
+              route: RoutesName.tables,
+            ),
+          ],
+        ),
+      )
+    ]));
   }
 }
 
@@ -89,10 +92,7 @@ class NavigationListItem extends StatelessWidget {
 class UserLeading extends StatelessWidget {
   const UserLeading({
     super.key,
-    required this.user,
   });
-
-  final local.User user;
 
   Future<void> navigateToProfile(BuildContext context) async {
     context.pushNamed(RoutesName.profile.name);
@@ -100,22 +100,24 @@ class UserLeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (user == null) {
-      return const Loading(color: Colors.white);
-    }
-    return Row(
-      children: [
-        InkWell(
-          borderRadius: BorderRadius.circular(100),
-          onTap: () => navigateToProfile(context),
-          child: CircleAvatar(backgroundImage: avatar(user.avatarURL)),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          user.username,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-        ),
-      ],
+    return Consumer<AuthService>(
+      builder: (context, authService, child) {
+        final user = authService.user!;
+        return Row(
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(100),
+              onTap: () => navigateToProfile(context),
+              child: CircleAvatar(backgroundImage: avatar(user.avatarURL)),
+            ),
+            const SizedBox(width: 15),
+            Text(
+              user.username,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            ),
+          ],
+        );
+      },
     );
   }
 

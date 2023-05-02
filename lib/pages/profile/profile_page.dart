@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       updateLoading(true);
       if (user == null) return;
-      if (avatar != null) await user!.updateAvatar(avatar!);
+      if (avatar != null) await user!.updateAvatar(avatar!, context);
       await fetchUser();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

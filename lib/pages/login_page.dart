@@ -41,23 +41,23 @@ class _LoginPageState extends State<LoginPage> {
         password: _formData['password'] as String,
       );
     } on AuthEmailNotVerifiedException catch (_) {
-      if (context.mounted) _openEmailNotVerifiedAlert();
+      // if (context.mounted) _openEmailNotVerifiedAlert();
     } catch (e) {
       setState(() => _error = e as Exception);
     }
   }
 
-  _openEmailNotVerifiedAlert() {
-    showDialog(
-      context: context,
-      builder: (ctx) => const AlertDialog(
-        title: Text("Verifique seu e-mail!"),
-        content: Text(
-          "Por favor, verifique seu e-mail para confirmar sua conta. Algumas funcionalidades podem ficar indisponíveis.",
-        ),
-      ),
-    );
-  }
+  // _openEmailNotVerifiedAlert() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (ctx) => const AlertDialog(
+  //       title: Text("Verifique seu e-mail!"),
+  //       content: Text(
+  //         "Por favor, verifique seu e-mail para confirmar sua conta. Algumas funcionalidades podem ficar indisponíveis.",
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

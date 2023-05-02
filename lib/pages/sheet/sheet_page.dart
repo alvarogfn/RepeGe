@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
+import 'package:repege/pages/sheet/sheet_character_details_page.dart';
+import 'package:repege/pages/sheet/sheet_spells_details_page.dart';
+import 'package:repege/pages/sheet/sheet_status_details_page.dart';
 import 'package:repege/pages/utils/loading_page.dart';
-import 'package:repege/route.dart';
-import 'package:repege/services/auth_service.dart';
 
 class SheetPage extends StatefulWidget {
   const SheetPage({required this.id, super.key});
@@ -31,13 +30,13 @@ class _SheetHomePageState extends State<SheetPage> {
             length: 5,
             child: Scaffold(
               appBar: _AppBar(characterName: sheet.characterName),
-              body: const TabBarView(
+              body: TabBarView(
                 children: [
-                  // SheetPersonPage(sheet),
-                  Text('Status'),
+                  SheetCharacterDetailsPage(sheet: sheet),
+                  SheetStatusDetailsPage(sheet: sheet),
                   Text('Inventário'),
                   Text('Itens'),
-                  // SheetSpellsPage(sheet),
+                  SheetSpellsDetailsPage(sheet: sheet),
                 ],
               ),
             ),

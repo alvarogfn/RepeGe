@@ -1,30 +1,30 @@
-import 'package:repege/models/dnd/sheets/dnd_utils.dart';
+import 'package:repege/models/dnd/attributes.dart';
 
 enum DndSkills {
-  acrobatics(type: DnDAttributes.charisma),
-  animalHandling(type: DnDAttributes.wisdom),
-  arcana(type: DnDAttributes.intelligence),
-  athletics(type: DnDAttributes.strength),
-  deception(type: DnDAttributes.charisma),
-  history(type: DnDAttributes.intelligence),
-  insight(type: DnDAttributes.wisdom),
-  intimidation(type: DnDAttributes.charisma),
-  investigation(type: DnDAttributes.intelligence),
-  medicine(type: DnDAttributes.wisdom),
-  nature(type: DnDAttributes.intelligence),
-  perception(type: DnDAttributes.wisdom),
-  performance(type: DnDAttributes.charisma),
-  persuasion(type: DnDAttributes.charisma),
-  religion(type: DnDAttributes.intelligence),
-  sleightOfHand(type: DnDAttributes.dextery),
-  stealth(type: DnDAttributes.dextery),
-  survival(type: DnDAttributes.wisdom);
+  acrobatics(type: Attributes.charisma),
+  animalHandling(type: Attributes.wisdom),
+  arcana(type: Attributes.intelligence),
+  athletics(type: Attributes.strength),
+  deception(type: Attributes.charisma),
+  history(type: Attributes.intelligence),
+  insight(type: Attributes.wisdom),
+  intimidation(type: Attributes.charisma),
+  investigation(type: Attributes.intelligence),
+  medicine(type: Attributes.wisdom),
+  nature(type: Attributes.intelligence),
+  perception(type: Attributes.wisdom),
+  performance(type: Attributes.charisma),
+  persuasion(type: Attributes.charisma),
+  religion(type: Attributes.intelligence),
+  sleightOfHand(type: Attributes.dextery),
+  stealth(type: Attributes.dextery),
+  survival(type: Attributes.wisdom);
 
   const DndSkills({
     required this.type,
   });
 
-  final DnDAttributes type;
+  final Attributes type;
 }
 
 class DnDSheetSkills {

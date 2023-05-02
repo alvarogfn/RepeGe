@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
+import 'package:repege/services/auth_service.dart';
+import 'package:repege/utils/get_image_file_from_assets.dart';
 
 class User {
   final _firestone = FirebaseFirestore.instance;
@@ -41,6 +45,12 @@ class User {
 
     await _ref.update({'avatarURL': url});
 
+    if (context != null && context.mounted) {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      FirebaseAuth.instance.currentUser!.updatePhotoURL(url);
+      await authService.refresh();
+    }
+
     return url;
   }
 
@@ -71,7 +81,9 @@ class User {
               toFirestore: toFirestore,
             );
 
-    final userDoc = await userRef.get();
+    final userDoc = await userRef.get(const GetOptions(
+      serverTimestampBehavior: ServerTimestampBehavior.estimate,
+    ));
 
     return userDoc.data();
   }
@@ -139,7 +151,7 @@ class User {
       email: userDoc['email'],
       uid: userDoc['uid'],
       username: userDoc['username'],
-      createdAt: doc['createdAt'],
+      createdAt: userDoc['createdAt'],
     );
   }
 }

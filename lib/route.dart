@@ -5,9 +5,10 @@ import 'package:repege/pages/home_page.dart';
 import 'package:repege/pages/login_page.dart';
 import 'package:repege/pages/profile/profile_page.dart';
 import 'package:repege/pages/register_page.dart';
+import 'package:repege/pages/sheet/sub/sheet_spell_create.dart';
+import 'package:repege/pages/sheet/sub/sheet_spell_search.dart';
 import 'package:repege/pages/sheets/sheet_create_page.dart';
-import 'package:repege/pages/sheets/sheet_page.dart';
-import 'package:repege/pages/sheets/sheet_spell_create.dart';
+import 'package:repege/pages/sheet/sheet_page.dart';
 import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/pages/tables/tables_home_page.dart';
 import 'package:repege/services/auth_service.dart';
@@ -27,6 +28,12 @@ enum RoutesName {
     state: AuthState.auth,
     name: 'sheet-spell-create',
     path: 'spell-create',
+  ),
+
+  sheetSpellSearch(
+    state: AuthState.auth,
+    name: 'sheet-spell-search',
+    path: 'spell-search',
   ),
 
   sheetCreate(
@@ -99,6 +106,11 @@ class CustomRouter {
                 path: RoutesName.sheetSpellCreate.path,
                 name: RoutesName.sheetSpellCreate.name,
                 builder: (context, state) => const SheetSpellCreate(),
+              ),
+              GoRoute(
+                path: RoutesName.sheetSpellSearch.path,
+                name: RoutesName.sheetSpellSearch.name,
+                builder: (context, state) => const SheetSpellSearch(),
               ),
             ],
           ),

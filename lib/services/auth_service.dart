@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,9 @@ class AuthService with ChangeNotifier {
     state = _instance.currentUser != null ? AuthState.auth : AuthState.unauth;
 
     _subscription = _instance.idTokenChanges().listen((current) {
-      local.User.get(current!.uid).then((value) => user = value);
+      if (current != null) {
+        local.User.get(current.uid).then((value) => user = value);
+      }
 
       if (user != null) {
         state = AuthState.auth;
@@ -30,7 +31,6 @@ class AuthService with ChangeNotifier {
         state = AuthState.unauth;
       }
 
-      print("Notifying all AuthService listeners");
       notifyListeners();
     });
   }
@@ -44,7 +44,6 @@ class AuthService with ChangeNotifier {
 
     try {
       final usernameExists = await checkIfUsernameExists(username);
-
       if (usernameExists) throw const AuthUsernameAlreadyUsedException();
 
       final credential = await _instance.createUserWithEmailAndPassword(
@@ -53,7 +52,6 @@ class AuthService with ChangeNotifier {
       );
 
       credentialUser = credential.user;
-
       if (credentialUser == null) throw const AuthException();
 
       await local.User.create(
@@ -120,6 +118,11 @@ class AuthService with ChangeNotifier {
   void dispose() {
     super.dispose();
     _subscription.cancel();
+  }
+
+  Future<void> refresh() async {
+    notifyListeners();
+    return await _instance.currentUser?.reload();
   }
 
   static Future<bool> checkIfUsernameExists(String username) async {

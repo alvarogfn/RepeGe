@@ -1,4 +1,4 @@
-import 'package:repege/models/dnd/sheets/dnd_utils.dart';
+import 'package:repege/models/dnd/attributes.dart';
 
 class DnDSheetAttributes {
   final int strength;
@@ -8,7 +8,7 @@ class DnDSheetAttributes {
   final int wisdom;
   final int charisma;
 
-  final List<DnDAttributes> savingThrows;
+  final List<Attributes> savingThrows;
 
   DnDSheetAttributes({
     this.strength = 0,
@@ -28,7 +28,7 @@ class DnDSheetAttributes {
       intelligence: data['intelligence'] as int,
       strength: data['strength'] as int,
       wisdom: data['wisdom'] as int,
-      savingThrows: data['savingThrows'] as List<DnDAttributes>,
+      savingThrows: data['savingThrows'] as List<Attributes>,
     );
   }
 }

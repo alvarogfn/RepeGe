@@ -1,40 +1,77 @@
 import 'package:flutter/material.dart';
 
-class CheckboxFormField extends StatelessWidget {
+class CheckboxFormField extends StatefulWidget {
   const CheckboxFormField({
     required this.label,
+    required this.options,
+    super.key,
+    this.onChanged,
+  });
+
+  final String label;
+  final List<String> options;
+  final Function(List<String>)? onChanged;
+
+  @override
+  State<CheckboxFormField> createState() => _CheckboxFormFieldState();
+}
+
+class _CheckboxFormFieldState extends State<CheckboxFormField> {
+  final List<String> selectedValues = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          widget.label,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          children: widget.options.map((value) {
+            return CheckboxField(
+              label: value,
+              value: selectedValues.contains(value),
+              onChanged: (newValue) {
+                if (newValue == true) {
+                  setState(() => selectedValues.add(value));
+                } else {
+                  setState(() => selectedValues.remove(value));
+                }
+
+                if (widget.onChanged != null) widget.onChanged!(selectedValues);
+              },
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class CheckboxField extends StatelessWidget {
+  const CheckboxField({
+    required this.label,
     required this.value,
-    required this.onChange,
-    this.padding = const EdgeInsets.symmetric(vertical: 10, horizontal: 0 ),
+    this.onChanged,
     super.key,
   });
 
   final String label;
   final bool value;
-  final EdgeInsets padding;
-  final void Function(bool?) onChange;
+  final void Function(bool?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Row(
-        children: [
-          SizedBox(
-            width: 25,
-            height: 25,
-            child: Checkbox(
-              value: value,
-              onChanged: onChange,
-            ),
-          ),
-          const SizedBox(width: 5),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox(value: value, onChanged: onChanged),
+        Text(label),
+      ],
     );
   }
 }
