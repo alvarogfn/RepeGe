@@ -61,92 +61,94 @@ class CustomRouter {
 
   Listenable? refreshListenable;
 
-  late final routes = GoRouter(
-    debugLogDiagnostics: !EnvironmentVariables.production,
-    initialLocation: '/',
-    navigatorKey: _rootNavigatorKey,
-    routes: [
-      GoRoute(
-          path: RoutesName.home.path,
-          name: RoutesName.home.name,
-          builder: (context, state) => const HomePage(),
-          routes: [
-            GoRoute(
-              path: RoutesName.profile.path,
-              name: RoutesName.profile.name,
-              builder: (context, state) => const ProfilePage(),
-            ),
-          ]),
-      GoRoute(
-        path: RoutesName.login.path,
-        name: RoutesName.login.name,
-        builder: (context, state) => const LoginPage(),
-      ),
-      GoRoute(
-        path: RoutesName.register.path,
-        name: RoutesName.register.name,
-        builder: (context, state) => const RegisterPage(),
-      ),
-      GoRoute(
-        path: RoutesName.sheets.path,
-        name: RoutesName.sheets.name,
-        builder: (context, state) => const SheetsPage(),
-        routes: [
-          GoRoute(
-            path: RoutesName.sheetCreate.path,
-            name: RoutesName.sheetCreate.name,
-            builder: (context, state) => const SheetCreatePage(),
-          ),
-          GoRoute(
-            path: RoutesName.sheet.path,
-            name: RoutesName.sheet.name,
-            builder: (context, state) => SheetPage(id: state.params['id']!),
+  GoRouter getRouter() {
+    return GoRouter(
+      debugLogDiagnostics: !EnvironmentVariables.production,
+      initialLocation: '/',
+      navigatorKey: _rootNavigatorKey,
+      routes: [
+        GoRoute(
+            path: RoutesName.home.path,
+            name: RoutesName.home.name,
+            builder: (context, state) => const HomePage(),
             routes: [
               GoRoute(
-                path: RoutesName.sheetSpellCreate.path,
-                name: RoutesName.sheetSpellCreate.name,
-                builder: (context, state) => const SheetSpellCreate(),
+                path: RoutesName.profile.path,
+                name: RoutesName.profile.name,
+                builder: (context, state) => const ProfilePage(),
               ),
-              GoRoute(
-                path: RoutesName.sheetSpellSearch.path,
-                name: RoutesName.sheetSpellSearch.name,
-                builder: (context, state) => const SheetSpellSearch(),
-              ),
-            ],
-          ),
-        ],
-      ),
-      GoRoute(
-        path: RoutesName.tables.path,
-        name: RoutesName.tables.name,
-        builder: (context, state) => const TablesHomePage(),
-      )
-    ],
-    refreshListenable: refreshListenable,
-    redirect: (context, state) async {
-      final authState = context.read<AuthService>().state;
-      final bool toUnauth = RoutesName.values
-          .where((element) => element.state == AuthState.unauth)
-          .map((e) => e.path)
-          .contains(state.subloc);
+            ]),
+        GoRoute(
+          path: RoutesName.login.path,
+          name: RoutesName.login.name,
+          builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: RoutesName.register.path,
+          name: RoutesName.register.name,
+          builder: (context, state) => const RegisterPage(),
+        ),
+        GoRoute(
+          path: RoutesName.sheets.path,
+          name: RoutesName.sheets.name,
+          builder: (context, state) => const SheetsPage(),
+          routes: [
+            GoRoute(
+              path: RoutesName.sheetCreate.path,
+              name: RoutesName.sheetCreate.name,
+              builder: (context, state) => const SheetCreatePage(),
+            ),
+            GoRoute(
+              path: RoutesName.sheet.path,
+              name: RoutesName.sheet.name,
+              builder: (context, state) => SheetPage(id: state.params['id']!),
+              routes: [
+                GoRoute(
+                  path: RoutesName.sheetSpellCreate.path,
+                  name: RoutesName.sheetSpellCreate.name,
+                  builder: (context, state) => const SheetSpellCreate(),
+                ),
+                GoRoute(
+                  path: RoutesName.sheetSpellSearch.path,
+                  name: RoutesName.sheetSpellSearch.name,
+                  builder: (context, state) => const SheetSpellSearch(),
+                ),
+              ],
+            ),
+          ],
+        ),
+        GoRoute(
+          path: RoutesName.tables.path,
+          name: RoutesName.tables.name,
+          builder: (context, state) => const TablesHomePage(),
+        )
+      ],
+      refreshListenable: refreshListenable,
+      redirect: (context, state) async {
+        final authState = context.read<AuthService>().state;
+        final bool toUnauth = RoutesName.values
+            .where((element) => element.state == AuthState.unauth)
+            .map((e) => e.path)
+            .contains(state.subloc);
 
-      if (authState == AuthState.unauth && toUnauth) {
+        if (authState == AuthState.unauth && toUnauth) {
+          return null;
+        }
+
+        if (authState == AuthState.unauth && !toUnauth) {
+          return RoutesName.login.path;
+        }
+
+        if (authState == AuthState.auth && toUnauth) {
+          return RoutesName.home.path;
+        }
+
+        if (authState == AuthState.auth && !toUnauth) {
+          return null;
+        }
+
         return null;
-      }
-
-      if (authState == AuthState.unauth && !toUnauth) {
-        return RoutesName.login.path;
-      }
-
-      if (authState == AuthState.auth && toUnauth) {
-        return RoutesName.home.path;
-      }
-
-      if (authState == AuthState.auth && !toUnauth) {
-        return null;
-      }
-
-      return null;
-    },
-  );
+      },
+    );
+  }
 }

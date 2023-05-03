@@ -59,9 +59,11 @@ class MyApp extends StatelessWidget {
       //   },
       // ),
       child: Consumer<AuthService>(builder: (context, value, _) {
-        router.routes.refresh();
+        router.refreshListenable = value;
+        print(value.state);
+
         var app = MaterialApp.router(
-          routerConfig: router.routes,
+          routerConfig: router.getRouter(),
           title: 'RepeGe',
           theme: lightTheme,
           darkTheme: darkTheme,
