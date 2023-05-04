@@ -6,7 +6,7 @@ import 'package:repege/components/shared/loading.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/models/dnd/sheets/sheet_spells.dart';
 import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/route.dart';
+import 'package:repege/config/route.dart';
 
 class SheetSpellsDetailsPage extends StatefulWidget {
   const SheetSpellsDetailsPage({required this.sheet, super.key});
@@ -42,7 +42,7 @@ class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
   Future<void> _addNewSpell(BuildContext context) async {
     Map<String, Object?>? spellData = await context.pushNamed(
       RoutesName.sheetSpellCreate.name,
-      params: {'id': widget.sheet.id},
+      pathParameters: {'id': widget.sheet.id},
     );
 
     if (spellData == null) return;
@@ -55,7 +55,7 @@ class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
   Future<void> _searchForSpell(BuildContext ontext) async {
     Spell? spell = await context.pushNamed(
       RoutesName.sheetSpellSearch.name,
-      params: {'id': widget.sheet.id},
+      pathParameters: {'id': widget.sheet.id},
     );
 
     if (spell == null) return;

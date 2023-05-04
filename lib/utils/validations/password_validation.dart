@@ -8,6 +8,8 @@ class PasswordValidation extends Validation {
 
   @override
   bool validate(String? value) {
+    if (!production) return true;
+
     if (value == null || value.isEmpty) {
       return false;
     }

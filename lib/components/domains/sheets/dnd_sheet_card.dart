@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/route.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/utils/images.dart';
 
 class SheetCard extends StatelessWidget {
@@ -40,7 +40,7 @@ class SheetCard extends StatelessWidget {
             onTap: () {
               context.pushNamed(
                 RoutesName.sheet.name,
-                params: {'id': sheet.id},
+                pathParameters: {'id': sheet.id},
               );
             },
             child: Row(

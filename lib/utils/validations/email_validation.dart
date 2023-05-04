@@ -6,6 +6,8 @@ class EmailValidation extends Validation {
 
   @override
   bool validate(String? value) {
+    if (!production) return true;
+
     return EmailValidator.validate(value!);
   }
 }

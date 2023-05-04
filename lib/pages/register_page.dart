@@ -1,19 +1,68 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/shared/app_title.dart';
-import 'package:repege/components/shared/full_screen_scroll.dart';
-import 'package:repege/components/shared/handlers/error_handler.dart';
-import 'package:repege/environment_variables.dart';
-import 'package:repege/route.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/components/base/button.dart';
+import 'package:repege/components/base/headline.dart';
+import 'package:repege/components/base/input.dart';
+import 'package:repege/components/base/label.dart';
+import 'package:repege/components/base/paragraph.dart';
+import 'package:repege/components/molecules/input_password.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
-import 'package:repege/utils/validations/password_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
-import 'package:repege/utils/validations/validations.dart';
+import '../components/shared/full_screen_scroll.dart';
+
+class RegisterForm {
+  String _username = "";
+  String _email = "";
+  String _password = "";
+  String _repassword = "";
+
+  RegisterForm([
+    this._email = "",
+    this._password = "",
+    this._repassword = "",
+    this._username = "",
+  ]);
+
+  bool get valid {
+    return _repassword.isNotEmpty &&
+        _password.isNotEmpty &&
+        _repassword == _password &&
+        _email.isNotEmpty &&
+        _username.isNotEmpty;
+  }
+
+  set email(String? value) => _email = value ?? "";
+  set username(String? value) => _username = (value ?? "").toLowerCase();
+  set password(String? value) => _password = value ?? "";
+  set repassword(String? value) => _repassword = value ?? "";
+
+  String get password => _password;
+  String get email => _email;
+  String get repassword => _repassword;
+  String get username => _username;
+
+  String? get passwordsValidity {
+    if (password != repassword) {
+      return "As senhas não combinam.";
+    }
+    return null;
+  }
+
+  String? get usernameValidity {
+    if (!RegExp(r'^[a-z]+$').hasMatch(username)) {
+      return "Esse nome de usuário não é válido.";
+    }
+    return null;
+  }
+}
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -21,217 +70,145 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final RegisterForm _registerForm = RegisterForm();
 
-  final Map<String, String> _formData = {};
+  Future<bool> _future = Future.value(false);
 
-  Exception? _error;
+  Future<bool> _handleSubmit(BuildContext context) async {
+    final isValid = _formKey.currentState?.validate();
 
-  Future<void> _handleSubmit() async {
-    if (_formKey.currentState == null) return;
-    _formKey.currentState!.save();
-
-    final isValid = _formKey.currentState!.validate();
-
-    if (!isValid) return;
+    if (isValid == null || isValid == false) return false;
 
     try {
-      await AuthService().signup(
-        email: _formData['email'] as String,
-        password: _formData['password'] as String,
-        username: _formData['username'] as String,
+      final authService = Provider.of<AuthService>(context, listen: false);
+
+      return authService.signup(
+        username: _registerForm.username,
+        email: _registerForm.email,
+        password: _registerForm.password,
       );
     } on Exception catch (e) {
-      setState(() => _error = e);
+      return Future.error(e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FullScreenScroll(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: AppTitle(),
-              ),
-              const PageTitle(),
-              const SizedBox(height: 40),
-              const SignInButton(),
-              const SizedBox(height: 20),
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    UsernameField(formData: _formData),
-                    const SizedBox(height: 20),
-                    EmailField(formData: _formData),
-                    const SizedBox(height: 20),
-                    PasswordField(formData: _formData),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: 'Confirme sua senha'),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      onFieldSubmitted: (_) => _handleSubmit(),
-                      validator: (value) {
-                        final nonNullValue = value ?? '';
-
-                        if (nonNullValue != _formData['password']) {
-                          return "As senhas não coincidem.";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: _handleSubmit,
-                          child: const Text("Cadastrar"),
-                        ),
-                      ],
+      body: _Layout(
+        child: FutureBuilder(
+          future: _future,
+          builder: (context, snap) {
+            ColorScheme colorScheme = Theme.of(context).colorScheme;
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const Headline(
+                    text: 'RepeGe',
+                    fontSize: 65,
+                    fontWeight: FontWeight.w900,
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  const Headline(
+                    text: 'Registro',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  signinButton(context),
+                  Input(
+                    label: "Nome de usuário",
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    onChanged: (value) => _registerForm.username = value,
+                    validations: [RequiredValidation()],
+                    action: TextInputAction.next,
+                    prefixIcon: Icons.person,
+                    validateFn: (_) => _registerForm.usernameValidity,
+                  ),
+                  Input(
+                    label: 'Email',
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    prefixIcon: Icons.alternate_email,
+                    onChanged: (value) => _registerForm.email = value,
+                    validations: [RequiredValidation(), EmailValidation()],
+                    action: TextInputAction.next,
+                  ),
+                  InputPassword(
+                    label: 'Senha',
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    action: TextInputAction.next,
+                    onChanged: (value) => _registerForm.password = value,
+                    validateFn: (_) => _registerForm.passwordsValidity,
+                  ),
+                  InputPassword(
+                    label: 'Confirme sua senha',
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    action: TextInputAction.done,
+                    onChanged: (value) => _registerForm.repassword = value,
+                    validateFn: (_) => _registerForm.passwordsValidity,
+                  ),
+                  Button(
+                    width: 120,
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    alignment: Alignment.centerRight,
+                    loading: snap.connectionState == ConnectionState.waiting,
+                    onPressed: () => setState(() {
+                      _future = _handleSubmit(context);
+                    }),
+                    child: const Text('Registrar'),
+                  ),
+                  if (snap.connectionState != ConnectionState.waiting &&
+                      snap.hasError)
+                    Label(
+                      text: snap.error.toString(),
+                      color: colorScheme.error,
+                      margin: const EdgeInsets.only(top: 20),
+                      icon: Icons.error,
                     )
-                  ],
-                ),
+                ],
               ),
-              ErrorHandler(error: _error),
-            ],
-          ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget signinButton(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: TextButton(
+        onPressed: () => context.goNamed(RoutesName.login.name),
+        child: const Paragraph(
+          'Já possui uma conta? **Entre!**',
         ),
       ),
     );
   }
 }
 
-class UsernameField extends StatelessWidget {
-  const UsernameField({
-    super.key,
-    required Map<String, String> formData,
-  }) : _formData = formData;
+class _Layout extends StatelessWidget {
+  const _Layout({required this.child});
 
-  final Map<String, String> _formData;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        labelText: 'Nome de usuário',
-      ),
-      keyboardType: TextInputType.name,
-      textInputAction: TextInputAction.next,
-      onSaved: (value) {
-        _formData['username'] = value as String;
-      },
-      validator: (value) => Validator.validateWith(value, [
-        RequiredValidation(),
-      ]),
-    );
-  }
-}
-
-class PasswordField extends StatelessWidget {
-  const PasswordField({
-    super.key,
-    required Map<String, String> formData,
-  }) : _formData = formData;
-
-  final Map<String, String> _formData;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'Senha'),
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.next,
-      obscureText: true,
-      onSaved: (value) {
-        _formData['password'] = value as String;
-      },
-      validator: (value) => Validator.validateWith(value, [
-        RequiredValidation(),
-        if (EnvironmentVariables.production) PasswordValidation()
-      ]),
-    );
-  }
-}
-
-class EmailField extends StatelessWidget {
-  const EmailField({
-    super.key,
-    required Map<String, String> formData,
-  }) : _formData = formData;
-
-  final Map<String, String> _formData;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: const InputDecoration(labelText: 'E-mail'),
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
-      onSaved: (value) {
-        _formData['email'] = value as String;
-      },
-      validator: (value) => Validator.validateWith(value, [
-        RequiredValidation(),
-        EmailValidation(),
-      ]),
-    );
-  }
-}
-
-class PageTitle extends StatelessWidget {
-  const PageTitle({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 25),
-      child: Text(
-        'Registrar',
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-    );
-  }
-}
-
-class SignInButton extends StatelessWidget {
-  const SignInButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TextButton(
-          onPressed: () => context.goNamed(RoutesName.login.name),
-          child: RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyMedium,
-              children: [
-                const TextSpan(text: 'Já possui uma conta? '),
-                TextSpan(
-                  text: 'Entrar.',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ],
+    return FullScreenScroll(
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          child: Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: child,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

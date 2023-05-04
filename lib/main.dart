@@ -8,14 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
 
-import 'package:repege/route.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/themes/dark_theme.dart';
 import 'package:repege/themes/light_theme.dart';
 
-import 'firebase_options.dart';
+import 'config/firebase_options.dart';
 
-import 'package:repege/environment_variables.dart';
+import 'package:repege/config/environment_variables.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,33 +44,21 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
       ],
-      // child: Consumer<AuthService>(
-      //   builder: (context, _, child) {
-      //     final CustomRouter router = Provider.of(context, listen: false);
-
-      //     return MaterialApp.router(
-      //       routerConfig: router.routes,
-      //       title: 'RepeGe',
-      //       theme: lightTheme,
-      //       darkTheme: darkTheme,
-      //       themeMode: ThemeMode.system,
-      //       debugShowCheckedModeBanner: false,
-      //     );
-      //   },
-      // ),
       child: Consumer<AuthService>(builder: (context, value, _) {
-        router.refreshListenable = value;
-        print(value.state);
-
-        var app = MaterialApp.router(
-          routerConfig: router.getRouter(),
+        router.routes.refresh();
+        return MaterialApp.router(
+          routerConfig: router.routes,
+          
           title: 'RepeGe',
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
+          locale: const Locale.fromSubtags(
+            languageCode: 'pt',
+            countryCode: "BR",
+          ),
         );
-        return app;
       }),
     );
   }

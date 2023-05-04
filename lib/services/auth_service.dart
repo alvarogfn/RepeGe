@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/models/user.dart' as local;
-import 'package:repege/environment_variables.dart';
+import 'package:repege/config/environment_variables.dart';
 
 enum AuthState { auth, unauth }
 
@@ -35,7 +35,7 @@ class AuthService with ChangeNotifier {
     });
   }
 
-  Future<void> signup({
+  Future<bool> signup({
     required String email,
     required String password,
     required String username,
@@ -64,6 +64,8 @@ class AuthService with ChangeNotifier {
       if (EnvironmentVariables.production) {
         await credentialUser.sendEmailVerification();
       }
+
+      return true;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':
@@ -81,7 +83,7 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> signin({
+  Future<bool> signin({
     required String email,
     required String password,
   }) async {
@@ -96,6 +98,8 @@ class AuthService with ChangeNotifier {
       if (user != null && !user.emailVerified) {
         throw const AuthEmailNotVerifiedException();
       }
+
+      return true;
     } on AuthEmailNotVerifiedException catch (_) {
       rethrow;
     } on FirebaseAuthException catch (e) {
@@ -121,8 +125,8 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> refresh() async {
+    await _instance.currentUser?.reload();
     notifyListeners();
-    return await _instance.currentUser?.reload();
   }
 
   static Future<bool> checkIfUsernameExists(String username) async {

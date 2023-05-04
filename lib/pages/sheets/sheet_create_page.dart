@@ -4,7 +4,7 @@ import 'package:repege/components/shared/form/form_title.dart';
 import 'package:repege/components/shared/form/picture_form_field.dart';
 import 'package:repege/components/shared/full_screen_scroll.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/route.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/utils/validations/required_validation.dart';
 import 'package:repege/utils/validations/validations.dart';
 
@@ -37,7 +37,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
       final Sheet sheet = await Sheet.create(_form);
 
       if (context.mounted) {
-        return context.goNamed(RoutesName.sheet.name, params: {'id': sheet.id});
+        return context.goNamed(RoutesName.sheet.name, pathParameters: {'id': sheet.id});
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

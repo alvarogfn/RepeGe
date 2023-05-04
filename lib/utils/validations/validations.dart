@@ -1,6 +1,12 @@
+import 'package:repege/config/environment_variables.dart';
+
 abstract class Validation {
   final String message;
-  const Validation({this.message = ''});
+  final bool production;
+  const Validation({
+    this.message = '',
+    this.production = EnvironmentVariables.production,
+  });
 
   bool validate(String? value) {
     return true;

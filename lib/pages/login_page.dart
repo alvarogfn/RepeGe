@@ -2,15 +2,35 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/shared/handlers/error_handler.dart';
-import 'package:repege/exceptions/auth_exceptions.dart';
-import 'package:repege/route.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/components/base/button.dart';
+import 'package:repege/components/base/headline.dart';
+import 'package:repege/components/base/input.dart';
+import 'package:repege/components/base/label.dart';
+import 'package:repege/components/base/paragraph.dart';
+import 'package:repege/components/molecules/input_password.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
-import 'package:repege/utils/validations/validations.dart';
-import '../components/shared/app_title.dart';
 import '../components/shared/full_screen_scroll.dart';
+
+class LoginForm {
+  String _password = "";
+  String _email = "";
+
+  LoginForm([this._email = "", this._password = ""]);
+
+  bool get fullfiled {
+    return _password.isNotEmpty && _email.isNotEmpty;
+  }
+
+  set password(String? value) => _password = value ?? "";
+  set email(String? value) => _email = value ?? "";
+
+  String get password => _password;
+  String get email => _email;
+}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,141 +41,127 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final LoginForm _loginForm = LoginForm();
 
-  final Map<String, String> _formData = {};
+  Future<bool> _future = Future.value(false);
 
-  Exception? _error;
+  Future<bool> _handleSubmit(BuildContext context) async {
+    final isValid = _formKey.currentState?.validate();
 
-  Future<void> _handleSubmit() async {
-    if (_formKey.currentState == null) return;
-
-    _formKey.currentState!.save();
-
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) return;
+    if (isValid == null || isValid == false) return false;
 
     try {
-      await AuthService().signin(
-        email: _formData['email'] as String,
-        password: _formData['password'] as String,
+      final authService = Provider.of<AuthService>(context, listen: false);
+
+      return authService.signin(
+        email: _loginForm.email,
+        password: _loginForm.password,
       );
-    } on AuthEmailNotVerifiedException catch (_) {
-      // if (context.mounted) _openEmailNotVerifiedAlert();
-    } catch (e) {
-      setState(() => _error = e as Exception);
+    } on Exception catch (e) {
+      return Future.error(e);
     }
   }
-
-  // _openEmailNotVerifiedAlert() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (ctx) => const AlertDialog(
-  //       title: Text("Verifique seu e-mail!"),
-  //       content: Text(
-  //         "Por favor, verifique seu e-mail para confirmar sua conta. Algumas funcionalidades podem ficar indisponíveis.",
-  //       ),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FullScreenScroll(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const AppTitle(),
-              Padding(
-                padding: const EdgeInsets.only(top: 25),
-                child: Text(
-                  'Login',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              const SizedBox(height: 40),
-              const SignUpButton(),
-              const SizedBox(height: 20),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      onSaved: (value) => _formData['email'] = value as String,
-                      validator: (value) => Validator.validateWith(value, [
-                        RequiredValidation(),
-                        EmailValidation(),
-                      ]),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Senha'),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      onSaved: (value) =>
-                          _formData['password'] = value as String,
-                      onFieldSubmitted: (_) => _handleSubmit,
-                      validator: (value) => Validator.validateWith(value, [
-                        RequiredValidation(),
-                      ]),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: _handleSubmit,
-                          child: const Text("Entrar"),
-                        ),
-                      ],
+      body: _Layout(
+        child: FutureBuilder(
+          future: _future,
+          builder: (context, snap) {
+            ColorScheme colorScheme = Theme.of(context).colorScheme;
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const Headline(
+                    text: 'RepeGe',
+                    fontSize: 65,
+                    fontWeight: FontWeight.w900,
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  const Headline(
+                    text: 'Login',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  signupButon(context),
+                  Input(
+                    label: 'Email',
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    prefixIcon: Icons.alternate_email,
+                    onChanged: (value) => _loginForm.email = value,
+                    validations: [RequiredValidation(), EmailValidation()],
+                    action: TextInputAction.next,
+                  ),
+                  InputPassword(
+                    label: 'Senha',
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    action: TextInputAction.done,
+                    onChanged: (value) => _loginForm.password = value,
+                  ),
+                  Button(
+                    width: 90,
+                    height: 50,
+                    margin: const EdgeInsets.only(top: 20),
+                    alignment: Alignment.centerRight,
+                    loading: snap.connectionState == ConnectionState.waiting,
+                    onPressed: () => setState(() {
+                      _future = _handleSubmit(context);
+                    }),
+                    child: const Text('Entrar'),
+                  ),
+                  if (snap.connectionState != ConnectionState.waiting &&
+                      snap.hasError)
+                    Label(
+                      text: snap.error.toString(),
+                      color: colorScheme.error,
+                      margin: const EdgeInsets.only(top: 20),
+                      icon: Icons.error,
                     )
-                  ],
-                ),
+                ],
               ),
-              ErrorHandler(error: _error)
-            ],
-          ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget signupButon(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: TextButton(
+        onPressed: () => context.goNamed(RoutesName.register.name),
+        child: const Paragraph(
+          'Não possui uma conta? **Registre-se!**',
         ),
       ),
     );
   }
 }
 
-class SignUpButton extends StatelessWidget {
-  const SignUpButton({
-    super.key,
-  });
+class _Layout extends StatelessWidget {
+  const _Layout({required this.child});
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TextButton(
-          onPressed: () {
-            context.goNamed(RoutesName.register.name);
-          },
-          child: RichText(
-            text: TextSpan(
-              style: Theme.of(context).textTheme.bodyMedium,
-              children: [
-                const TextSpan(text: 'Não possui uma conta? '),
-                TextSpan(
-                  text: 'Cadastrar-se.',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ],
+    return FullScreenScroll(
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          child: Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: child,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

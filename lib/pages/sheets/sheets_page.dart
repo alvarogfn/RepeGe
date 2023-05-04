@@ -7,7 +7,7 @@ import 'package:repege/components/shared/custom_drawer.dart';
 import 'package:repege/components/shared/loading.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 
-import 'package:repege/route.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/services/auth_service.dart';
 
 class SheetsPage extends StatefulWidget {
