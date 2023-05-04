@@ -7,6 +7,8 @@ class Label extends StatelessWidget {
     this.margin = const EdgeInsets.symmetric(vertical: 10),
     this.padding = const EdgeInsets.all(10),
     this.gap = 10,
+    this.width,
+    this.height,
     this.color = Colors.black,
     super.key,
   });
@@ -16,6 +18,8 @@ class Label extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final double gap;
+  final double? width;
+  final double? height;
   final IconData icon;
   final Color color;
 
@@ -26,6 +30,8 @@ class Label extends StatelessWidget {
     return Container(
       margin: margin,
       padding: padding,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         border: Border.all(color: color, width: 1.5),
         borderRadius: BorderRadius.circular(5),
@@ -34,7 +40,10 @@ class Label extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color,),
+          Icon(
+            icon,
+            color: color,
+          ),
           SizedBox(width: gap),
           Expanded(
             child: Text(

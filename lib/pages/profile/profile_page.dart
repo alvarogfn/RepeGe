@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/shared/form/picture_form_field.dart';
-import 'package:repege/components/shared/full_screen_scroll.dart';
+import 'package:repege/components/layout/full_screen_scroll.dart';
 import 'package:repege/models/user.dart';
 import 'package:repege/pages/utils/loading_page.dart';
 import 'package:repege/services/auth_service.dart';

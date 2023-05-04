@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/shared/form/form_title.dart';
 import 'package:repege/components/shared/form/picture_form_field.dart';
-import 'package:repege/components/shared/full_screen_scroll.dart';
+import 'package:repege/components/layout/full_screen_scroll.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/config/route.dart';
 import 'package:repege/utils/validations/required_validation.dart';

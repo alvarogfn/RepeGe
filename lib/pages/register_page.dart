@@ -13,7 +13,7 @@ import 'package:repege/config/route.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
-import '../components/shared/full_screen_scroll.dart';
+import '../components/layout/full_screen_scroll.dart';
 
 class RegisterForm {
   String _username = "";

@@ -15,49 +15,49 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: Column(children: [
-      AppBar(
-        automaticallyImplyLeading: false,
-        title: const UserLeading(),
-        actions: [
-          Consumer<AuthService>(
-            builder: (context, authService, child) {
-              return PopupMenuButton(
-                itemBuilder: (ctx) => [
-                  PopupMenuItem(
-                    onTap: () {
-                      context.goNamed(RoutesName.login.name);
-                      authService.logout();
-                    },
-                    child: const IconTextButton(
-                      icon: Icons.logout,
-                      text: "Sair",
-                    ),
-                  ),
-                ],
-              );
-            },
+      child: Column(
+        children: [
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: const UserLeading(),
+            actions: [
+              Consumer<AuthService>(
+                builder: (context, authService, child) {
+                  return PopupMenuButton(
+                    itemBuilder: (ctx) => [
+                      PopupMenuItem(
+                        onTap: authService.logout,
+                        child: const IconTextButton(
+                          icon: Icons.logout,
+                          text: "Sair",
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              children: const [
+                NavigationListItem(
+                  icon: Icons.article,
+                  text: "Fichas",
+                  route: RoutesName.sheets,
+                ),
+                NavigationListItem(
+                  icon: Icons.groups,
+                  text: "Mesas",
+                  route: RoutesName.tables,
+                ),
+              ],
+            ),
+          )
         ],
       ),
-      Expanded(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-          children: const [
-            NavigationListItem(
-              icon: Icons.article,
-              text: "Fichas",
-              route: RoutesName.sheets,
-            ),
-            NavigationListItem(
-              icon: Icons.groups,
-              text: "Mesas",
-              route: RoutesName.tables,
-            ),
-          ],
-        ),
-      )
-    ]));
+    );
   }
 }
 

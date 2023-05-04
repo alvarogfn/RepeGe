@@ -20,10 +20,11 @@ class AuthService with ChangeNotifier {
   AuthService() {
     state = _instance.currentUser != null ? AuthState.auth : AuthState.unauth;
 
-    _subscription = _instance.idTokenChanges().listen((current) {
-      if (current != null) {
-        local.User.get(current.uid).then((value) => user = value);
-      }
+    _subscription = _instance.idTokenChanges().asyncMap((current) async {
+      if (current == null) return null;
+      return local.User.get(current.uid);
+    }).listen((current) async {
+      user = current;
 
       if (user != null) {
         state = AuthState.auth;

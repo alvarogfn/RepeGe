@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:repege/components/shared/circle_icon.dart';
 import 'package:repege/components/shared/form/form_card_bottom_editable.dart';
-import 'package:repege/components/shared/full_screen_scroll.dart';
+import 'package:repege/components/layout/full_screen_scroll.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 
 class SheetCharacterDetailsPage extends StatefulWidget {
