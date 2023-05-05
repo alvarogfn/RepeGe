@@ -8,6 +8,7 @@ class Input extends StatelessWidget {
     this.label = '',
     this.placeholder = '',
     this.initialValue = '',
+    this.helperText,
     this.onChanged,
     this.obscure = false,
     this.margin = const EdgeInsets.all(0),
@@ -22,6 +23,7 @@ class Input extends StatelessWidget {
   final List<Validation> validations;
   final String label;
   final String initialValue;
+  final String? helperText;
   final String placeholder;
   final TextInputAction action;
   final EdgeInsets margin;
@@ -50,6 +52,8 @@ class Input extends StatelessWidget {
           prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
           suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
           suffix: suffix,
+          helperText: helperText,
+          hintText: placeholder,
         ),
         validator: validator,
         onChanged: onChanged,

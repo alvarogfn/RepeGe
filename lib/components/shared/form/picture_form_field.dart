@@ -7,7 +7,7 @@ import 'package:repege/components/shared/circle_icon.dart';
 
 class PictureFormField extends StatefulWidget {
   const PictureFormField({
-    required this.label,
+    this.label,
     this.width = 175,
     this.height = 175,
     this.initialValue,
@@ -15,7 +15,7 @@ class PictureFormField extends StatefulWidget {
     super.key,
   });
 
-  final String label;
+  final String? label;
   final String? initialValue;
   final double width;
   final double height;
@@ -65,6 +65,7 @@ class _PictureFormFieldState extends State<PictureFormField> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          if (widget.label != null) Text(widget.label!),
           InkWell(
             borderRadius: BorderRadius.circular(200),
             onTap: pickImage,

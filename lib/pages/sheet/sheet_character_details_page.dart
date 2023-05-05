@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/components/shared/circle_icon.dart';
 import 'package:repege/components/shared/form/form_card_bottom_editable.dart';
@@ -7,7 +8,7 @@ import 'package:repege/models/dnd/sheets/sheet.dart';
 class SheetCharacterDetailsPage extends StatefulWidget {
   const SheetCharacterDetailsPage({required this.sheet, super.key});
 
-  final Sheet sheet;
+  final DocumentSnapshot<Sheet?> sheet;
 
   @override
   State<SheetCharacterDetailsPage> createState() =>
@@ -15,6 +16,8 @@ class SheetCharacterDetailsPage extends StatefulWidget {
 }
 
 class _SheetCharacterDetailsPageState extends State<SheetCharacterDetailsPage> {
+  Sheet get sheet => widget.sheet.data()!;
+
   @override
   Widget build(BuildContext context) {
     return FullScreenScroll(
@@ -34,10 +37,8 @@ class _SheetCharacterDetailsPageState extends State<SheetCharacterDetailsPage> {
             padding: const EdgeInsets.all(5.0),
             child: FormCardBottomEditable(
               title: "Informações Básicas:",
-              fields: widget.sheet.fields(),
-              onSaved: (values) => {
-                widget.sheet.updateMany(values),
-              },
+              fields: sheet.fields(),
+              onSaved: (values) => widget.sheet.reference.update(values),
             ),
           ),
         ],

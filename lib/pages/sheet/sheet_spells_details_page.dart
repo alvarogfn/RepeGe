@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/domains/sheets/list_spell_card.dart';
@@ -10,7 +11,8 @@ import 'package:repege/config/route.dart';
 
 class SheetSpellsDetailsPage extends StatefulWidget {
   const SheetSpellsDetailsPage({required this.sheet, super.key});
-  final Sheet sheet;
+
+  final DocumentSnapshot<Sheet?> sheet;
 
   @override
   State<SheetSpellsDetailsPage> createState() => _SheetSpellsDetailsPageState();
@@ -19,12 +21,11 @@ class SheetSpellsDetailsPage extends StatefulWidget {
 class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
   Future<List<Spell>> spells = Future.value([]);
 
-  SheetSpells get sheetSpells => widget.sheet.sheetSpells;
+  Sheet get sheet => widget.sheet.data()!;
+  SheetSpells get sheetSpells => sheet.sheetSpells;
 
   Future<void> _refreshSpells() async {
-    setState(() {
-      spells = sheetSpells.fetch();
-    });
+    setState(() {});
   }
 
   @override
@@ -48,8 +49,6 @@ class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
     if (spellData == null) return;
 
     final spell = Spell.fromMap(spellData);
-
-    sheetSpells.add(spell);
   }
 
   Future<void> _searchForSpell(BuildContext ontext) async {
@@ -59,8 +58,6 @@ class _SheetSpellsDetailsPageState extends State<SheetSpellsDetailsPage> {
     );
 
     if (spell == null) return;
-
-    sheetSpells.add(spell);
   }
 
   @override

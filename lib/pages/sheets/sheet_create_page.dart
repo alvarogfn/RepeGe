@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/shared/form/form_title.dart';
-import 'package:repege/components/shared/form/picture_form_field.dart';
+import 'package:repege/components/atoms/headline.dart';
+import 'package:repege/components/atoms/input.dart';
 import 'package:repege/components/layout/full_screen_scroll.dart';
+import 'package:repege/components/organism/avatar_wallpaper.dart';
+import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/config/route.dart';
 import 'package:repege/utils/validations/required_validation.dart';
-import 'package:repege/utils/validations/validations.dart';
 
 class SheetCreatePage extends StatefulWidget {
   const SheetCreatePage({super.key});
@@ -16,153 +16,127 @@ class SheetCreatePage extends StatefulWidget {
 }
 
 class _SheetCreatePageState extends State<SheetCreatePage> {
-  final Map<String, Object> _form = {};
-
+  final Sheet _sheet = Sheet();
   final _formKey = GlobalKey<FormState>();
 
-  bool loading = false;
-
-  Future<void> _handleSubmit() async {
-    final currentState = _formKey.currentState;
-    if (currentState == null) return;
-
-    final isValid = currentState.validate();
-    if (!isValid) return;
-
-    try {
-      setState(() => loading = true);
-
-      currentState.save();
-
-      final Sheet sheet = await Sheet.create(_form);
-
-      if (context.mounted) {
-        return context.goNamed(RoutesName.sheet.name, pathParameters: {'id': sheet.id});
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-    } finally {
-      setState(() => loading = false);
+  ImageProvider<Object> get image {
+    if (_sheet.avatarURL.isEmpty) {
+      return const AssetImage("assets/images/default_avatar.jpg");
     }
+    return NetworkImage(_sheet.avatarURL);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nova Ficha'),
-        actions: [
-          IconButton(
-            onPressed: loading ? null : _handleSubmit,
-            icon: const Icon(Icons.save),
-          ),
-        ],
-      ),
-      body: FullScreenScroll(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: FormTitle(
-                    title: "Dados do Personagem",
-                    subtitle:
-                        "Você poderá preencher outras informações na própria ficha.",
-                  ),
-                ),
-                PictureFormField(
-                  label: "Foto do Personagem",
-                  onChange: (picture) {
-                    if (picture != null) _form['picture'] = picture;
-                  },
-                ),
-                _TextField(
-                  label: 'Nome',
-                  formKey: 'characterName',
-                  form: _form,
-                  keyboardType: TextInputType.name,
-                  textAction: TextInputAction.next,
-                  helperText: "Gandalf",
-                ),
-                _TextField(
-                  label: 'Classe',
-                  formKey: 'characterClass',
-                  form: _form,
-                  keyboardType: TextInputType.text,
-                  textAction: TextInputAction.next,
-                  helperText: "Mago",
-                ),
-                _TextField(
-                  label: 'Raça',
-                  formKey: 'characterRace',
-                  form: _form,
-                  keyboardType: TextInputType.text,
-                  textAction: TextInputAction.next,
-                  helperText: "Humano",
-                ),
-                _TextField(
-                  label: 'Antecedente',
-                  formKey: 'background',
-                  form: _form,
-                  keyboardType: TextInputType.text,
-                  textAction: TextInputAction.next,
-                  helperText: "Eremita",
-                ),
-                _TextField(
-                  label: 'Alinhamento',
-                  formKey: 'aligment',
-                  form: _form,
-                  keyboardType: TextInputType.text,
-                  textAction: TextInputAction.done,
-                  helperText: "Neutro/Bom",
-                ),
-              ],
-            ),
+    return _Layout(
+      appBar: appBar(),
+      formKey: _formKey,
+      children: [
+        AvatarWallpaper(image: image),
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+          child: Column(
+            children: [
+              title("Dados Básicos"),
+              Input(
+                label: "Nome",
+                placeholder: "Gandalf",
+                margin: const EdgeInsets.symmetric(vertical: 7.5),
+                onChanged: (value) => _sheet.characterName = value ?? '',
+                prefixIcon: Rpg.helmet,
+                validations: [RequiredValidation()],
+              ),
+              Input(
+                label: "Classe",
+                placeholder: "Mago",
+                onChanged: (value) => _sheet.characterClass = value ?? '',
+                prefixIcon: Rpg.crossed_swords,
+                margin: const EdgeInsets.symmetric(vertical: 7.5),
+                validations: [RequiredValidation()],
+              ),
+              Input(
+                label: "Raça",
+                placeholder: "Humano",
+                onChanged: (value) => _sheet.characterRace = value ?? '',
+                prefixIcon: Rpg.player,
+                margin: const EdgeInsets.symmetric(vertical: 7.5),
+                validations: [RequiredValidation()],
+              ),
+              Input(
+                label: "Antepassado",
+                placeholder: "Eremita",
+                onChanged: (value) => _sheet.background = value ?? '',
+                prefixIcon: Rpg.dead_tree,
+                margin: const EdgeInsets.symmetric(vertical: 7.5),
+                validations: [RequiredValidation()],
+              ),
+              Input(
+                label: "Alinhamento",
+                placeholder: "Neutro/Bom",
+                onChanged: (value) => _sheet.aligment = value ?? '',
+                prefixIcon: Rpg.player_pyromaniac,
+                margin: const EdgeInsets.symmetric(vertical: 7.5),
+                validations: [RequiredValidation()],
+              ),
+            ],
           ),
         ),
+      ],
+    );
+  }
+
+  Container title(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: const EdgeInsets.only(top: 20, bottom: 10),
+      child: Headline(
+        text: text,
+        fontSize: 22,
+        fontWeight: FontWeight.w900,
       ),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      title: const Text('Novo Personagem'),
+      actions: [
+        IconButton(
+          onPressed: () {
+            final isValid = _formKey.currentState?.validate();
+
+            if (isValid == true) context.pop<Sheet>(_sheet);
+          },
+          icon: const Icon(Icons.save),
+        )
+      ],
     );
   }
 }
 
-class _TextField extends StatelessWidget {
-  const _TextField({
-    required this.label,
-    required this.form,
+class _Layout extends StatelessWidget {
+  const _Layout({
+    required this.children,
     required this.formKey,
-    required this.keyboardType,
-    required this.textAction,
-    this.helperText,
+    required this.appBar,
   });
 
-  final String label;
-  final Map<dynamic, dynamic> form;
-  final String formKey;
-  final TextInputType keyboardType;
-  final TextInputAction textAction;
-  final String? helperText;
+  final AppBar appBar;
+  final GlobalKey<FormState> formKey;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: label,
-          helperText: helperText != null ? "Exemplo: $helperText" : null,
+    return Scaffold(
+      appBar: appBar,
+      body: FullScreenScroll(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: children,
+          ),
         ),
-        validator: (value) => Validator.validateWith(value, [
-          RequiredValidation(),
-        ]),
-        onSaved: (value) => form[formKey] = value as String,
-        keyboardType: keyboardType,
-        textInputAction: textAction,
       ),
     );
   }

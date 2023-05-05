@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
-  primaryColor: Colors.black87,
+  primaryColor: Colors.black,
   colorScheme: ThemeData.light().colorScheme.copyWith(
-        primary: Colors.black87,
+        primary: Colors.black,
         secondary: Colors.black,
         background: Colors.black,
       ),

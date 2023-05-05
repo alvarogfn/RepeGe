@@ -1,11 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/components/shared/circle_icon.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 
-class SheetStatusDetailsPage extends StatelessWidget {
+class SheetStatusDetailsPage extends StatefulWidget {
   const SheetStatusDetailsPage({required this.sheet, super.key});
 
-  final Sheet sheet;
+  final DocumentSnapshot<Sheet?> sheet;
+
+  @override
+  State<SheetStatusDetailsPage> createState() => _SheetStatusDetailsPageState();
+}
+
+class _SheetStatusDetailsPageState extends State<SheetStatusDetailsPage> {
+  Sheet get sheet => widget.sheet.data()!;
 
   @override
   Widget build(BuildContext context) {

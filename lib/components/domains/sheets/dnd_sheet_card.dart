@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
@@ -6,18 +7,20 @@ import 'package:repege/utils/images.dart';
 
 class SheetCard extends StatelessWidget {
   const SheetCard({
-    required this.sheet,
+    required this.sheetDoc,
     required this.deleteSheet,
     super.key,
   });
 
-  final Sheet sheet;
+  final DocumentSnapshot<Sheet> sheetDoc;
   final Future<void> Function(Sheet) deleteSheet;
+
+  Sheet get sheet => sheetDoc.data()!;
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey<String>(sheet.id),
+      key: ValueKey<String>(sheetDoc.id),
       onDismissed: (_) {
         deleteSheet(sheet);
       },
@@ -40,7 +43,7 @@ class SheetCard extends StatelessWidget {
             onTap: () {
               context.pushNamed(
                 RoutesName.sheet.name,
-                pathParameters: {'id': sheet.id},
+                pathParameters: {'id': sheetDoc.id},
               );
             },
             child: Row(

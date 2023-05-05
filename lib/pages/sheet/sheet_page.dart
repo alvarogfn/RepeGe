@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/pages/sheet/sheet_character_details_page.dart';
 import 'package:repege/pages/sheet/sheet_spells_details_page.dart';
 import 'package:repege/pages/sheet/sheet_status_details_page.dart';
 import 'package:repege/pages/utils/loading_page.dart';
+import 'package:repege/services/auth_service.dart';
 
 class SheetPage extends StatefulWidget {
   const SheetPage({required this.id, super.key});
@@ -14,34 +19,41 @@ class SheetPage extends StatefulWidget {
 }
 
 class _SheetHomePageState extends State<SheetPage> {
+  Stream<DocumentSnapshot<Sheet?>> _streamSheet(BuildContext context) {
+    final user = context.read<AuthService>().user!;
+    return user.sheet(widget.id);
+  }
+
+  List<Widget> pages(DocumentSnapshot<Sheet?> sheet) => [
+        SheetCharacterDetailsPage(sheet: sheet),
+        SheetStatusDetailsPage(sheet: sheet),
+        const Text('Inventário'),
+        const Text('Itens'),
+        SheetSpellsDetailsPage(sheet: sheet),
+      ];
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Sheet?>(
-        stream: Sheet.get(widget.id),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LoadingPage();
-          }
-          if (!snapshot.hasData) return const LoadingPage();
+    return DefaultTabController(
+      length: 5,
+      child: StreamBuilder(
+          stream: _streamSheet(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LoadingPage();
+            }
+            if (!snapshot.hasData) return const LoadingPage();
 
-          final sheet = snapshot.data!;
+            final sheetDoc = snapshot.data!;
 
-          return DefaultTabController(
-            length: 5,
-            child: Scaffold(
-              appBar: _AppBar(characterName: sheet.characterName),
+            return Scaffold(
+              appBar: _AppBar(characterName: sheetDoc.data()!.characterName),
               body: TabBarView(
-                children: [
-                  SheetCharacterDetailsPage(sheet: sheet),
-                  SheetStatusDetailsPage(sheet: sheet),
-                  const Text('Inventário'),
-                  const Text('Itens'),
-                  SheetSpellsDetailsPage(sheet: sheet),
-                ],
+                children: pages(sheetDoc),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 }
 
@@ -63,11 +75,11 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
         isScrollable: true,
         tabs: [
-          Tab(icon: Icon(Icons.person)),
-          Tab(icon: Icon(Icons.healing)),
-          Tab(icon: Icon(Icons.inventory_2)),
-          Tab(icon: Icon(Icons.shape_line)),
-          Tab(icon: Icon(Icons.book_outlined)),
+          Tab(icon: Icon(Rpg.player)),
+          Tab(icon: Icon(Rpg.health)),
+          Tab(icon: Icon(Rpg.ammo_bag)),
+          Tab(icon: Icon(Rpg.axe)),
+          Tab(icon: Icon(Rpg.book)),
         ],
       ),
     );

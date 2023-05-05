@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/base/input.dart';
+import 'package:repege/components/atoms/input.dart';
 import 'package:repege/icons/octicons_icons.dart';
 import 'package:repege/utils/validations/password_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/models/firebase/document.dart';
 
-class ReferencedDocument<T extends FirestoneDocument<T>> {
+class ReferencedDocument<T> {
   late DocumentReference<T> ref;
   final String id;
   final Timestamp createdAt;
@@ -12,13 +11,8 @@ class ReferencedDocument<T extends FirestoneDocument<T>> {
     required this.createdAt,
     required this.id,
     required this.item,
-    required DocumentReference<T> ref,
-  }) {
-    this.ref = ref.withConverter(
-      fromFirestore: item.fromFirestore,
-      toFirestore: item.toFirestore,
-    );
-  }
+    required this.ref,
+  });
 
   Future<void> delete() async {
     return ref.delete();
@@ -34,5 +28,4 @@ class ReferencedDocument<T extends FirestoneDocument<T>> {
   Future<void> updateFields(Map<String, Object> data) async {
     await ref.update(data);
   }
-
 }

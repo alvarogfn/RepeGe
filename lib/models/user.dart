@@ -6,18 +6,25 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
+import 'package:repege/models/extensions.dart';
+import 'package:repege/models/firebase/referenced_document.dart';
 import 'package:repege/services/auth_service.dart';
 
 class User {
   final _firestone = FirebaseFirestore.instance;
-  final _bucket = FirebaseStorage.instance;
+  final _storage = FirebaseStorage.instance;
 
   late final _ref = _firestone.collection("users").doc(uid).withConverter(
         fromFirestore: fromFirestore,
         toFirestore: toFirestore,
       );
 
-  late final _bucketRef = _bucket.ref('users/$uid/');
+  late final _sheetsRef = _firestone.collection("sheets").withConverter(
+        fromFirestore: Sheet.fromFirestore,
+        toFirestore: Sheet.toFirestore,
+      );
+
+  late final _bucketRef = _storage.ref('users/$uid/');
 
   final String username;
   final String uid;
@@ -69,16 +76,58 @@ class User {
         .where((sheet) => sheet != null));
   }
 
-  Stream<Sheet?> sheet(String id) {
-    return Sheet.get(id);
+  Future<DocumentSnapshot<Sheet?>> createSheet(Sheet sheet) async {
+    final batch = _firestone.batch();
+
+    final sheetRef = _sheetsRef.doc();
+
+    final pictureRef = _storage.ref(
+      "users/$uid/sheets/${sheetRef.id}/picture",
+    );
+
+    try {
+      final File avatarFile = File(sheet.avatarURL);
+
+      await pictureRef.putFile(
+        avatarFile,
+        SettableMetadata(
+          contentType: "image/${avatarFile.ext}",
+        ),
+      );
+
+      final pictureURL = await pictureRef.getDownloadURL();
+
+      final Sheet newSheet = Sheet(
+        characterName: sheet.characterName,
+        characterClass: sheet.characterClass,
+        characterRace: sheet.characterRace,
+        background: sheet.background,
+        aligment: sheet.aligment,
+        avatarURL: pictureURL,
+      );
+
+      batch.set(sheetRef, newSheet);
+
+      await batch.commit();
+
+      return sheetRef.get(const GetOptions(
+        serverTimestampBehavior: ServerTimestampBehavior.estimate,
+      ));
+    } catch (e) {
+      await pictureRef.delete();
+      rethrow;
+    }
+  }
+
+  Stream<DocumentSnapshot<Sheet?>> sheet(String id) {
+    return _sheetsRef.doc(id).snapshots();
   }
 
   static Future<User?> get(String id) async {
-    final userRef =
-        FirebaseFirestore.instance.collection("users").doc(id).withConverter(
-              fromFirestore: fromFirestore,
-              toFirestore: toFirestore,
-            );
+    final userRef = FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore);
 
     final userDoc = await userRef.get(const GetOptions(
       serverTimestampBehavior: ServerTimestampBehavior.estimate,
