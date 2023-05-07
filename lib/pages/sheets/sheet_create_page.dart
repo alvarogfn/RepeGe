@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/atoms/headline.dart';
@@ -19,20 +21,19 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
   final Sheet _sheet = Sheet();
   final _formKey = GlobalKey<FormState>();
 
-  ImageProvider<Object> get image {
-    if (_sheet.avatarURL.isEmpty) {
-      return const AssetImage("assets/images/default_avatar.jpg");
-    }
-    return NetworkImage(_sheet.avatarURL);
-  }
-
   @override
   Widget build(BuildContext context) {
     return _Layout(
       appBar: appBar(),
       formKey: _formKey,
       children: [
-        AvatarWallpaper(image: image),
+        AvatarWallpaper(
+          image: _sheet.avatar,
+          onChanged: (file) {
+            if (file == null) return;
+            setState(() => _sheet.avatarURL = file.path);
+          },
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
           child: Column(
@@ -45,6 +46,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                 onChanged: (value) => _sheet.characterName = value ?? '',
                 prefixIcon: Rpg.helmet,
                 validations: [RequiredValidation()],
+                action: TextInputAction.next,
               ),
               Input(
                 label: "Classe",
@@ -53,6 +55,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                 prefixIcon: Rpg.crossed_swords,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
+                action: TextInputAction.next,
               ),
               Input(
                 label: "Raça",
@@ -61,6 +64,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                 prefixIcon: Rpg.player,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
+                action: TextInputAction.next,
               ),
               Input(
                 label: "Antepassado",
@@ -69,6 +73,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                 prefixIcon: Rpg.dead_tree,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
+                action: TextInputAction.next,
               ),
               Input(
                 label: "Alinhamento",
@@ -77,6 +82,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                 prefixIcon: Rpg.player_pyromaniac,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
+                action: TextInputAction.done,
               ),
             ],
           ),
@@ -104,7 +110,6 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
         IconButton(
           onPressed: () {
             final isValid = _formKey.currentState?.validate();
-
             if (isValid == true) context.pop<Sheet>(_sheet);
           },
           icon: const Icon(Icons.save),

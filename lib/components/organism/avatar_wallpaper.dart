@@ -20,14 +20,13 @@ class AvatarWallpaper extends StatelessWidget {
     try {
       final xfile = await imagePicker.pickImage(
         source: ImageSource.gallery,
-        maxHeight: 240,
       );
 
       if (xfile == null) return;
 
-      final bytes = await xfile.readAsBytes();
+      final path = xfile.path;
 
-      final file = File.fromRawPath(bytes);
+      final file = File(path);
 
       if (onChanged != null) onChanged!(file);
     } catch (e) {
@@ -64,7 +63,16 @@ class AvatarWallpaper extends StatelessWidget {
         Positioned(
           top: 10,
           left: 10,
-          child: Icon(Icons.camera_alt, color: Colors.white),
+          child: Icon(
+            Icons.camera_alt,
+            color: Colors.white,
+            shadows: [
+              Shadow(color: Colors.black38, offset: Offset(-1, -1)),
+              Shadow(color: Colors.black38, offset: Offset(1, 1)),
+              Shadow(color: Colors.black38, offset: Offset(-1, 1)),
+              Shadow(color: Colors.black38, offset: Offset(1, -1)),
+            ],
+          ),
         )
       ],
     );

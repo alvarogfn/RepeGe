@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:repege/models/dnd/sheets/sheet_spells.dart';
 import 'package:repege/models/utils/field.dart';
 
 class Sheet {
+  String? id;
   String characterName;
   String characterClass;
   String characterRace;
   String avatarURL;
   String background;
   String aligment;
+  String? ownerUID;
   List<String> notes;
 
   Timestamp _createdAt = Timestamp.fromDate(DateTime.now());
@@ -16,12 +22,14 @@ class Sheet {
   SheetSpells sheetSpells;
 
   Sheet({
+    this.id,
     this.characterName = '',
     this.characterClass = '',
     this.characterRace = '',
     this.background = '',
     this.aligment = '',
     this.avatarURL = '',
+    this.ownerUID,
     this.sheetSpells = const SheetSpells(),
     this.notes = const [],
   });
@@ -32,10 +40,11 @@ class Sheet {
     );
   }
 
-  factory Sheet.fromMap(Map<String, dynamic> sheetDoc) {
+  factory Sheet.fromMap(Map<String, dynamic> sheetDoc, [String? id]) {
     final sheetSpells = SheetSpells.fromMap(sheetDoc['sheetSpells']);
 
     final sheet = Sheet(
+      id: id ?? '',
       sheetSpells: sheetSpells,
       characterName: sheetDoc['characterName'],
       characterClass: sheetDoc['characterClass'],
@@ -43,6 +52,7 @@ class Sheet {
       avatarURL: sheetDoc['avatarURL'],
       background: sheetDoc['background'],
       aligment: sheetDoc['aligment'],
+      ownerUID: sheetDoc['ownerUID'],
       notes: List<String>.from(sheetDoc['notes']),
     );
 
@@ -82,8 +92,24 @@ class Sheet {
         'spellCastingClass': sheet.sheetSpells.spellCastingClass?.name,
         'spellCastingHability': sheet.sheetSpells.spellCastingHability,
         'spellSaveDc': sheet.sheetSpells.spellSaveDc,
-      }
+      },
+      'ownerUID': sheet.ownerUID,
     };
+  }
+
+  Future<void> updateAvatar() async {
+    final bucket = FirebaseStorage.instance;
+    final ref = bucket.ref(
+      "users/",
+    );
+
+    sheetRef.set({avatarURL : ref});
+  }
+
+  DocumentReference<dynamic> get sheetRef {
+    if (id == null || id?.isEmpty != false) throw Exception();
+    print(id);
+    return FirebaseFirestore.instance.collection("sheets").doc(id);
   }
 
   static Sheet? fromFirestore(
@@ -93,6 +119,20 @@ class Sheet {
     final sheetDoc = doc.data();
     if (sheetDoc == null) return null;
 
-    return Sheet.fromMap(sheetDoc);
+    return Sheet.fromMap(sheetDoc, doc.id);
+  }
+
+  ImageProvider<Object> get avatar {
+    try {
+      if (avatarURL.isEmpty) throw Exception();
+      final uri = Uri.parse(avatarURL);
+
+      if (uri.host.isEmpty) {
+        return FileImage(File(uri.path));
+      }
+      return NetworkImage(avatarURL);
+    } catch (_) {
+      return const AssetImage("assets/images/default_avatar.jpg");
+    }
   }
 }

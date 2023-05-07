@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/domains/sheets/list_spell_card.dart';
+import 'package:repege/components/organism/list_spell_card.dart';
 import 'package:repege/components/shared/circle_icon.dart';
 import 'package:repege/components/shared/loading.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';

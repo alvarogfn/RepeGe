@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:repege/utils/if_prop.dart';
 
-import '../../../utils/validations/required_validation.dart';
-import '../../../utils/validations/validations.dart';
+import '../../utils/validations/required_validation.dart';
+import '../../utils/validations/validations.dart';
 
 class InputField extends StatelessWidget {
   const InputField({

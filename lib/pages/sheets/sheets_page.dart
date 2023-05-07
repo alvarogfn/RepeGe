@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/atoms/label.dart';
 import 'package:repege/components/layout/refresh_list_view.dart';
-import 'package:repege/components/shared/custom_drawer.dart';
+import 'package:repege/components/layout/stream_list_view.dart';
+import 'package:repege/components/organism/sheet_list_card.dart';
+import 'package:repege/components/organism/custom_drawer.dart';
 import 'package:repege/config/route.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
@@ -12,9 +15,9 @@ import 'package:repege/services/auth_service.dart';
 class SheetsPage extends StatelessWidget {
   const SheetsPage({super.key});
 
-  Future<List<Sheet>> _getSheets(BuildContext context) {
+  Stream<List<Sheet>> _getSheets(BuildContext context) {
     final user = context.read<AuthService>().user!;
-    return user.sheets();
+    return user.streamSheets();
   }
 
   @override
@@ -25,12 +28,12 @@ class SheetsPage extends StatelessWidget {
         title: const Text("Fichas Cadastradas"),
       ),
       drawer: const CustomDrawer(),
-      body: RefreshListView(
-        future: _getSheets,
+      body: StreamListView(
+        stream: _getSheets(context),
         error: errorWidget(),
         empty: const Center(child: Text('Você não tem fichas criadas.')),
-        builder: (context, value) {
-          return Text(value.characterName);
+        builder: (context, sheet) {
+          return SheetListCard(sheet: sheet);
         },
       ),
     );
@@ -60,7 +63,12 @@ class SheetsPage extends StatelessWidget {
           final user = context.read<AuthService>().user!;
           final sheetReference = await user.createSheet(sheet);
 
-          if (context.mounted) context.pushNamed(sheetReference.id);
+          if (context.mounted) {
+            context.pushNamed(
+              RoutesName.sheet.name,
+              pathParameters: {'id': sheetReference.id},
+            );
+          }
         }
       },
       child: const Icon(Icons.add),

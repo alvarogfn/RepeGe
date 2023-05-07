@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/models/extensions.dart';
-import 'package:repege/models/firebase/referenced_document.dart';
 import 'package:repege/services/auth_service.dart';
 
 class User {
@@ -64,16 +63,33 @@ class User {
     final sheets = await _firestone
         .collection("sheets")
         .orderBy('createdAt')
-        .where('ownerID', isEqualTo: uid)
+        .where('ownerUID', isEqualTo: uid)
         .withConverter(
           fromFirestore: (doc, options) => Sheet.fromFirestore(doc, options),
           toFirestore: (sheet, options) => Sheet.toFirestore(sheet, options),
         )
         .get();
 
-    return List.from(sheets.docs
-        .map((sheetDoc) => sheetDoc.data())
-        .where((sheet) => sheet != null));
+    return List<Sheet>.from(
+      sheets.docs.map((sheet) => sheet.data()).where((sheet) => sheet != null),
+    );
+  }
+
+  Stream<List<Sheet>> streamSheets() {
+    return _firestone
+        .collection("sheets")
+        .orderBy('createdAt')
+        .where('ownerUID', isEqualTo: uid)
+        .withConverter(
+          fromFirestore: (doc, options) => Sheet.fromFirestore(doc, options),
+          toFirestore: (sheet, options) => Sheet.toFirestore(sheet, options),
+        )
+        .snapshots()
+        .map((query) => query.docs.map((doc) => doc.data()!).toList());
+  }
+
+  Future<void> deleteSheet(String id) async {
+    return _sheetsRef.doc(id).delete();
   }
 
   Future<DocumentSnapshot<Sheet?>> createSheet(Sheet sheet) async {
@@ -85,36 +101,33 @@ class User {
       "users/$uid/sheets/${sheetRef.id}/picture",
     );
 
+    sheet.ownerUID = uid;
     try {
-      final File avatarFile = File(sheet.avatarURL);
+      if (sheet.avatarURL.isEmpty) {
+        batch.set(sheetRef, sheet);
+      } else {
+        final File avatarFile = File(sheet.avatarURL);
 
-      await pictureRef.putFile(
-        avatarFile,
-        SettableMetadata(
-          contentType: "image/${avatarFile.ext}",
-        ),
-      );
+        await pictureRef.putFile(
+          avatarFile,
+          SettableMetadata(
+            contentType: "image/${avatarFile.ext}",
+          ),
+        );
 
-      final pictureURL = await pictureRef.getDownloadURL();
+        final avatarURL = await pictureRef.getDownloadURL();
 
-      final Sheet newSheet = Sheet(
-        characterName: sheet.characterName,
-        characterClass: sheet.characterClass,
-        characterRace: sheet.characterRace,
-        background: sheet.background,
-        aligment: sheet.aligment,
-        avatarURL: pictureURL,
-      );
+        sheet.avatarURL = avatarURL;
 
-      batch.set(sheetRef, newSheet);
-
+        batch.set(sheetRef, sheet);
+      }
       await batch.commit();
 
       return sheetRef.get(const GetOptions(
         serverTimestampBehavior: ServerTimestampBehavior.estimate,
       ));
     } catch (e) {
-      await pictureRef.delete();
+      await pictureRef.delete().catchError((_) {});
       rethrow;
     }
   }

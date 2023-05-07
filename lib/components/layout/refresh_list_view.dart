@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/layout/full_screen_scroll.dart';
 import 'package:repege/components/shared/loading.dart';
 
 class RefreshListView<T> extends StatefulWidget {

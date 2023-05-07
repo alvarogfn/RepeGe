@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/shared/custom_drawer.dart';
+import 'package:repege/components/organism/custom_drawer.dart';
 
 
 class HomePage extends StatefulWidget {

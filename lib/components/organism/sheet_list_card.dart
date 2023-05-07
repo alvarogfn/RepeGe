@@ -1,51 +1,51 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/components/shared/loading.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/config/route.dart';
+import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/images.dart';
 
-class SheetCard extends StatelessWidget {
-  const SheetCard({
-    required this.sheetDoc,
-    required this.deleteSheet,
+class SheetListCard extends StatelessWidget {
+  const SheetListCard({
+    required this.sheet,
     super.key,
   });
 
-  final DocumentSnapshot<Sheet> sheetDoc;
-  final Future<void> Function(Sheet) deleteSheet;
+  final Sheet sheet;
 
-  Sheet get sheet => sheetDoc.data()!;
+  _showDeleteLoading(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        final user = context.read<AuthService>().user!;
+        user.deleteSheet(sheet.id!).then((_) => context.pop());
+        return const Loading(color: Colors.white);
+      },
+    );
+  }
+
+  _navigateToSheet(BuildContext context, String id) {
+    context.pushNamed(
+      RoutesName.sheet.name,
+      pathParameters: {'id': sheet.id!},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey<String>(sheetDoc.id),
-      onDismissed: (_) {
-        deleteSheet(sheet);
-      },
-      confirmDismiss: (_) {
-        return confirmDelete(context);
-      },
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        decoration: const BoxDecoration(color: Colors.red),
-        child: const Padding(
-          padding: EdgeInsets.only(right: 20),
-          child: Icon(Icons.delete),
-        ),
-      ),
-      child: SizedBox(
-        height: 80,
-        child: Card(
+    return SizedBox(
+      height: 80,
+      child: Card(
+        child: Dismissible(
+          key: ValueKey<String>(sheet.id!),
+          onDismissed: (_) => _showDeleteLoading(context),
+          confirmDismiss: (_) => confirmDelete(context),
+          direction: DismissDirection.endToStart,
+          background: dismissibleDecoration(),
           child: InkWell(
-            onTap: () {
-              context.pushNamed(
-                RoutesName.sheet.name,
-                pathParameters: {'id': sheetDoc.id},
-              );
-            },
+            onTap: () => _navigateToSheet(context, sheet.id!),
             child: Row(
               children: [
                 Expanded(
@@ -70,6 +70,17 @@ class SheetCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Container dismissibleDecoration() {
+    return Container(
+      alignment: Alignment.centerRight,
+      decoration: const BoxDecoration(color: Colors.red),
+      child: const Padding(
+        padding: EdgeInsets.only(right: 20),
+        child: Icon(Icons.delete),
       ),
     );
   }

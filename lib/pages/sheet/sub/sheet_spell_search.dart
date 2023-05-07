@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:repege/components/domains/sheets/list_spell_card.dart';
+import 'package:repege/components/organism/list_spell_card.dart';
 import 'package:repege/components/shared/loading.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/utils/validations/required_validation.dart';
