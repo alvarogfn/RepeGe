@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/components/shared/loading.dart';
+import 'package:repege/components/atoms/loading.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/config/route.dart';
-import 'package:repege/services/auth_service.dart';
-import 'package:repege/utils/images.dart';
+import 'package:repege/services/sheet_service.dart';
 
 class SheetListCard extends StatelessWidget {
   const SheetListCard({
@@ -19,8 +18,8 @@ class SheetListCard extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) {
-        final user = context.read<AuthService>().user!;
-        user.deleteSheet(sheet.id!).then((_) => context.pop());
+        final sheetService = context.read<SheetService>();
+        sheetService.deleteSheet(sheet.id).then((_) => context.pop());
         return const Loading(color: Colors.white);
       },
     );
@@ -29,7 +28,7 @@ class SheetListCard extends StatelessWidget {
   _navigateToSheet(BuildContext context, String id) {
     context.pushNamed(
       RoutesName.sheet.name,
-      pathParameters: {'id': sheet.id!},
+      pathParameters: {'id': sheet.id},
     );
   }
 
@@ -39,20 +38,20 @@ class SheetListCard extends StatelessWidget {
       height: 80,
       child: Card(
         child: Dismissible(
-          key: ValueKey<String>(sheet.id!),
+          key: ValueKey<String>(sheet.id),
           onDismissed: (_) => _showDeleteLoading(context),
           confirmDismiss: (_) => confirmDelete(context),
           direction: DismissDirection.endToStart,
           background: dismissibleDecoration(),
           child: InkWell(
-            onTap: () => _navigateToSheet(context, sheet.id!),
+            onTap: () => _navigateToSheet(context, sheet.id),
             child: Row(
               children: [
                 Expanded(
                   child: ListTile(
                     title: Text(sheet.characterName),
                     subtitle: Text(
-                      '${sheet.characterRace}, ${sheet.characterClass}, ${sheet.aligment}.',
+                      '${sheet.characterRace}, ${sheet.characterClass}, ${sheet.alignment}.',
                     ),
                   ),
                 ),
@@ -61,10 +60,7 @@ class SheetListCard extends StatelessWidget {
                     topRight: Radius.circular(5),
                     bottomRight: Radius.circular(5),
                   ),
-                  child: Image.network(
-                    Images.image1,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image(image: sheet.avatar, fit: BoxFit.cover),
                 ),
               ],
             ),

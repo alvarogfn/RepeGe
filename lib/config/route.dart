@@ -1,16 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/pages/home_page.dart';
 import 'package:repege/pages/login_page.dart';
 import 'package:repege/pages/profile/profile_page.dart';
 import 'package:repege/pages/register_page.dart';
 import 'package:repege/pages/sheet/sub/sheet_spell_create.dart';
 import 'package:repege/pages/sheet/sub/sheet_spell_search.dart';
+import 'package:repege/pages/sheet/sub/spell_details_page.dart';
 import 'package:repege/pages/sheets/sheet_create_page.dart';
 import 'package:repege/pages/sheet/sheet_page.dart';
 import 'package:repege/pages/sheets/sheets_page.dart';
 import 'package:repege/pages/tables/tables_home_page.dart';
+import 'package:repege/pages/utils/loading_page.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/config/environment_variables.dart';
 
@@ -28,7 +31,10 @@ enum RoutesName {
   sheetSpellSearch(name: 'sheet-spell-search', path: 'spell-search'),
   sheetCreate(name: 'sheet-create', path: 'create'),
 
-  tables(name: 'tables', path: '/tables');
+  spellDetails(name: 'spell-details', path: '/spell-details'),
+
+  tables(name: 'tables', path: '/tables'),
+  loading(name: 'loading', path: '/loading');
 
   const RoutesName({
     this.state = AuthState.auth,
@@ -53,25 +59,38 @@ class CustomRouter {
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
-          path: RoutesName.home.path,
-          name: RoutesName.home.name,
-          builder: (context, state) => const HomePage(),
-          routes: [
-            GoRoute(
-              path: RoutesName.profile.path,
-              name: RoutesName.profile.name,
-              builder: (context, state) => const ProfilePage(),
-            ),
-          ]),
+        path: RoutesName.home.path,
+        name: RoutesName.home.name,
+        builder: (context, state) => const HomePage(),
+        routes: [
+          GoRoute(
+            path: RoutesName.profile.path,
+            name: RoutesName.profile.name,
+            builder: (context, state) => const ProfilePage(),
+          ),
+        ],
+      ),
       GoRoute(
         path: RoutesName.login.path,
         name: RoutesName.login.name,
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
+        path: RoutesName.spellDetails.path,
+        name: RoutesName.spellDetails.name,
+        builder: (context, state) {
+          return SpellDetailsPage(spell: state.extra as SpellModel);
+        },
+      ),
+      GoRoute(
         path: RoutesName.register.path,
         name: RoutesName.register.name,
         builder: (context, state) => const RegisterPage(),
+      ),
+      GoRoute(
+        path: RoutesName.loading.path,
+        name: RoutesName.loading.name,
+        builder: (context, state) => const LoadingPage(),
       ),
       GoRoute(
         path: RoutesName.sheets.path,

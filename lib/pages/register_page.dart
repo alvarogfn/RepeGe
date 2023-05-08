@@ -80,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (isValid == null || isValid == false) return false;
 
     try {
-      final authService = Provider.of<AuthService>(context, listen: false);
+      final authService = context.read<AuthService>();
 
       return authService.signup(
         username: _registerForm.username,

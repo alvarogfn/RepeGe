@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:repege/components/shared/circle_icon.dart';
+import 'package:repege/components/atoms/circle_icon.dart';
 
 class PictureFormField extends StatefulWidget {
   const PictureFormField({

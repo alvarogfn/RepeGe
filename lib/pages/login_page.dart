@@ -51,8 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     if (isValid == null || isValid == false) return false;
 
     try {
-      final authService = Provider.of<AuthService>(context, listen: false);
-
+      final authService = context.read<AuthService>();
       return authService.signin(
         email: _loginForm.email,
         password: _loginForm.password,

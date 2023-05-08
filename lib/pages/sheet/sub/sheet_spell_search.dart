@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:go_router/go_router.dart';
+import 'package:repege/components/atoms/loading.dart';
+import 'package:repege/components/molecules/input_search_bar.dart';
 import 'package:repege/components/organism/list_spell_card.dart';
-import 'package:repege/components/shared/loading.dart';
 import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/utils/validations/required_validation.dart';
-import 'package:repege/utils/validations/validations.dart';
+import 'package:repege/icons/octicons_icons.dart';
+import 'package:repege/services/spells_service.dart';
 
 class SheetSpellSearch extends StatefulWidget {
   const SheetSpellSearch({super.key});
@@ -16,107 +16,77 @@ class SheetSpellSearch extends StatefulWidget {
 
 class _SheetSpellSearchState extends State<SheetSpellSearch> {
   final _controller = TextEditingController(text: '');
-  Future<List<Spell>> _spells = Future.value([]);
+  Future<List<SpellModel>> _spells = Future.value([]);
 
-  Future<List<Spell>> _fetchSpell() async {
-    final Uri api = Uri.parse(
-      "https://dnd-spell.vercel.app/search/spells?s=${_controller.text}",
-    );
-
-    final response = await http.get(api);
-    final List<dynamic> json = jsonDecode(response.body);
-
-    return json
-        .map((item) => Spell(
-              level: SpellLevels.values.firstWhere(
-                (l) => l.value == item['level'],
-              ),
-              type: SpellTypes.values.firstWhere(
-                (t) {
-                  return t.name.toLowerCase() ==
-                      item['type'].toString().toLowerCase();
-                },
-              ),
-              catalyts: List.from(item['components']).map((v) {
-                return SpellCatalyts.values
-                    .firstWhere((c) => c.abbreviation == v);
-              }).toList(),
-              castingTime: item['casting_time'],
-              name: item['name'],
-              description: item['description'],
-              duration: item['duration'],
-            ))
-        .toList();
+  Future<List<SpellModel>> _fetchSpell() async {
+    return SpellService.getBookSpells(_controller.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Buscar Magia"),
-      ),
+      appBar: appBar(),
       body: Column(
         children: [
-          searchTextField(),
+          InputSearchBar(
+            padding: const EdgeInsets.all(10),
+            hint: "Buscar por nome, descrição, tipo, dano, efeito.",
+            label: "",
+            controller: _controller,
+            onSubmit: (_) => setState(() {
+              _spells = _fetchSpell();
+            }),
+          ),
           Expanded(
-            child: FutureBuilder<List<Spell>>(
-                future: _spells,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Loading();
-                  }
+            child: FutureBuilder<List<SpellModel>>(
+              future: _spells,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Loading();
+                }
 
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        "Não foi possível buscar. ${snapshot.error.toString()}",
-                      ),
-                    );
-                  }
-
-                  final List<Spell> spells = snapshot.data!;
-
-                  if (spells.isEmpty) {
-                    return const Center(
-                      child: Text("Sem resultados."),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: spells.length,
-                    itemBuilder: (context, index) {
-                      final Spell spell = spells[index];
-                      return ListSpellCard(spell: spell);
-                    },
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Não foi possível buscar. ${snapshot.error.toString()}",
+                    ),
                   );
-                }),
+                }
+
+                final List<SpellModel> spells = snapshot.data!;
+
+                if (spells.isEmpty) {
+                  return const Center(child: Text("Sem resultados."));
+                }
+
+                return ListView.builder(
+                  itemCount: spells.length,
+                  itemBuilder: (context, index) {
+                    final SpellModel spell = spells[index];
+                    return ListSpellCard(
+                      spell: spell,
+                      onPress: (spell) => context.pop(spell),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget searchTextField() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: TextFormField(
-        controller: _controller,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(Icons.search),
-          hintText: "Buscar por nome, descrição, tipo, dano, efeito.",
-        ),
-        onFieldSubmitted: (_) {
-          setState(() {
-            _spells = _fetchSpell();
-          });
-        },
-        validator: (value) => Validator.validateWith(value, [
-          RequiredValidation(),
-        ]),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        keyboardType: TextInputType.text,
-        textInputAction: TextInputAction.search,
-      ),
+  AppBar appBar() {
+    return AppBar(
+      title: const Text("Buscar Magia"),
+      actions: const [
+        IconButton(
+          onPressed: null,
+          icon: Icon(Octicons.search),
+          tooltip: 'Busca avançada',
+        )
+      ],
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/components/shared/form/form_builder.dart';
 import 'package:repege/components/layout/full_screen_scroll.dart';
 import 'package:repege/models/dnd/damage.dart';
-import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/utils/field.dart';
+import 'package:repege/models/utils/utils.dart';
 
 class SheetSpellCreate extends StatefulWidget {
   const SheetSpellCreate({super.key});

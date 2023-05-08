@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/components/layout/sheet_service_wrapper.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/pages/sheet/sheet_character_details_page.dart';
 import 'package:repege/pages/sheet/sheet_spells_details_page.dart';
 import 'package:repege/pages/sheet/sheet_status_details_page.dart';
 import 'package:repege/pages/utils/loading_page.dart';
-import 'package:repege/services/auth_service.dart';
+import 'package:repege/services/sheet_service.dart';
 
 class SheetPage extends StatefulWidget {
   const SheetPage({required this.id, super.key});
@@ -19,41 +19,48 @@ class SheetPage extends StatefulWidget {
 }
 
 class _SheetHomePageState extends State<SheetPage> {
-  Stream<DocumentSnapshot<Sheet?>> _streamSheet(BuildContext context) {
-    final user = context.read<AuthService>().user!;
-    return user.sheet(widget.id);
-  }
-
   List<Widget> pages(DocumentSnapshot<Sheet?> sheet) => [
-        SheetCharacterDetailsPage(sheet: sheet),
-        SheetStatusDetailsPage(sheet: sheet),
+        SheetCharacterDetailsPage(sheet),
+        SheetStatusDetailsPage(sheet),
         const Text('Inventário'),
         const Text('Itens'),
-        SheetSpellsDetailsPage(sheet: sheet),
+        SheetSpellsDetailsPage(sheet),
       ];
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 5,
-      child: StreamBuilder(
-          stream: _streamSheet(context),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingPage();
-            }
-            if (!snapshot.hasData) return const LoadingPage();
+    return SheetServiceWrapper(builder: (context, _) {
+      return DefaultTabController(
+        length: 5,
+        child: Consumer<SheetService>(
+          builder: (context, service, _) {
+            return StreamBuilder(
+              stream: service.getSheetRef(widget.id).snapshots(),
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const LoadingPage();
+                }
 
-            final sheetDoc = snapshot.data!;
+                if (snap.hasError) {
+                  return const Text('Alguma coisa deu errado.');
+                }
 
-            return Scaffold(
-              appBar: _AppBar(characterName: sheetDoc.data()!.characterName),
-              body: TabBarView(
-                children: pages(sheetDoc),
-              ),
+                final sheetDoc = snap.data!;
+
+                return Scaffold(
+                  appBar: _AppBar(
+                    characterName: sheetDoc.data()!.characterName,
+                  ),
+                  body: TabBarView(
+                    children: pages(sheetDoc),
+                  ),
+                );
+              },
             );
-          }),
-    );
+          },
+        ),
+      );
+    });
   }
 }
 

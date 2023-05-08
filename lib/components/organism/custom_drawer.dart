@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/config/route.dart';
+import 'package:repege/pages/utils/loading_page.dart';
 import 'package:repege/services/auth_service.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -12,6 +13,19 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  Future<void> _logout(BuildContext context) async {
+    return Future.delayed(
+      const Duration(seconds: 0),
+      () => showDialog(
+        context: context,
+        builder: (context) {
+          context.read<AuthService>().logout().then((_) => context.pop());
+          return const Dialog.fullscreen(child: LoadingPage());
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -21,20 +35,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
             automaticallyImplyLeading: false,
             title: const UserLeading(),
             actions: [
-              Consumer<AuthService>(
-                builder: (context, authService, child) {
-                  return PopupMenuButton(
-                    itemBuilder: (ctx) => [
-                      PopupMenuItem(
-                        onTap: authService.logout,
-                        child: const IconTextButton(
-                          icon: Icons.logout,
-                          text: "Sair",
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              PopupMenuButton(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    onTap: () => _logout(context),
+                    child: const IconTextButton(
+                      icon: Icons.logout,
+                      text: "Sair",
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -99,7 +109,10 @@ class UserLeading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthService>(
       builder: (context, authService, child) {
-        final user = authService.user!;
+        final user = authService.user;
+
+        if (user == null) return const SizedBox();
+
         return Row(
           children: [
             InkWell(

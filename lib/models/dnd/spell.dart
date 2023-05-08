@@ -1,87 +1,97 @@
-import 'package:repege/models/dnd/damage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum SpellLevels {
-  l0(name: 'Nível 0', value: 0),
-  l1(name: 'Nível 1', value: 1),
-  l2(name: 'Nível 2', value: 2),
-  l3(name: 'Nível 3', value: 3),
-  l4(name: 'Nível 4', value: 4),
-  l5(name: 'Nível 5', value: 5),
-  l6(name: 'Nível 6', value: 6),
-  l7(name: 'Nível 7', value: 7),
-  l8(name: 'Nível 8', value: 8),
-  l9(name: 'Nível 9', value: 9);
+class SpellModel {
+  int level;
+  String type;
+  String materials;
+  List<String> catalyts;
+  String castingTime;
+  String effectType;
+  String duration;
+  String range;
+  String name;
+  String description;
 
-  const SpellLevels({
-    required this.name,
-    required this.value,
+  SpellModel({
+    this.range = '',
+    this.materials = '',
+    this.level = 0,
+    this.type = '',
+    this.catalyts = const [],
+    this.castingTime = '',
+    this.effectType = '',
+    this.duration = '',
+    this.name = '',
+    this.description = '',
   });
 
-  final String name;
-  final int value;
+  toMap() {
+    return {
+      'name': name,
+      'materials': materials,
+      'description': description,
+      'castingTime': castingTime,
+      'catalyts': catalyts,
+      'effectType': effectType,
+      'level': level,
+      'type': type,
+      'duration': duration,
+    };
+  }
+
+  factory SpellModel.fromMap(Map<String, dynamic> model) {
+    return SpellModel(
+      level: model['level'],
+      type: model['type'],
+      catalyts: List<String>.from(model['components']).toList(),
+      castingTime: model['casting_time'],
+      effectType: model['type'],
+      duration: model['duration'],
+      name: model['name'],
+      description: model['description'],
+      materials: model['materials'],
+    );
+  }
 }
 
-enum SpellTypes {
-  abjuration(name: 'Abjuração'),
-  alteration(name: 'Transmutação'),
-  conjuration(name: 'Conjuração'),
-  divination(name: 'Adivinhação'),
-  enchantment(name: 'Encantamento'),
-  illusion(name: 'Ilusão'),
-  invocation(name: 'Evocação'),
-  necromancy(name: 'Necromancia');
-
-  const SpellTypes({required this.name});
-
-  final String name;
-}
-
-enum SpellCatalyts {
-  verbal(name: 'Verbal', abbreviation: "V"),
-  somantic(name: 'Somático', abbreviation: "S"),
-  material(name: 'Material', abbreviation: "M");
-
-  const SpellCatalyts({required this.name, required this.abbreviation});
-
-  final String name;
-  final String abbreviation;
-}
-
-class Spell {
-  final SpellLevels level;
-  final SpellTypes type;
-  final List<SpellCatalyts> catalyts;
-  final String castingTime;
-  final Damage? damageType;
-  final String duration;
-  final String name;
-  final String description;
+class Spell extends SpellModel {
+  final String id;
+  final Timestamp createdAt;
 
   Spell({
-    required this.level,
-    required this.type,
-    required this.catalyts,
-    required this.castingTime,
-    required this.name,
-    required this.description,
-    required this.duration,
-    this.damageType,
+    required this.createdAt,
+    required this.id,
+    required super.range,
+    required super.level,
+    required super.type,
+    required super.catalyts,
+    required super.castingTime,
+    required super.name,
+    required super.description,
+    required super.duration,
+    required super.effectType,
+    required super.materials,
   });
 
-  factory Spell.fromMap(Map<String, dynamic> data) {
+  factory Spell.fromMap(
+    SpellModel model, {
+    required String id,
+    required Timestamp createdAt,
+    required String ownerUID,
+  }) {
     return Spell(
-      level: SpellLevels.values.firstWhere((e) => e.name == data['level']),
-      type: SpellTypes.values.firstWhere((e) => e.name == data['type']),
-      catalyts: List.from(data['catalyts'])
-          .map((v) => SpellCatalyts.values.firstWhere((e) => e.name == v))
-          .toList(),
-      castingTime: data['castingTime'],
-      damageType: data['damageType'] != null
-          ? Damage.values.firstWhere((e) => e.name == data['damageType'])
-          : null,
-      duration: data['duration'],
-      name: data['name'],
-      description: data['description'],
+      id: id,
+      range: model.range,
+      createdAt: createdAt,
+      materials: model.materials,
+      level: model.level,
+      type: model.type,
+      catalyts: List<String>.from(model.catalyts).toList(),
+      castingTime: model.castingTime,
+      effectType: model.effectType,
+      duration: model.duration,
+      name: model.name,
+      description: model.description,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:repege/components/shared/icon_text.dart';
+import 'package:go_router/go_router.dart';
+import 'package:repege/config/route.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/extensions.dart';
 
@@ -8,14 +8,19 @@ class ListSpellCard extends StatelessWidget {
   const ListSpellCard({
     super.key,
     required this.spell,
+    required this.onPress,
   });
 
-  final Spell spell;
+  final void Function(SpellModel) onPress;
+  final SpellModel spell;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () => confirmAddition(context).then((value) {
+          if (value == true) context.pop(spell);
+        }),
         title: Text(spell.name.capitalize()),
         subtitle: Text(
           spell.description,
@@ -25,7 +30,7 @@ class ListSpellCard extends StatelessWidget {
         ),
         trailing: Text(spell.castingTime),
         isThreeLine: true,
-        leading: Text(spell.level.name),
+        leading: Text("${spell.level}º nível"),
         onLongPress: () {
           showDetails(context);
         },
@@ -33,55 +38,27 @@ class ListSpellCard extends StatelessWidget {
     );
   }
 
-  Future<dynamic> showDetails(BuildContext context) {
-    return showDialog(
+  Future<bool?> confirmAddition(BuildContext context) {
+    return showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        scrollable: true,
-        title: Text(spell.name),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              spacing: 10,
-              children: [
-                IconText(
-                  spell.castingTime,
-                  icon: const Icon(Icons.hourglass_bottom),
-                ),
-                IconText(
-                  spell.level.name,
-                  icon: const Icon(Icons.upgrade_rounded),
-                ),
-                IconText(
-                  spell.catalyts.map((e) => e.abbreviation).join(' '),
-                  icon: const Icon(Icons.apps_rounded),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Flexible(
-              fit: FlexFit.loose,
-              child: MarkdownBody(
-                selectable: true,
-                data: spell.description,
-                styleSheet: MarkdownStyleSheet(
-                    p: const TextStyle(
-                  fontSize: 15,
-                )),
-              ),
-            ),
-            const SizedBox(height: 10),
-            IconText(
-              spell.duration,
-              spacing: 10,
-              icon: const Icon(Icons.watch_later_rounded),
+      builder: (context) {
+        return AlertDialog(
+          content: const Text(
+            "Adicionar essa magia a sua lista de magias?",
+          ),
+          title: Text(spell.name),
+          actions: [
+            ElevatedButton(
+              onPressed: () => context.pop<bool>(true),
+              child: const Text("Adicionar"),
             )
           ],
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  Future<dynamic> showDetails(BuildContext context) {
+    return context.pushNamed(RoutesName.spellDetails.name, extra: spell);
   }
 }

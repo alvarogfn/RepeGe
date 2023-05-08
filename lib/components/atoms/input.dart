@@ -7,7 +7,7 @@ class Input extends StatelessWidget {
     this.validations = const [],
     this.label = '',
     this.placeholder = '',
-    this.initialValue = '',
+    this.initialValue,
     this.helperText,
     this.onChanged,
     this.obscure = false,
@@ -17,12 +17,18 @@ class Input extends StatelessWidget {
     this.suffixIcon,
     this.suffix,
     this.validateFn,
+    this.controller,
+    this.validateMode = AutovalidateMode.disabled,
+    this.readOnly = false,
   });
 
+  final TextEditingController? controller;
+  final AutovalidateMode validateMode;
+  final bool readOnly;
   final String? Function(String?)? validateFn;
   final List<Validation> validations;
   final String label;
-  final String initialValue;
+  final String? initialValue;
   final String? helperText;
   final String placeholder;
   final TextInputAction action;
@@ -46,6 +52,7 @@ class Input extends StatelessWidget {
     return Container(
       margin: margin,
       child: TextFormField(
+        controller: controller,
         initialValue: initialValue,
         decoration: InputDecoration(
           labelText: label,
@@ -59,6 +66,8 @@ class Input extends StatelessWidget {
         onChanged: onChanged,
         textInputAction: action,
         obscureText: obscure,
+        readOnly: readOnly,
+        autovalidateMode: validateMode,
       ),
     );
   }

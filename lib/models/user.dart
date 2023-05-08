@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/models/extensions.dart';
 import 'package:repege/services/auth_service.dart';
 
 class User {
@@ -16,11 +14,6 @@ class User {
   late final _ref = _firestone.collection("users").doc(uid).withConverter(
         fromFirestore: fromFirestore,
         toFirestore: toFirestore,
-      );
-
-  late final _sheetsRef = _firestone.collection("sheets").withConverter(
-        fromFirestore: Sheet.fromFirestore,
-        toFirestore: Sheet.toFirestore,
       );
 
   late final _bucketRef = _storage.ref('users/$uid/');
@@ -51,89 +44,12 @@ class User {
     await _ref.update({'avatarURL': url});
 
     if (context != null && context.mounted) {
-      final authService = Provider.of<AuthService>(context, listen: false);
+      final authService = context.read<AuthService>();
       FirebaseAuth.instance.currentUser!.updatePhotoURL(url);
       await authService.refresh();
     }
 
     return url;
-  }
-
-  Future<List<Sheet>> sheets() async {
-    final sheets = await _firestone
-        .collection("sheets")
-        .orderBy('createdAt')
-        .where('ownerUID', isEqualTo: uid)
-        .withConverter(
-          fromFirestore: (doc, options) => Sheet.fromFirestore(doc, options),
-          toFirestore: (sheet, options) => Sheet.toFirestore(sheet, options),
-        )
-        .get();
-
-    return List<Sheet>.from(
-      sheets.docs.map((sheet) => sheet.data()).where((sheet) => sheet != null),
-    );
-  }
-
-  Stream<List<Sheet>> streamSheets() {
-    return _firestone
-        .collection("sheets")
-        .orderBy('createdAt')
-        .where('ownerUID', isEqualTo: uid)
-        .withConverter(
-          fromFirestore: (doc, options) => Sheet.fromFirestore(doc, options),
-          toFirestore: (sheet, options) => Sheet.toFirestore(sheet, options),
-        )
-        .snapshots()
-        .map((query) => query.docs.map((doc) => doc.data()!).toList());
-  }
-
-  Future<void> deleteSheet(String id) async {
-    return _sheetsRef.doc(id).delete();
-  }
-
-  Future<DocumentSnapshot<Sheet?>> createSheet(Sheet sheet) async {
-    final batch = _firestone.batch();
-
-    final sheetRef = _sheetsRef.doc();
-
-    final pictureRef = _storage.ref(
-      "users/$uid/sheets/${sheetRef.id}/picture",
-    );
-
-    sheet.ownerUID = uid;
-    try {
-      if (sheet.avatarURL.isEmpty) {
-        batch.set(sheetRef, sheet);
-      } else {
-        final File avatarFile = File(sheet.avatarURL);
-
-        await pictureRef.putFile(
-          avatarFile,
-          SettableMetadata(
-            contentType: "image/${avatarFile.ext}",
-          ),
-        );
-
-        final avatarURL = await pictureRef.getDownloadURL();
-
-        sheet.avatarURL = avatarURL;
-
-        batch.set(sheetRef, sheet);
-      }
-      await batch.commit();
-
-      return sheetRef.get(const GetOptions(
-        serverTimestampBehavior: ServerTimestampBehavior.estimate,
-      ));
-    } catch (e) {
-      await pictureRef.delete().catchError((_) {});
-      rethrow;
-    }
-  }
-
-  Stream<DocumentSnapshot<Sheet?>> sheet(String id) {
-    return _sheetsRef.doc(id).snapshots();
   }
 
   static Future<User?> get(String id) async {

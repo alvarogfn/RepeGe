@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
         router.routes.refresh();
         return MaterialApp.router(
           routerConfig: router.routes,
-          
           title: 'RepeGe',
           theme: lightTheme,
           darkTheme: darkTheme,

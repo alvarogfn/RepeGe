@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/shared/loading.dart';
+import 'package:repege/components/atoms/loading.dart';
 
 class StreamListView<T> extends StatelessWidget {
   const StreamListView({

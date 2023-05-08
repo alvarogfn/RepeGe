@@ -13,7 +13,7 @@ class FullScreenScroll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (ctx, viewport) => SingleChildScrollView(
+      builder: (context, viewport) => SingleChildScrollView(
         physics: physics,
         child: ConstrainedBox(
           constraints: BoxConstraints(

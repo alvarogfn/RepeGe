@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/atoms/headline.dart';
@@ -18,7 +16,7 @@ class SheetCreatePage extends StatefulWidget {
 }
 
 class _SheetCreatePageState extends State<SheetCreatePage> {
-  final Sheet _sheet = Sheet();
+  final SheetModel _sheet = SheetModel();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,10 +27,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
       children: [
         AvatarWallpaper(
           image: _sheet.avatar,
-          onChanged: (file) {
-            if (file == null) return;
-            setState(() => _sheet.avatarURL = file.path);
-          },
+          onChanged: (file) => setState(() => _sheet.avatarFile = file),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
@@ -78,7 +73,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
               Input(
                 label: "Alinhamento",
                 placeholder: "Neutro/Bom",
-                onChanged: (value) => _sheet.aligment = value ?? '',
+                onChanged: (value) => _sheet.alignment = value ?? '',
                 prefixIcon: Rpg.player_pyromaniac,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
@@ -110,7 +105,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
         IconButton(
           onPressed: () {
             final isValid = _formKey.currentState?.validate();
-            if (isValid == true) context.pop<Sheet>(_sheet);
+            if (isValid == true) context.pop<SheetModel>(_sheet);
           },
           icon: const Icon(Icons.save),
         )
