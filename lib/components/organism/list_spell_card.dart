@@ -8,11 +8,13 @@ class ListSpellCard extends StatelessWidget {
   const ListSpellCard({
     super.key,
     required this.spell,
+    required this.sheetID,
     required this.onPress,
   });
 
   final void Function(SpellModel) onPress;
   final SpellModel spell;
+  final String sheetID;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,12 @@ class ListSpellCard extends StatelessWidget {
   }
 
   Future<dynamic> showDetails(BuildContext context) {
-    return context.pushNamed(RoutesName.spellDetails.name, extra: spell);
+    return context.pushNamed(
+      RoutesName.spellDetails.name,
+      pathParameters: {
+        'id': sheetID,
+      },
+      extra: spell,
+    );
   }
 }

@@ -31,7 +31,7 @@ enum RoutesName {
   sheetSpellSearch(name: 'sheet-spell-search', path: 'spell-search'),
   sheetCreate(name: 'sheet-create', path: 'create'),
 
-  spellDetails(name: 'spell-details', path: '/spell-details'),
+  spellDetails(name: 'spell-details', path: 'spell-details'),
 
   tables(name: 'tables', path: '/tables'),
   loading(name: 'loading', path: '/loading');
@@ -76,13 +76,6 @@ class CustomRouter {
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
-        path: RoutesName.spellDetails.path,
-        name: RoutesName.spellDetails.name,
-        builder: (context, state) {
-          return SpellDetailsPage(spell: state.extra as SpellModel);
-        },
-      ),
-      GoRoute(
         path: RoutesName.register.path,
         name: RoutesName.register.name,
         builder: (context, state) => const RegisterPage(),
@@ -105,8 +98,9 @@ class CustomRouter {
           GoRoute(
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
-            builder: (context, state) =>
-                SheetPage(id: state.pathParameters['id']!),
+            builder: (context, state) => SheetPage(
+              id: state.pathParameters['id']!,
+            ),
             routes: [
               GoRoute(
                 path: RoutesName.sheetSpellCreate.path,
@@ -116,7 +110,16 @@ class CustomRouter {
               GoRoute(
                 path: RoutesName.sheetSpellSearch.path,
                 name: RoutesName.sheetSpellSearch.name,
-                builder: (context, state) => const SheetSpellSearch(),
+                builder: (context, state) => SheetSpellSearch(
+                  sheetID: state.pathParameters['id']!,
+                ),
+              ),
+              GoRoute(
+                path: RoutesName.spellDetails.path,
+                name: RoutesName.spellDetails.name,
+                builder: (context, state) {
+                  return SpellDetailsPage(spell: state.extra as SpellModel);
+                },
               ),
             ],
           ),

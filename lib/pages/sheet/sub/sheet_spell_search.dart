@@ -8,7 +8,12 @@ import 'package:repege/icons/octicons_icons.dart';
 import 'package:repege/services/spells_service.dart';
 
 class SheetSpellSearch extends StatefulWidget {
-  const SheetSpellSearch({super.key});
+  const SheetSpellSearch({
+    super.key,
+    required this.sheetID,
+  });
+
+  final String sheetID;
 
   @override
   State<SheetSpellSearch> createState() => _SheetSpellSearchState();
@@ -65,6 +70,7 @@ class _SheetSpellSearchState extends State<SheetSpellSearch> {
                     final SpellModel spell = spells[index];
                     return ListSpellCard(
                       spell: spell,
+                      sheetID: widget.sheetID,
                       onPress: (spell) => context.pop(spell),
                     );
                   },
