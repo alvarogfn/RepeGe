@@ -5,15 +5,15 @@ class StreamListView<T> extends StatelessWidget {
   const StreamListView({
     required this.stream,
     required this.builder,
-    this.empty,
-    this.error,
+    this.emptyWidget,
+    this.errorBuilder,
     super.key,
   });
 
   final Stream<List<T>> stream;
   final Widget Function(BuildContext context, T value) builder;
-  final Widget? empty;
-  final Widget? error;
+  final Widget Function(BuildContext context, Object error)? errorBuilder;
+  final Widget? emptyWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,18 @@ class StreamListView<T> extends StatelessWidget {
           return const Loading();
         }
 
-        if (snap.hasError) return error ?? const SizedBox();
+        if (snap.hasError) {
+          if (errorBuilder == null) return Text(snap.error.toString());
+          return errorBuilder!(context, snap.error!);
+        }
 
         final items = snap.data ?? [];
-
-        if (items.isEmpty) return empty ?? const SizedBox();
+        if (items.isEmpty) {
+          return emptyWidget ??
+              const Center(
+                child: Text('A lista está vazia.'),
+              );
+        }
 
         return ListView.builder(
           itemCount: items.length,

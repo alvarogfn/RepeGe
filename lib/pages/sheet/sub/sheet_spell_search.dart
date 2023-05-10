@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/atoms/loading.dart';
 import 'package:repege/components/molecules/input_search_bar.dart';
-import 'package:repege/components/organism/list_spell_card.dart';
+import 'package:repege/components/organism/search_spell_card.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/icons/octicons_icons.dart';
 import 'package:repege/services/spells_service.dart';
@@ -68,7 +68,7 @@ class _SheetSpellSearchState extends State<SheetSpellSearch> {
                   itemCount: spells.length,
                   itemBuilder: (context, index) {
                     final SpellModel spell = spells[index];
-                    return ListSpellCard(
+                    return SearchSpellCard(
                       spell: spell,
                       sheetID: widget.sheetID,
                       onPress: (spell) => context.pop(spell),

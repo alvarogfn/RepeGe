@@ -22,7 +22,7 @@ class AuthService with ChangeNotifier {
 
     _subscription = _instance.idTokenChanges().asyncMap((current) async {
       if (current == null) return null;
-      return local.User.get(current.uid);
+      return local.User.get(current.uid).catchError((_) => null);
     }).listen((current) async {
       user = current;
 

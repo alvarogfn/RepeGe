@@ -4,15 +4,15 @@ import 'package:repege/config/route.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/extensions.dart';
 
-class ListSpellCard extends StatelessWidget {
-  const ListSpellCard({
+class SearchSpellCard extends StatelessWidget {
+  const SearchSpellCard({
     super.key,
     required this.spell,
     required this.sheetID,
-    required this.onPress,
+    this.onPress,
   });
 
-  final void Function(SpellModel) onPress;
+  final void Function(SpellModel)? onPress;
   final SpellModel spell;
   final String sheetID;
 
@@ -23,7 +23,7 @@ class ListSpellCard extends StatelessWidget {
         onTap: () => confirmAddition(context).then((value) {
           if (value == true) context.pop(spell);
         }),
-        title: Text(spell.name.capitalize()),
+        title: Text(spell.name.toCapitalize()),
         subtitle: Text(
           spell.description,
           maxLines: 3,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/atoms/label.dart';
+import 'package:repege/components/atoms/loading.dart';
 import 'package:repege/components/layout/sheet_service_wrapper.dart';
 import 'package:repege/components/layout/stream_list_view.dart';
 import 'package:repege/components/organism/sheet_list_card.dart';
@@ -27,8 +28,8 @@ class SheetsPage extends StatelessWidget {
           builder: (context, sheets, _) {
             return StreamListView(
               stream: sheets.streamAllSheets(),
-              error: errorWidget(),
-              empty: const Center(child: Text('Você não tem fichas criadas.')),
+              errorBuilder: (context, error) => errorWidget(),
+              emptyWidget: Text('cade'),
               builder: (context, sheet) {
                 return SheetListCard(sheet: sheet);
               },
@@ -58,6 +59,13 @@ class SheetsPage extends StatelessWidget {
         );
 
         if (sheet == null) return;
+
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => const Dialog.fullscreen(child: Loading()),
+          );
+        }
 
         if (context.mounted) {
           final sheetService = context.read<SheetService>();

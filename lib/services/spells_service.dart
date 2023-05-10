@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:repege/models/dnd/spell.dart';
+import 'package:repege/models/extensions.dart';
 
 class SpellService with ChangeNotifier {
   late final _firestoneRef = FirebaseFirestore.instance
@@ -21,8 +22,22 @@ class SpellService with ChangeNotifier {
     required this.sheetID,
   });
 
-  Stream<QuerySnapshot<Spell?>> streamSpells() {
-    return _firestoneRef.snapshots();
+  Stream<List<QueryDocumentSnapshot<Spell>>> streamSpells() {
+    return _firestoneRef.snapshots().map((query) {
+      final docs = query.docs;
+      try {
+        final filter = docs
+            .map((element) => element as QueryDocumentSnapshot<Spell>)
+            .toList();
+        print(filter);
+      } catch (e) {
+        print(e);
+      }
+
+      final nonnu = docs.whereType<QueryDocumentSnapshot<Spell>>().toList();
+      print(nonnu);
+      return nonnu;
+    });
   }
 
   Future<QuerySnapshot<Spell?>> getAllSpells() async {
