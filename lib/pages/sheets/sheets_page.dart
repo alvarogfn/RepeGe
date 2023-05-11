@@ -71,13 +71,17 @@ class SheetsPage extends StatelessWidget {
 
         if (context.mounted) {
           final sheetService = context.read<SheetService>();
-          final sheetReference = await sheetService.createSheet(sheet);
+          try {
+            final sheetReference = await sheetService.createSheet(sheet);
 
-          if (context.mounted) {
-            context.pushNamed(
-              RoutesName.sheet.name,
-              pathParameters: {'id': sheetReference.id},
-            );
+            if (context.mounted) {
+              context.pushNamed(
+                RoutesName.sheet.name,
+                pathParameters: {'id': sheetReference.id},
+              );
+            }
+          } catch (_) {
+            context.pop();
           }
         }
       },

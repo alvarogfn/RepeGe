@@ -5,8 +5,8 @@ class Input extends StatelessWidget {
   const Input({
     super.key,
     this.validations = const [],
-    this.label = '',
-    this.placeholder = '',
+    this.label,
+    this.placeholder,
     this.initialValue,
     this.helperText,
     this.onChanged,
@@ -27,10 +27,10 @@ class Input extends StatelessWidget {
   final bool readOnly;
   final String? Function(String?)? validateFn;
   final List<Validation> validations;
-  final String label;
+  final String? label;
   final String? initialValue;
   final String? helperText;
-  final String placeholder;
+  final String? placeholder;
   final TextInputAction action;
   final EdgeInsets margin;
   final bool obscure;

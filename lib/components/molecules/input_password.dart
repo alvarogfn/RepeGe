@@ -9,8 +9,8 @@ class InputPassword extends StatefulWidget {
   const InputPassword({
     required this.label,
     super.key,
-    this.initialValue = '',
-    this.placeholder = '',
+    this.initialValue,
+    this.placeholder,
     this.action = TextInputAction.done,
     this.margin = const EdgeInsets.all(0),
     this.onChanged,
@@ -21,11 +21,11 @@ class InputPassword extends StatefulWidget {
 
   final TextEditingController? controller;
   final TextInputAction action;
-  final String initialValue;
+  final String? initialValue;
   final String label;
   final EdgeInsets margin;
   final Function(String?)? onChanged;
-  final String placeholder;
+  final String? placeholder;
   final Validation? validation;
   final String? Function(String?)? validateFn;
 

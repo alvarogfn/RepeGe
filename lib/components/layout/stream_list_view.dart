@@ -22,7 +22,7 @@ class StreamListView<T> extends StatelessWidget {
       builder: (context, snap) {
         if (snap.connectionState == ConnectionState.waiting) {
           return const Loading();
-        }
+      }
 
         if (snap.hasError) {
           if (errorBuilder == null) return Text(snap.error.toString());

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/atoms/circle_icon.dart';
 import 'package:repege/components/layout/stream_list_view.dart';
-import 'package:repege/components/organism/search_spell_card.dart';
+import 'package:repege/components/molecules/spell_card.dart';
 import 'package:repege/config/route.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/models/dnd/spell.dart';
@@ -17,21 +17,40 @@ class SheetSpellsDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _Layout(
+      sheetReference: sheetReference,
+      builder: (context, service, child) {
+        return StreamListView(
+          errorBuilder: (context, error) => Text(error.toString()),
+          stream: service.streamSpells(),
+          builder: (context, snapshot) {
+            return SpellCard(
+              spellSnapshot: snapshot,
+              sheetID: sheetReference.id,
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _Layout extends StatelessWidget {
+  const _Layout({required this.sheetReference, required this.builder});
+
+  final DocumentSnapshot<Sheet?> sheetReference;
+
+  final Widget Function(BuildContext, SpellService, Widget?) builder;
+
+  @override
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => SpellService(sheetID: sheetReference.id),
       builder: (context, child) {
         return Scaffold(
           floatingActionButton: floatingActionButton(),
           body: Consumer<SpellService>(
-            builder: (context, value, child) {
-              return StreamListView(
-                errorBuilder: (context, error) => Text(error.toString()),
-                stream: value.streamSpells(),
-                builder: (context, doc) {
-                  return SpellCard(snapshot: doc);
-                },
-              );
-            },
+            builder: builder,
           ),
         );
       },
@@ -91,29 +110,6 @@ class SheetSpellsDetailsPage extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class SpellCard extends StatelessWidget {
-  const SpellCard({
-    super.key,
-    required this.snapshot,
-  });
-
-  final DocumentSnapshot<Spell?> snapshot;
-
-  Spell get spell => snapshot.data()!;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(snapshot.id),
-      child: Card(
-        child: ListTile(
-          title: Text(spell.name),
         ),
       ),
     );

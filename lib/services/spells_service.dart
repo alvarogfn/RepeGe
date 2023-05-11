@@ -84,7 +84,7 @@ class SpellService with ChangeNotifier {
 
     return Spell(
       id: doc.id,
-      createdAt: spellDoc['createdAt'],
+      createdAt: spellDoc['createdAt'] ?? Timestamp.now(),
       level: spellDoc['level'],
       range: spellDoc['range'],
       type: spellDoc['type'],
