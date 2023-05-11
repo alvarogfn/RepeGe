@@ -29,7 +29,9 @@ class SheetsPage extends StatelessWidget {
             return StreamListView(
               stream: sheets.streamAllSheets(),
               errorBuilder: (context, error) => errorWidget(),
-              emptyWidget: Text('cade'),
+              emptyWidget: const Center(
+                child: Text('Não existem fichas cadastradas.'),
+              ),
               builder: (context, sheet) {
                 return SheetListCard(sheet: sheet);
               },

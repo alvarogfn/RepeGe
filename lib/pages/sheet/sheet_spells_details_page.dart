@@ -27,8 +27,8 @@ class SheetSpellsDetailsPage extends StatelessWidget {
               return StreamListView(
                 errorBuilder: (context, error) => Text(error.toString()),
                 stream: value.streamSpells(),
-                builder: (context, spell) {
-                  return SpellCard(snapshot: spell);
+                builder: (context, doc) {
+                  return SpellCard(snapshot: doc);
                 },
               );
             },
@@ -103,7 +103,7 @@ class SpellCard extends StatelessWidget {
     required this.snapshot,
   });
 
-  final DocumentSnapshot<Spell> snapshot;
+  final DocumentSnapshot<Spell?> snapshot;
 
   Spell get spell => snapshot.data()!;
 
