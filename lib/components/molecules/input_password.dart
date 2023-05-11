@@ -16,8 +16,10 @@ class InputPassword extends StatefulWidget {
     this.onChanged,
     this.validation,
     this.validateFn,
+    this.controller,
   });
 
+  final TextEditingController? controller;
   final TextInputAction action;
   final String initialValue;
   final String label;
@@ -56,6 +58,7 @@ class _InputPasswordState extends State<InputPassword> {
       placeholder: widget.placeholder,
       prefixIcon: Icons.password,
       obscure: _isObscure,
+      controller: widget.controller,
       suffix: GestureDetector(
         onTap: toggle,
         child: Padding(

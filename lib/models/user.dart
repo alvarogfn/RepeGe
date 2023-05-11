@@ -131,4 +131,11 @@ class User {
       createdAt: userDoc['createdAt'] ?? Timestamp.fromDate(DateTime.now()),
     );
   }
+
+  ImageProvider get avatar {
+    if (avatarURL == null) {
+      return const AssetImage("assets/images/default_profile_picture.png");
+    }
+    return NetworkImage(avatarURL!);
+  }
 }

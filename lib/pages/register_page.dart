@@ -16,45 +16,45 @@ import 'package:repege/utils/validations/required_validation.dart';
 import '../components/layout/full_screen_scroll.dart';
 
 class RegisterForm {
-  String _username = "";
-  String _email = "";
-  String _password = "";
-  String _repassword = "";
+  late final TextEditingController username;
+  late final TextEditingController email;
+  late final TextEditingController password;
+  late final TextEditingController repassword;
 
   RegisterForm([
-    this._email = "",
-    this._password = "",
-    this._repassword = "",
-    this._username = "",
-  ]);
-
-  bool get valid {
-    return _repassword.isNotEmpty &&
-        _password.isNotEmpty &&
-        _repassword == _password &&
-        _email.isNotEmpty &&
-        _username.isNotEmpty;
+    String email = "",
+    String password = "",
+    String repassword = "",
+    String username = "",
+  ]) {
+    this.username = TextEditingController(text: username);
+    this.email = TextEditingController(text: email);
+    this.password = TextEditingController(text: password);
+    this.repassword = TextEditingController(text: repassword);
   }
 
-  set email(String? value) => _email = value ?? "";
-  set username(String? value) => _username = (value ?? "").toLowerCase();
-  set password(String? value) => _password = value ?? "";
-  set repassword(String? value) => _repassword = value ?? "";
+  bool get valid {
+    return repassword.text.isNotEmpty &&
+        password.text.isNotEmpty &&
+        repassword == password &&
+        email.text.isNotEmpty &&
+        username.text.isNotEmpty;
+  }
 
-  String get password => _password;
-  String get email => _email;
-  String get repassword => _repassword;
-  String get username => _username;
+  String get passwordText => password.text;
+  String get emailText => email.text;
+  String get repasswordText => repassword.text;
+  String get usernameText => username.text;
 
   String? get passwordsValidity {
-    if (password != repassword) {
+    if (passwordText != repasswordText) {
       return "As senhas não combinam.";
     }
     return null;
   }
 
   String? get usernameValidity {
-    if (!RegExp(r'^[a-z]+$').hasMatch(username)) {
+    if (!RegExp(r'^[a-z]+$').hasMatch(usernameText)) {
       return "Esse nome de usuário não é válido.";
     }
     return null;
@@ -83,9 +83,9 @@ class _RegisterPageState extends State<RegisterPage> {
       final authService = context.read<AuthService>();
 
       return authService.signup(
-        username: _registerForm.username,
-        email: _registerForm.email,
-        password: _registerForm.password,
+        username: _registerForm.usernameText,
+        email: _registerForm.emailText,
+        password: _registerForm.passwordText,
       );
     } on Exception catch (e) {
       return Future.error(e);
@@ -120,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Input(
                     label: "Nome de usuário",
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    onChanged: (value) => _registerForm.username = value,
+                    controller: _registerForm.username,
                     validations: [RequiredValidation()],
                     action: TextInputAction.next,
                     prefixIcon: Icons.person,
@@ -130,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     label: 'Email',
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     prefixIcon: Icons.alternate_email,
-                    onChanged: (value) => _registerForm.email = value,
+                    controller: _registerForm.email,
                     validations: [RequiredValidation(), EmailValidation()],
                     action: TextInputAction.next,
                   ),
@@ -138,14 +138,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     label: 'Senha',
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     action: TextInputAction.next,
-                    onChanged: (value) => _registerForm.password = value,
+                    controller: _registerForm.password,
                     validateFn: (_) => _registerForm.passwordsValidity,
                   ),
                   InputPassword(
                     label: 'Confirme sua senha',
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     action: TextInputAction.done,
-                    onChanged: (value) => _registerForm.repassword = value,
+                    controller: _registerForm.repassword,
                     validateFn: (_) => _registerForm.passwordsValidity,
                   ),
                   Button(
