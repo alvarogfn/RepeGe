@@ -82,14 +82,34 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       final authService = context.read<AuthService>();
 
-      return authService.signup(
+      await authService.signup(
         username: _registerForm.usernameText,
         email: _registerForm.emailText,
         password: _registerForm.passwordText,
       );
+
+      if (context.mounted) {
+        await _sendEmailConfirmation(context);
+      }
+
+      return true;
     } on Exception catch (e) {
       return Future.error(e);
     }
+  }
+
+  Future<void> _sendEmailConfirmation(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Confirmação de E-mail.'),
+          content: Text(
+            'Uma confirmação de email foi enviada para ${_registerForm.emailText}. Você precisa confirmar antes de poder se logar.',
+          ),
+        );
+      },
+    ).then((value) => context.goNamed(RoutesName.login.name));
   }
 
   @override

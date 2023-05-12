@@ -6,6 +6,6 @@ class InputSocorro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Input();
+    return const Input();
   }
 }

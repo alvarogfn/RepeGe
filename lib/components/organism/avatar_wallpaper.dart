@@ -58,8 +58,8 @@ class AvatarWallpaper extends StatelessWidget {
   }
 
   Stack positionedCamera() {
-    return Stack(
-      children: const [
+    return const Stack(
+      children: [
         Positioned(
           top: 10,
           left: 10,

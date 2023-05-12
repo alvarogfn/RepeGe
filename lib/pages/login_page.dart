@@ -10,6 +10,7 @@ import 'package:repege/components/atoms/label.dart';
 import 'package:repege/components/atoms/paragraph.dart';
 import 'package:repege/components/molecules/input_password.dart';
 import 'package:repege/config/route.dart';
+import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
@@ -52,13 +53,41 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final authService = context.read<AuthService>();
-      return authService.signin(
+      await authService.signin(
         email: _loginForm.email,
         password: _loginForm.password,
       );
+      return true;
+    } on AuthEmailNotVerifiedException catch (_) {
+      await _notVerifiedEmailDialog(context);
+      return false;
     } on Exception catch (e) {
+      print('hihi');
       return Future.error(e);
     }
+  }
+
+  Future<dynamic> _notVerifiedEmailDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Email não confirmado.'),
+          content: Paragraph(
+              'O endereço de email **${_loginForm.email}** ainda não foi confirmado na plataforma.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final authService = context.read<AuthService>();
+                authService.sendEmailVerification();
+                context.pop();
+              },
+              child: const Text('Reenviar Confirmação.'),
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override

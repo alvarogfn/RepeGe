@@ -22,6 +22,7 @@ class AuthService with ChangeNotifier {
 
     _subscription = _instance.idTokenChanges().asyncMap((current) async {
       if (current == null) return null;
+      if (!current.emailVerified) return null;
       return local.User.get(current.uid).catchError((_) => null);
     }).listen((current) async {
       user = current;
@@ -62,9 +63,7 @@ class AuthService with ChangeNotifier {
         avatarURL: credentialUser.photoURL,
       );
 
-      if (EnvironmentVariables.production) {
-        await credentialUser.sendEmailVerification();
-      }
+      await credentialUser.sendEmailVerification();
 
       return true;
     } on FirebaseAuthException catch (e) {
@@ -81,6 +80,13 @@ class AuthService with ChangeNotifier {
     } catch (e) {
       await credentialUser?.delete();
       throw const AuthException();
+    }
+  }
+
+  FutureOr<void> sendEmailVerification() {
+    if (_instance.currentUser?.emailVerified == false) {
+      _instance.currentUser?.sendEmailVerification();
+      return _instance.signOut();
     }
   }
 
