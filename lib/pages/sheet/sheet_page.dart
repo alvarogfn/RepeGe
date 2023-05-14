@@ -23,7 +23,6 @@ class _SheetHomePageState extends State<SheetPage> {
         SheetCharacterDetailsPage(sheet),
         SheetStatusDetailsPage(sheet),
         const Text('Inventário'),
-        const Text('Itens'),
         SheetSpellsDetailsPage(sheet),
       ];
 
@@ -31,7 +30,7 @@ class _SheetHomePageState extends State<SheetPage> {
   Widget build(BuildContext context) {
     return SheetServiceWrapper(builder: (context, _) {
       return DefaultTabController(
-        length: 5,
+        length: 4,
         child: Consumer<SheetService>(
           builder: (context, service, _) {
             return StreamBuilder(
@@ -84,7 +83,6 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
         tabs: [
           Tab(icon: Icon(Rpg.player)),
           Tab(icon: Icon(Rpg.health)),
-          Tab(icon: Icon(Rpg.ammo_bag)),
           Tab(icon: Icon(Rpg.axe)),
           Tab(icon: Icon(Rpg.book)),
         ],

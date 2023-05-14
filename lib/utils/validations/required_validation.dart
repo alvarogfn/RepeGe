@@ -1,7 +1,7 @@
 import 'package:repege/utils/validations/validations.dart';
 
 class RequiredValidation extends Validation {
-  RequiredValidation({super.message = 'Esse campo é obrigátorio.'});
+  RequiredValidation({super.message = 'Esse campo é obrigatório.'});
 
   @override
   bool validate(String? value) {

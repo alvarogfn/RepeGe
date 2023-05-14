@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/exceptions/auth_exceptions.dart';
 import 'package:repege/models/user.dart' as local;
-import 'package:repege/config/environment_variables.dart';
 
 enum AuthState { auth, unauth }
 

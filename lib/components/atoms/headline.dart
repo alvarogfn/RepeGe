@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Headline extends StatelessWidget {
-  const Headline({
-    required this.text,
+  const Headline(
+    this.text, {
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(0),
     this.fontSize = 50,

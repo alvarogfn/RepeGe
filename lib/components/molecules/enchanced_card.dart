@@ -6,6 +6,7 @@ class EnchancedCard extends StatelessWidget {
     required this.title,
     required this.content,
     this.padding = const EdgeInsets.all(10),
+    this.margin,
     this.icon,
     super.key,
   });
@@ -14,28 +15,32 @@ class EnchancedCard extends StatelessWidget {
   final String title;
   final Widget content;
   final EdgeInsets padding;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (icon != null) icon!,
-                  if (icon != null) const SizedBox(width: 10),
-                  Headline(text: title, fontSize: 20),
-                ],
+    return Container(
+      margin: margin,
+      child: Card(
+        child: Padding(
+          padding: padding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (icon != null) icon!,
+                    if (icon != null) const SizedBox(width: 10),
+                    Headline(title, fontSize: 21),
+                  ],
+                ),
               ),
-            ),
-            content,
-          ],
+              content,
+            ],
+          ),
         ),
       ),
     );

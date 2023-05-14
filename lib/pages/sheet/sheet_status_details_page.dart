@@ -16,7 +16,7 @@ class SheetStatusDetailsPage extends StatelessWidget {
     return Consumer<AuthService>(
       builder: (context, service, _) {
         return const Scaffold(
-          body: Text(''),
+          body: Text('Status aqui'),
         );
       },
     );

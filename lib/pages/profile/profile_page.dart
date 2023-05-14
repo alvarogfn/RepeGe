@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: Column(children: [
               const Headline(
-                text: 'Dados Pessoais',
+                'Dados Pessoais',
                 fontSize: 20,
                 padding: EdgeInsets.all(10),
               ),

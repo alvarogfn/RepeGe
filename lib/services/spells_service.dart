@@ -21,8 +21,21 @@ class SpellService with ChangeNotifier {
     required this.sheetID,
   });
 
-  Stream<List<QueryDocumentSnapshot<Spell?>>> streamSpells() {
-    return _firestoneRef.snapshots().map((query) {
+  Stream<List<QueryDocumentSnapshot<Spell?>>> streamSpells([
+    String? type,
+    String? level,
+  ]) {
+    Query<Spell?> query = _firestoneRef;
+
+    if (level != null) {
+      query = query.where('level', isEqualTo: level);
+    }
+
+    if (type != null) {
+      query = query.where('type', isEqualTo: type);
+    }
+
+    return query.snapshots().map((query) {
       return query.docs;
     });
   }
@@ -36,10 +49,10 @@ class SpellService with ChangeNotifier {
   }
 
   Future<DocumentSnapshot<Spell?>> addSpell(SpellModel model) async {
-    final spellRef = _firestoneRef.doc();
+    final spellRef = _firestoneRef.doc(model.id.isEmpty ? null : model.id);
 
     final spell = Spell(
-      id: spellRef.id,
+      id: model.id.isEmpty ? spellRef.id : model.id,
       materials: model.materials,
       catalyts: model.catalyts,
       createdAt: Timestamp.now(),

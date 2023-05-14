@@ -6,15 +6,11 @@ class Paragraph extends StatelessWidget {
     this.text, {
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(0),
-    this.fontSize = 50,
-    this.fontWeight = FontWeight.bold,
     super.key,
   });
 
   final String text;
   final EdgeInsets margin;
-  final double fontSize;
-  final FontWeight fontWeight;
   final EdgeInsets padding;
   @override
   Widget build(BuildContext context) {
@@ -23,6 +19,12 @@ class Paragraph extends StatelessWidget {
       padding: padding,
       child: MarkdownBody(
         data: text,
+        styleSheet: MarkdownStyleSheet(
+          p: const TextStyle(
+            height: 1.5,
+            fontSize: 15,
+          ),
+        ),
       ),
     );
   }

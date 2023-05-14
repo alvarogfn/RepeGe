@@ -5,14 +5,17 @@ import 'package:repege/components/atoms/headline.dart';
 import 'package:repege/config/route.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/extensions.dart';
+import 'package:repege/models/utils/utils.dart';
 
 class SpellCard extends StatelessWidget {
   const SpellCard({
     super.key,
     required this.spellSnapshot,
     required this.sheetID,
+    this.onTap,
   });
 
+  final void Function()? onTap;
   final DocumentSnapshot<Spell?> spellSnapshot;
   final String sheetID;
 
@@ -20,40 +23,45 @@ class SpellCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Dismissible(
-        key: ValueKey(spellSnapshot.id),
-        background: editBackground(),
-        secondaryBackground: errorBackground(),
-        confirmDismiss: (direction) => handleConfirmDismiss(context, direction),
-        onDismissed: (direction) => handleDismiss(context, direction),
-        child: ListTile(
-          title: Text(spell.name.toCapitalize()),
-          subtitle: Text(
-            spell.description.toCapitalize(),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.justify,
-          ),
-          trailing: Headline(
-            text: spell.castingTime,
-            fontWeight: FontWeight.w900,
-            fontSize: 14,
-          ),
-          leading: Headline(
-            text: "${spell.level}º nível",
-            fontWeight: FontWeight.w900,
-            fontSize: 14,
-          ),
-          isThreeLine: true,
-          onTap: () => context.pushNamed(
-            RoutesName.spellDetails.name,
-            pathParameters: {'id': sheetID},
-            extra: spell,
-          ),
+    return Dismissible(
+      key: ValueKey(spellSnapshot.id),
+      background: editBackground(),
+      secondaryBackground: errorBackground(),
+      confirmDismiss: (direction) => handleConfirmDismiss(context, direction),
+      onDismissed: (direction) => handleDismiss(context, direction),
+      child: ListTile(
+        title: Headline(
+          spell.name.toCapitalize(),
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+        ),
+        subtitle: Headline(
+          details,
+          fontWeight: FontWeight.w500,
+          fontSize: 12,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+        ),
+        trailing: Headline(
+          spell.castingTime,
+          fontWeight: FontWeight.w900,
+          fontSize: 14,
+        ),
+        onTap: () async => context.pushNamed<SpellModel>(
+          RoutesName.spellDetails.name,
+          pathParameters: {'id': sheetID},
+          extra: spell,
         ),
       ),
     );
+  }
+
+  String get details {
+    final type = spell.type.toCapitalize();
+    final duration = spell.duration;
+    final effectType = spell.effectType;
+    final catalyts = spell.catalyts.join(' ');
+
+    return "$type  |  $catalyts  |  $duration  |  $effectType ";
   }
 
   Container errorBackground() => Container(
@@ -86,6 +94,7 @@ class SpellCard extends StatelessWidget {
       await context.pushNamed<SpellModel>(
         RoutesName.sheetSpellCreate.name,
         pathParameters: {'id': sheetID},
+        extra: spellSnapshot.data(),
       );
     }
   }

@@ -14,6 +14,7 @@ class Input extends StatelessWidget {
     this.margin = const EdgeInsets.all(0),
     this.action = TextInputAction.done,
     this.prefixIcon,
+    this.maxLines = 1,
     this.suffixIcon,
     this.suffix,
     this.validateFn,
@@ -32,6 +33,7 @@ class Input extends StatelessWidget {
   final String? helperText;
   final String? placeholder;
   final TextInputAction action;
+  final int maxLines;
   final EdgeInsets margin;
   final bool obscure;
   final Widget? suffix;
@@ -62,6 +64,7 @@ class Input extends StatelessWidget {
           helperText: helperText,
           hintText: placeholder,
         ),
+        maxLines: maxLines,
         validator: validator,
         onChanged: onChanged,
         textInputAction: action,

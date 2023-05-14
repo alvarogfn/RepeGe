@@ -5,6 +5,8 @@ import 'package:repege/components/layout/full_screen_scroll.dart';
 import 'package:repege/components/molecules/enchanced_card.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/spell.dart';
+import 'package:repege/models/extensions.dart';
+import 'package:repege/models/utils/utils.dart';
 
 class SpellDetailsPage extends StatelessWidget {
   const SpellDetailsPage({required this.spell, super.key});
@@ -27,43 +29,25 @@ class SpellDetailsPage extends StatelessWidget {
             ),
             EnchancedCard(
               title: 'Materiais',
-              icon: const Icon(Rpg.diamond),
-              content: Paragraph(spell.materials),
+              icon: const Icon(Icons.backpack_outlined),
+              content: Paragraph(materials),
             ),
             EnchancedCard(
-              title: 'Atributos',
-              icon: const Icon(Rpg.hand),
+              title: 'Detalhes',
+              icon: const Icon(Icons.info_outline),
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   IconText(
-                    spell.castingTime,
+                    castingTime,
                     icon: const Icon(Icons.hourglass_empty),
                   ),
-                  IconText(
-                    "${spell.level}º nível",
-                    icon: const Icon(Icons.trending_up),
-                  ),
-                  IconText(
-                    spell.catalyts.join(' '),
-                    icon: const Icon(Icons.apps_rounded),
-                  ),
-                  IconText(
-                    spell.range,
-                    icon: const Icon(Icons.map),
-                  ),
-                  IconText(
-                    spell.duration,
-                    icon: const Icon(Rpg.stopwatch),
-                  ),
-                  IconText(
-                    spell.type,
-                    icon: const Icon(Icons.abc),
-                  ),
-                  IconText(
-                    spell.effectType,
-                    icon: const Icon(Icons.abc),
-                  ),
+                  IconText(level, icon: const Icon(Icons.trending_up)),
+                  IconText(formatedCatalytics, icon: const Icon(Rpg.hand)),
+                  IconText(range, icon: const Icon(Icons.map)),
+                  IconText(duration, icon: const Icon(Rpg.stopwatch)),
+                  IconText(type, icon: const Icon(Icons.school)),
+                  IconText(effectType, icon: const Icon(Rpg.fire)),
                 ],
               ),
             ),
@@ -71,5 +55,67 @@ class SpellDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String get materials {
+    if (spell.materials.isEmpty) {
+      return "*Essa magia não possui materiais ou eles são desconhecidos.*";
+    }
+    return spell.materials.toCapitalize();
+  }
+
+  String get formatedCatalytics {
+    const catalyts = SpellCatalyts.values;
+
+    final filteredCatalyts = catalyts.where((value) {
+      return spell.catalyts.contains(value.abbreviation);
+    }).map((e) => e.name);
+
+    if (filteredCatalyts.isEmpty) return '*Catalizadores desconhecidos.*';
+
+    final formatedCatalyts = filteredCatalyts.toList().join(', ');
+
+    return 'Catalizadores: **$formatedCatalyts.**';
+  }
+
+  String get castingTime {
+    if (spell.castingTime.isEmpty) {
+      return '*Tempo de Conjuração Desconhecido.*';
+    }
+
+    return "Tempo de Conjuração: **${spell.castingTime}.**";
+  }
+
+  String get level {
+    return "Nível da Magia: **${spell.levelText}.**";
+  }
+
+  String get range {
+    if (spell.range.isEmpty) return '*Alcance desconhecido.*';
+    return 'Alcance/Distância: **${spell.range}.** ';
+  }
+
+  String get duration {
+    if (spell.duration.isEmpty) return "*Duração desconhecida.*";
+    return "Duração da Magia: **${spell.duration}.**";
+  }
+
+  String get type {
+    if (spell.type.isEmpty) return "*Escola desconhecida.*";
+    return "Escola da Magia: **${spell.type.toCapitalize()}.**";
+  }
+
+  String get effectType {
+    if (spell.effectType.isEmpty) return "*Efeito desconhecido.*";
+    return "Efeito/Dano da Magia: **${spell.effectType}.**";
+  }
+}
+
+class _Layout extends StatelessWidget {
+  const _Layout();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

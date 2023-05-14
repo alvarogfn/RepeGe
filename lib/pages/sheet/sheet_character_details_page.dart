@@ -35,8 +35,8 @@ class SheetCharacterDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Headline(
+                      "Caracteristicas",
                       padding: EdgeInsets.only(bottom: 10, top: 5),
-                      text: "Caracteristicas",
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                     ),

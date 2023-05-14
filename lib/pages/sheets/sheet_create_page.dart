@@ -90,11 +90,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
     return Container(
       alignment: Alignment.centerLeft,
       margin: const EdgeInsets.only(top: 20, bottom: 10),
-      child: Headline(
-        text: text,
-        fontSize: 22,
-        fontWeight: FontWeight.w900,
-      ),
+      child: Headline(text, fontSize: 22, fontWeight: FontWeight.w900),
     );
   }
 

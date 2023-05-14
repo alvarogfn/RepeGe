@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 
-class SelectFormField extends StatefulWidget {
-  const SelectFormField({
+class Select<T> extends StatefulWidget {
+  const Select({
     required this.items,
     required this.label,
+    this.margin = const EdgeInsets.all(0),
+    this.initialValue,
     this.validator,
     this.onSaved,
     this.onChanged,
     super.key,
   });
 
-  final List items;
-  final void Function(String?)? onChanged;
+  final List<T> items;
+  final EdgeInsets margin;
+  final T? initialValue;
+  final void Function(dynamic)? onChanged;
   final String label;
-  final void Function(String?)? onSaved;
-  final String? Function(String?)? validator;
+  final void Function(T?)? onSaved;
+  final String? Function(T?)? validator;
 
   @override
-  State<SelectFormField> createState() => _SelectFormFieldState();
+  State<Select> createState() => _SelectFormFieldState();
 }
 
-class _SelectFormFieldState extends State<SelectFormField> {
-  String? selectedItem;
+class _SelectFormFieldState<T> extends State<Select<T>> {
+  late T? selectedItem = widget.initialValue;
 
-  final FocusNode _inputFocus = FocusNode();
-
-  List<DropdownMenuItem<String>> get dropdownItems {
+  List<DropdownMenuItem<T>> get dropdownItems {
     final widgets = widget.items.map((item) {
-      return DropdownMenuItem<String>(
+      return DropdownMenuItem<T>(
         value: item,
         child: Text(item.toString()),
       );
@@ -38,20 +40,19 @@ class _SelectFormFieldState extends State<SelectFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() => selectedItem = value);
-        _inputFocus.requestFocus();
-        if (widget.onChanged != null) widget.onChanged!(value);
-      },
-      validator: widget.validator,
-      value: selectedItem,
-      decoration: InputDecoration(
-        labelText: widget.label,
+    return Padding(
+      padding: widget.margin,
+      child: DropdownButtonFormField<T>(
+        items: dropdownItems,
+        onChanged: widget.onChanged,
+        validator: widget.validator,
+        value: selectedItem,
+        decoration: InputDecoration(
+          labelText: widget.label,
+        ),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        onSaved: widget.onSaved,
       ),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      onSaved: widget.onSaved,
     );
   }
 }

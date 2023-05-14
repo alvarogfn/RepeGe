@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/models/extensions.dart';
 
 class SpellModel {
+  String id;
   int level;
   String type;
   String materials;
@@ -13,6 +15,7 @@ class SpellModel {
   String description;
 
   SpellModel({
+    this.id = '',
     this.range = '',
     this.materials = '',
     this.level = 0,
@@ -41,32 +44,37 @@ class SpellModel {
 
   factory SpellModel.fromMap(Map<String, dynamic> model) {
     return SpellModel(
-      level: model['level'],
-      type: model['type'],
-      catalyts: List<String>.from(model['components']).toList(),
-      castingTime: model['casting_time'],
-      effectType: model['type'],
-      duration: model['duration'],
-      name: model['name'],
-      description: model['description'],
-      materials: model['materials'],
+      id: model['id']?.toString() ?? '',
+      level: model['level'] ?? 0,
+      type: model['type'] ?? '',
+      catalyts: List<String>.from(model['components'] ?? []).toList(),
+      castingTime: model['casting_time'] ?? '',
+      effectType: model['effectType'] ?? '',
+      duration: model['duration'] ?? '',
+      name: model['name']?.toString().toCapitalize() ?? '',
+      description: model['description'] ?? '',
+      materials: model['materials'] ?? '',
     );
+  }
+
+  String get levelText {
+    if (level == 0) return "Truque";
+    return "$levelº Nível";
   }
 }
 
 class Spell extends SpellModel {
-  final String id;
   final Timestamp createdAt;
 
   Spell({
     required this.createdAt,
-    required this.id,
     required super.range,
     required super.level,
     required super.type,
     required super.catalyts,
     required super.castingTime,
     required super.name,
+    required super.id,
     required super.description,
     required super.duration,
     required super.effectType,

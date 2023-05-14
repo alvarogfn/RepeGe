@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/atoms/circle_icon.dart';
-import 'package:repege/components/layout/stream_list_view.dart';
+import 'package:repege/components/atoms/headline.dart';
+import 'package:repege/components/atoms/loading.dart';
 import 'package:repege/components/molecules/spell_card.dart';
 import 'package:repege/config/route.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
@@ -15,18 +16,63 @@ class SheetSpellsDetailsPage extends StatelessWidget {
 
   final DocumentSnapshot<Sheet?> sheetReference;
 
+  Map<int, List<QueryDocumentSnapshot<Spell?>>> groupBySpellsByLevel(
+    List<QueryDocumentSnapshot<Spell?>> spells,
+  ) {
+    return spells.fold<Map<int, List<QueryDocumentSnapshot<Spell?>>>>({}, (
+      map,
+      spell,
+    ) {
+      final index = spell.data()!.level;
+      if (map.containsKey(index)) {
+        map[index]!.add(spell);
+      } else {
+        map.putIfAbsent(index, () => [spell]);
+      }
+      return map;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return _Layout(
       sheetReference: sheetReference,
       builder: (context, service, child) {
-        return StreamListView(
-          errorBuilder: (context, error) => Text(error.toString()),
-          stream: service.streamSpells(),
-          builder: (context, snapshot) {
-            return SpellCard(
-              spellSnapshot: snapshot,
-              sheetID: sheetReference.id,
+        return StreamBuilder(
+          stream: service.streamSpells().map(groupBySpellsByLevel),
+          builder: (context, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return const Loading();
+            }
+
+            if (snap.hasError) {
+              return const Center(
+                child: Text('Error'),
+              );
+            }
+
+            final entries = snap.data!.entries.toList();
+
+            if (entries.isEmpty) {
+              return const Center(
+                child: Text('Vazio'),
+              );
+            }
+
+            entries.sort((a, b) => a.key.compareTo(b.key));
+
+            return ListView(
+              children: entries.map((e) {
+                return ExpansionTile(
+                  title: Headline('${e.key} nível', fontSize: 20),
+                  children: e.value.map((spell) {
+                    return SpellCard(
+                      spellSnapshot: spell,
+                      sheetID: sheetReference.id,
+                    );
+                  }).toList(),
+                );
+              }).toList(),
             );
           },
         );
@@ -49,33 +95,46 @@ class _Layout extends StatelessWidget {
       builder: (context, child) {
         return Scaffold(
           floatingActionButton: floatingActionButton(),
-          body: Consumer<SpellService>(
-            builder: builder,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Headline(
+                "Magias salvas:",
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                padding: EdgeInsets.all(10),
+              ),
+              Expanded(
+                child: Consumer<SpellService>(
+                  builder: builder,
+                ),
+              )
+            ],
           ),
         );
       },
     );
   }
 
-  _addNewSpell(BuildContext context) async {
-    final SpellModel? model = await context.pushNamed<Spell>(
+  Future<void> _addNewSpell(BuildContext context, SpellService service) async {
+    await context.pushNamed<SpellModel>(
       RoutesName.sheetSpellCreate.name,
       pathParameters: {'id': sheetReference.id},
     );
-
-    if (model == null) return;
-
-    if (context.mounted) {
-      final SpellService spellService = context.read<SpellService>();
-      spellService.addSpell(model);
-    }
   }
 
-  Future<SpellModel?> _searchForSpell(BuildContext context) async {
-    return context.pushNamed<SpellModel>(
+  Future<void> _searchForSpell(
+    BuildContext context,
+    SpellService service,
+  ) async {
+    final spell = await context.pushNamed<SpellModel>(
       RoutesName.sheetSpellSearch.name,
       pathParameters: {'id': sheetReference.id},
     );
+
+    if (spell == null) return;
+
+    await service.addSpell(spell);
   }
 
   ClipRRect floatingActionButton() {
@@ -88,14 +147,11 @@ class _Layout extends StatelessWidget {
               itemBuilder: (context) => [
                 PopupMenuItem(
                   child: const Text('Preencher'),
-                  onTap: () => _addNewSpell(context),
+                  onTap: () => _addNewSpell(context, service),
                 ),
                 PopupMenuItem(
                   child: const Text('Buscar'),
-                  onTap: () => _searchForSpell(context).then((value) {
-                    if (value == null) return;
-                    service.addSpell(value);
-                  }),
+                  onTap: () => _searchForSpell(context, service),
                 ),
               ],
               child: child,

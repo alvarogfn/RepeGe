@@ -105,7 +105,10 @@ class CustomRouter {
               GoRoute(
                 path: RoutesName.sheetSpellCreate.path,
                 name: RoutesName.sheetSpellCreate.name,
-                builder: (context, state) => const SheetSpellCreate(),
+                builder: (context, state) => SheetSpellCreate(
+                  spell: state.extra as Spell?,
+                  sheetID: state.pathParameters['id']!,
+                ),
               ),
               GoRoute(
                 path: RoutesName.sheetSpellSearch.path,

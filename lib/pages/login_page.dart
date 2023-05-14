@@ -62,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
       await _notVerifiedEmailDialog(context);
       return false;
     } on Exception catch (e) {
-      print('hihi');
       return Future.error(e);
     }
   }
@@ -103,13 +102,13 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   const Headline(
-                    text: 'RepeGe',
+                    'RepeGe',
                     fontSize: 65,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
                   ),
                   const Headline(
-                    text: 'Login',
+                    'Login',
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),

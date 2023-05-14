@@ -125,13 +125,13 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   const Headline(
-                    text: 'RepeGe',
+                    'RepeGe',
                     fontSize: 65,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
                   ),
                   const Headline(
-                    text: 'Registro',
+                    'Registro',
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
