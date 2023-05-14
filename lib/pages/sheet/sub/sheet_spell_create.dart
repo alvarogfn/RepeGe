@@ -10,7 +10,6 @@ import 'package:repege/components/shared/form/select_form_field.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/extensions.dart';
 import 'package:repege/models/utils/utils.dart';
-import 'package:repege/pages/utils/loading_page.dart';
 import 'package:repege/services/spells_service.dart';
 import 'package:repege/utils/validations/required_validation.dart';
 

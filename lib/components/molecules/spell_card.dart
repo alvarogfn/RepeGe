@@ -5,7 +5,6 @@ import 'package:repege/components/atoms/headline.dart';
 import 'package:repege/config/route.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/extensions.dart';
-import 'package:repege/models/utils/utils.dart';
 
 class SpellCard extends StatelessWidget {
   const SpellCard({
