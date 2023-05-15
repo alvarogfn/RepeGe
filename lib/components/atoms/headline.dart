@@ -7,9 +7,11 @@ class Headline extends StatelessWidget {
     this.padding = const EdgeInsets.all(0),
     this.fontSize = 50,
     this.fontWeight = FontWeight.bold,
+    this.color,
     super.key,
   });
 
+  final Color? color;
   final String text;
   final EdgeInsets margin;
   final double fontSize;
@@ -26,6 +28,7 @@ class Headline extends StatelessWidget {
         style: style?.copyWith(
           fontSize: fontSize,
           fontWeight: fontWeight,
+          color: color,
         ),
       ),
     );

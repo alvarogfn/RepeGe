@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/atoms/circle_icon.dart';
 import 'package:repege/components/atoms/headline.dart';
+import 'package:repege/components/atoms/input.dart';
 import 'package:repege/components/atoms/loading.dart';
 import 'package:repege/components/molecules/spell_card.dart';
 import 'package:repege/config/route.dart';
@@ -98,6 +99,20 @@ class _Layout extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Flexible(
+              //   child: GridView.count(
+              //     crossAxisCount: 3,
+              //     crossAxisSpacing: 10,
+              //     children: [
+              //       Input(),
+              //       Input(),
+              //       Input(),
+              //       Input(),
+              //       Input(),
+              //       Input(),
+              //     ],
+              //   ),
+              // ),
               const Headline(
                 "Magias salvas:",
                 fontSize: 15,

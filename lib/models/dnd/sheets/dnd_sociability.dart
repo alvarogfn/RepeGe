@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class DndSociabilitySheet {
-  final int age;
-  final Color eyes;
-  final double height;
-  final Color skin;
-  final double weight;
-  final Color hair;
+class SheetCharacterPersonality {
+  final String age;
+  final String eyesColor;
+  final String skinColor;
+  final String hairColor;
+  final String height;
+  final String weight;
 
   final String characterAppearance;
   final String characterBackstory;
@@ -15,16 +15,16 @@ class DndSociabilitySheet {
   final String ideals;
   final String bonds;
   final String flaws;
-  final List<String> languages;
-  final List<String> proficiences;
 
-  DndSociabilitySheet({
+  final List<String> languages;
+
+  SheetCharacterPersonality({
     required this.age,
-    required this.eyes,
+    required this.eyesColor,
     required this.height,
-    required this.skin,
+    required this.skinColor,
     required this.weight,
-    required this.hair,
+    required this.hairColor,
     required this.characterAppearance,
     required this.characterBackstory,
     required this.personalityTraits,
@@ -32,6 +32,23 @@ class DndSociabilitySheet {
     required this.bonds,
     required this.flaws,
     required this.languages,
-    required this.proficiences,
   });
+
+  Map<String, Object> toMap() {
+    return {
+      'age': age,
+      'eyesColor': eyesColor,
+      'skinColor': skinColor,
+      'hairColor': hairColor,
+      'height': height,
+      'weight': weight,
+      'characterAppearance': characterAppearance,
+      'characterBackstory': characterBackstory,
+      'personalityTraits': personalityTraits,
+      'ideals': ideals,
+      'bonds': bonds,
+      'flaws': flaws,
+      'languages': languages,
+    };
+  }
 }
