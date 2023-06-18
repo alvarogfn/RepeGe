@@ -1,9 +1,9 @@
-import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:repege/exceptions/auth_exceptions.dart';
-import 'package:repege/models/user.dart' as local;
+import "dart:async";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
+import "package:flutter/material.dart";
+import "package:repege/exceptions/auth_exceptions.dart";
+import "package:repege/models/user.dart" as local;
 
 enum AuthState { auth, unauth }
 
@@ -67,9 +67,9 @@ class AuthService with ChangeNotifier {
       return true;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
-        case 'email-already-in-use':
+        case "email-already-in-use":
           throw const AuthEmailAlreadyUsedException();
-        case 'weak-password':
+        case "weak-password":
           throw const AuthWeakPasswordException();
         default:
           throw const AuthException();
@@ -110,7 +110,7 @@ class AuthService with ChangeNotifier {
       rethrow;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
-        case 'user-not-found':
+        case "user-not-found":
           throw const AuthMismatchLoginException();
         default:
           throw const AuthException();

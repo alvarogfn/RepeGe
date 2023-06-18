@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/loading.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/loading.dart";
 
 class StreamListView<T> extends StatelessWidget {
   const StreamListView({
@@ -33,7 +33,7 @@ class StreamListView<T> extends StatelessWidget {
         if (items.isEmpty) {
           return emptyWidget ??
               const Center(
-                child: Text('A lista está vazia.'),
+                child: Text("A lista está vazia."),
               );
         }
 

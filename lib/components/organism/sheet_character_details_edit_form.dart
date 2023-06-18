@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/button.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/atoms/input.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/utils/validations/required_validation.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/button.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/atoms/input.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/utils/validations/required_validation.dart";
 
 class SheetCharacterEditForm extends StatefulWidget {
   const SheetCharacterEditForm({
@@ -51,33 +51,33 @@ class _SheetCharacterEditFormState extends State<SheetCharacterEditForm> {
           ),
           input(
             initialValue: sheet.characterName,
-            propertyKey: 'characterName',
-            label: 'Nome',
+            propertyKey: "characterName",
+            label: "Nome",
           ),
           input(
             initialValue: sheet.characterClass,
-            propertyKey: 'characterClass',
-            label: 'Classe',
+            propertyKey: "characterClass",
+            label: "Classe",
           ),
           input(
             initialValue: sheet.characterRace,
-            propertyKey: 'characterRace',
-            label: 'Raça',
+            propertyKey: "characterRace",
+            label: "Raça",
           ),
           input(
             initialValue: sheet.background,
-            propertyKey: 'background',
-            label: 'Antepassado',
+            propertyKey: "background",
+            label: "Antepassado",
           ),
           input(
             initialValue: sheet.alignment,
-            propertyKey: 'alignment',
-            label: 'Alinhamento',
+            propertyKey: "alignment",
+            label: "Alinhamento",
           ),
           Button(
             alignment: Alignment.centerRight,
             onPressed: handleSubmit,
-            child: const Text('Salvar'),
+            child: const Text("Salvar"),
           )
         ],
       ),

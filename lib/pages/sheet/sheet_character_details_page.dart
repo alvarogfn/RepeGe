@@ -1,16 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/show_snack_bar.dart';
-import 'package:repege/components/layout/show_keyboard_bottom_sheet.dart';
-import 'package:repege/components/organism/avatar_wallpaper.dart';
-import 'package:repege/components/layout/full_screen_scroll.dart';
-import 'package:repege/components/organism/sheet_character_details_edit_form.dart';
-import 'package:repege/components/organism/sheet_character_details_header.dart';
-import 'package:repege/components/organism/sheet_character_personality_section.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/services/sheet_service.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/show_snack_bar.dart";
+import "package:repege/components/layout/show_keyboard_bottom_sheet.dart";
+import "package:repege/components/organism/avatar_wallpaper.dart";
+import "package:repege/components/layout/full_screen_scroll.dart";
+import "package:repege/components/organism/sheet_character_details_edit_form.dart";
+import "package:repege/components/organism/sheet_character_details_header.dart";
+import "package:repege/components/organism/sheet_character_personality_section.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/services/sheet_service.dart";
 
 class SheetCharacterDetailsPage extends StatelessWidget {
   const SheetCharacterDetailsPage(this.sheetReference, {super.key});
@@ -90,7 +90,7 @@ class SheetCharacterDetailsPage extends StatelessWidget {
 
   AppBar appBar() {
     return AppBar(
-      title: const Text('Caraterísticas', style: TextStyle(fontSize: 16)),
+      title: const Text("Caraterísticas", style: TextStyle(fontSize: 16)),
       automaticallyImplyLeading: false,
     );
   }

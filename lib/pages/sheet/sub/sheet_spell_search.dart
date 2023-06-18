@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:repege/components/atoms/loading.dart';
-import 'package:repege/components/molecules/input_search_bar.dart';
-import 'package:repege/components/organism/search_spell_card.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/icons/octicons_icons.dart';
-import 'package:repege/services/spells_service.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:repege/components/atoms/loading.dart";
+import "package:repege/components/molecules/input_search_bar.dart";
+import "package:repege/components/organism/search_spell_card.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/icons/octicons_icons.dart";
+import "package:repege/services/spells_service.dart";
 
 class SheetSpellSearch extends StatefulWidget {
   const SheetSpellSearch({
@@ -20,7 +20,7 @@ class SheetSpellSearch extends StatefulWidget {
 }
 
 class _SheetSpellSearchState extends State<SheetSpellSearch> {
-  final _controller = TextEditingController(text: '');
+  final _controller = TextEditingController(text: "");
   Future<List<SpellModel>> _spells = Future.value([]);
 
   Future<List<SpellModel>> _fetchSpell() async {
@@ -90,7 +90,7 @@ class _SheetSpellSearchState extends State<SheetSpellSearch> {
         IconButton(
           onPressed: null,
           icon: Icon(Octicons.search),
-          tooltip: 'Busca avançada',
+          tooltip: "Busca avançada",
         )
       ],
     );

@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/models/extensions.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:repege/models/extensions.dart";
 
 class SpellModel {
   String id;
@@ -15,45 +15,45 @@ class SpellModel {
   String description;
 
   SpellModel({
-    this.id = '',
-    this.range = '',
-    this.materials = '',
+    this.id = "",
+    this.range = "",
+    this.materials = "",
     this.level = 0,
-    this.type = '',
+    this.type = "",
     this.catalyts = const [],
-    this.castingTime = '',
-    this.effectType = '',
-    this.duration = '',
-    this.name = '',
-    this.description = '',
+    this.castingTime = "",
+    this.effectType = "",
+    this.duration = "",
+    this.name = "",
+    this.description = "",
   });
 
   toMap() {
     return {
-      'name': name,
-      'materials': materials,
-      'description': description,
-      'castingTime': castingTime,
-      'catalyts': catalyts,
-      'effectType': effectType,
-      'level': level,
-      'type': type,
-      'duration': duration,
+      "name": name,
+      "materials": materials,
+      "description": description,
+      "castingTime": castingTime,
+      "catalyts": catalyts,
+      "effectType": effectType,
+      "level": level,
+      "type": type,
+      "duration": duration,
     };
   }
 
   factory SpellModel.fromMap(Map<String, dynamic> model) {
     return SpellModel(
-      id: model['id']?.toString() ?? '',
-      level: model['level'] ?? 0,
-      type: model['type'] ?? '',
-      catalyts: List<String>.from(model['components'] ?? []).toList(),
-      castingTime: model['casting_time'] ?? '',
-      effectType: model['effectType'] ?? '',
-      duration: model['duration'] ?? '',
-      name: model['name']?.toString().toCapitalize() ?? '',
-      description: model['description'] ?? '',
-      materials: model['materials'] ?? '',
+      id: model["id"]?.toString() ?? "",
+      level: model["level"] ?? 0,
+      type: model["type"] ?? "",
+      catalyts: List<String>.from(model["components"] ?? []).toList(),
+      castingTime: model["casting_time"] ?? "",
+      effectType: model["effectType"] ?? "",
+      duration: model["duration"] ?? "",
+      name: model["name"]?.toString().toCapitalize() ?? "",
+      description: model["description"] ?? "",
+      materials: model["materials"] ?? "",
     );
   }
 

@@ -1,20 +1,20 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/models/dnd/sheets/sheet_spells.dart';
-import 'package:repege/models/extensions.dart';
-import 'package:repege/models/user.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_storage/firebase_storage.dart";
+import "package:flutter/material.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/models/dnd/sheets/sheet_spells.dart";
+import "package:repege/models/extensions.dart";
+import "package:repege/models/user.dart";
 
 class SheetService with ChangeNotifier {
   late final _firestoneRef = FirebaseFirestore.instance
-      .collection('sheets')
+      .collection("sheets")
       .withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore);
 
   late final _storageRef = FirebaseStorage.instance.ref(
-    'users/${user.uid}/sheets',
+    "users/${user.uid}/sheets",
   );
 
   final User user;
@@ -32,8 +32,8 @@ class SheetService with ChangeNotifier {
 
   Stream<List<Sheet>> streamAllSheets() {
     return _firestoneRef
-        .orderBy('createdAt')
-        .where('ownerUID', isEqualTo: user.uid)
+        .orderBy("createdAt")
+        .where("ownerUID", isEqualTo: user.uid)
         .withConverter(
           fromFirestore: (doc, options) => fromFirestore(doc, options),
           toFirestore: (sheet, options) => toFirestore(sheet, options),
@@ -85,8 +85,8 @@ class SheetService with ChangeNotifier {
 
   Future<List<Sheet>> getAllSheets() async {
     final sheets = await _firestoneRef
-        .orderBy('createdAt')
-        .where('ownerUID', isEqualTo: user.uid)
+        .orderBy("createdAt")
+        .where("ownerUID", isEqualTo: user.uid)
         .get();
 
     return List<Sheet>.from(
@@ -95,8 +95,8 @@ class SheetService with ChangeNotifier {
   }
 
   Future<void> updateSheet(String id, Map<String, dynamic> data) async {
-    if (data['avatarURL']) {
-      throw Exception('Cannot update avatarURL, use updateAvatar.');
+    if (data["avatarURL"]) {
+      throw Exception("Cannot update avatarURL, use updateAvatar.");
     }
     return _firestoneRef.doc(id).update(data);
   }
@@ -117,7 +117,7 @@ class SheetService with ChangeNotifier {
     final avatarURL = await pictureRef.getDownloadURL();
 
     if (shouldUpdateDocument) {
-      await sheetRef.update({'avatarURL': avatarURL});
+      await sheetRef.update({"avatarURL": avatarURL});
     }
 
     return avatarURL;
@@ -126,21 +126,21 @@ class SheetService with ChangeNotifier {
   Map<String, Object?> toFirestore(Sheet? sheet, SetOptions? options) {
     if (sheet == null) return {};
     return {
-      'characterName': sheet.characterName,
-      'characterClass': sheet.characterClass,
-      'characterRace': sheet.characterRace,
-      'avatarURL': sheet.avatarURL,
-      'background': sheet.background,
-      'alignment': sheet.alignment,
-      'createdAt': FieldValue.serverTimestamp(),
-      'notes': sheet.notes,
-      'sheetSpells': {
-        'spellAttackBonus': sheet.sheetSpells.spellAttackBonus,
-        'spellCastingClass': sheet.sheetSpells.spellCastingClass?.name,
-        'spellCastingHability': sheet.sheetSpells.spellCastingHability,
-        'spellSaveDc': sheet.sheetSpells.spellSaveDc,
+      "characterName": sheet.characterName,
+      "characterClass": sheet.characterClass,
+      "characterRace": sheet.characterRace,
+      "avatarURL": sheet.avatarURL,
+      "background": sheet.background,
+      "alignment": sheet.alignment,
+      "createdAt": FieldValue.serverTimestamp(),
+      "notes": sheet.notes,
+      "sheetSpells": {
+        "spellAttackBonus": sheet.sheetSpells.spellAttackBonus,
+        "spellCastingClass": sheet.sheetSpells.spellCastingClass?.name,
+        "spellCastingHability": sheet.sheetSpells.spellCastingHability,
+        "spellSaveDc": sheet.sheetSpells.spellSaveDc,
       },
-      'ownerUID': sheet.ownerUID,
+      "ownerUID": sheet.ownerUID,
     };
   }
 
@@ -152,15 +152,15 @@ class SheetService with ChangeNotifier {
     if (sheetDoc == null) return null;
     return Sheet(
       id: doc.id,
-      ownerUID: sheetDoc['ownerUID'],
-      createdAt: sheetDoc['createdAt'],
-      avatarURL: sheetDoc['avatarURL'],
-      characterName: sheetDoc['characterName'],
-      characterClass: sheetDoc['characterClass'],
-      characterRace: sheetDoc['characterRace'],
-      background: sheetDoc['background'],
-      alignment: sheetDoc['alignment'],
-      notes: List<String>.from(sheetDoc['notes']),
+      ownerUID: sheetDoc["ownerUID"],
+      createdAt: sheetDoc["createdAt"],
+      avatarURL: sheetDoc["avatarURL"],
+      characterName: sheetDoc["characterName"],
+      characterClass: sheetDoc["characterClass"],
+      characterRace: sheetDoc["characterRace"],
+      background: sheetDoc["background"],
+      alignment: sheetDoc["alignment"],
+      notes: List<String>.from(sheetDoc["notes"]),
       sheetSpells: const SheetSpells(),
     );
   }

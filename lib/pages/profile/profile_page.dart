@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/organism/avatar_wallpaper.dart';
-import 'package:repege/models/user.dart';
-import 'package:repege/services/auth_service.dart';
-import 'package:repege/components/atoms/input.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/organism/avatar_wallpaper.dart";
+import "package:repege/models/user.dart";
+import "package:repege/services/auth_service.dart";
+import "package:repege/components/atoms/input.dart";
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -21,18 +21,18 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: Column(children: [
               const Headline(
-                'Dados Pessoais',
+                "Dados Pessoais",
                 fontSize: 20,
                 padding: EdgeInsets.all(10),
               ),
               Input(
-                label: 'Usuário',
+                label: "Usuário",
                 initialValue: user.username,
                 readOnly: true,
                 margin: const EdgeInsets.symmetric(vertical: 10),
               ),
               Input(
-                label: 'Email',
+                label: "Email",
                 initialValue: user.email,
                 readOnly: true,
                 margin: const EdgeInsets.symmetric(vertical: 10),
@@ -53,7 +53,7 @@ class _Layout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Perfil')),
+      appBar: AppBar(title: const Text("Perfil")),
       body: Consumer<AuthService>(
         builder: builder,
       ),

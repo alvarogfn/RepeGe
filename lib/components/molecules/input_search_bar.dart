@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:repege/utils/validations/required_validation.dart';
-import 'package:repege/utils/validations/validations.dart';
+import "package:flutter/material.dart";
+import "package:repege/utils/validations/required_validation.dart";
+import "package:repege/utils/validations/validations.dart";
 
 class InputSearchBar extends StatelessWidget {
   const InputSearchBar({

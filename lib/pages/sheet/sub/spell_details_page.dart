@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/icon_text.dart';
-import 'package:repege/components/atoms/paragraph.dart';
-import 'package:repege/components/layout/full_screen_scroll.dart';
-import 'package:repege/components/molecules/enchanced_card.dart';
-import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/models/extensions.dart';
-import 'package:repege/models/utils/utils.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/icon_text.dart";
+import "package:repege/components/atoms/paragraph.dart";
+import "package:repege/components/layout/full_screen_scroll.dart";
+import "package:repege/components/molecules/enchanced_card.dart";
+import "package:repege/icons/rpg_icons.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/models/extensions.dart";
+import "package:repege/models/utils/utils.dart";
 
 class SpellDetailsPage extends StatelessWidget {
   const SpellDetailsPage({required this.spell, super.key});
@@ -23,17 +23,17 @@ class SpellDetailsPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             EnchancedCard(
-              title: 'Descrição',
+              title: "Descrição",
               icon: const Icon(Rpg.scroll_unfurled),
               content: Paragraph(spell.description),
             ),
             EnchancedCard(
-              title: 'Materiais',
+              title: "Materiais",
               icon: const Icon(Icons.backpack_outlined),
               content: Paragraph(materials),
             ),
             EnchancedCard(
-              title: 'Detalhes',
+              title: "Detalhes",
               icon: const Icon(Icons.info_outline),
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,16 +71,16 @@ class SpellDetailsPage extends StatelessWidget {
       return spell.catalyts.contains(value.abbreviation);
     }).map((e) => e.name);
 
-    if (filteredCatalyts.isEmpty) return '*Catalizadores desconhecidos.*';
+    if (filteredCatalyts.isEmpty) return "*Catalizadores desconhecidos.*";
 
-    final formatedCatalyts = filteredCatalyts.toList().join(', ');
+    final formatedCatalyts = filteredCatalyts.toList().join(", ");
 
-    return 'Catalizadores: **$formatedCatalyts.**';
+    return "Catalizadores: **$formatedCatalyts.**";
   }
 
   String get castingTime {
     if (spell.castingTime.isEmpty) {
-      return '*Tempo de Conjuração Desconhecido.*';
+      return "*Tempo de Conjuração Desconhecido.*";
     }
 
     return "Tempo de Conjuração: **${spell.castingTime}.**";
@@ -91,8 +91,8 @@ class SpellDetailsPage extends StatelessWidget {
   }
 
   String get range {
-    if (spell.range.isEmpty) return '*Alcance desconhecido.*';
-    return 'Alcance/Distância: **${spell.range}.** ';
+    if (spell.range.isEmpty) return "*Alcance desconhecido.*";
+    return "Alcance/Distância: **${spell.range}.** ";
   }
 
   String get duration {

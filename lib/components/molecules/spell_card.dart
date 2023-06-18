@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/models/extensions.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/config/route.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/models/extensions.dart";
 
 class SpellCard extends StatelessWidget {
   const SpellCard({
@@ -47,7 +47,7 @@ class SpellCard extends StatelessWidget {
         ),
         onTap: () async => context.pushNamed<SpellModel>(
           RoutesName.spellDetails.name,
-          pathParameters: {'id': sheetID},
+          pathParameters: {"id": sheetID},
           extra: spell,
         ),
       ),
@@ -58,7 +58,7 @@ class SpellCard extends StatelessWidget {
     final type = spell.type.toCapitalize();
     final duration = spell.duration;
     final effectType = spell.effectType;
-    final catalyts = spell.catalyts.join(' ');
+    final catalyts = spell.catalyts.join(" ");
 
     return "$type  |  $catalyts  |  $duration  |  $effectType ";
   }
@@ -92,7 +92,7 @@ class SpellCard extends StatelessWidget {
     } else if (direction == DismissDirection.startToEnd) {
       await context.pushNamed<SpellModel>(
         RoutesName.sheetSpellCreate.name,
-        pathParameters: {'id': sheetID},
+        pathParameters: {"id": sheetID},
         extra: spellSnapshot.data(),
       );
     }
@@ -103,8 +103,8 @@ class SpellCard extends StatelessWidget {
     DismissDirection direction,
   ) async {
     final text = direction == DismissDirection.endToStart
-        ? 'Confirmar deleção da magia ${spell.name}?'
-        : 'Deseja editar a magia ${spell.name}?';
+        ? "Confirmar deleção da magia ${spell.name}?"
+        : "Deseja editar a magia ${spell.name}?";
 
     return showDialog<bool?>(
       context: context,
@@ -115,7 +115,7 @@ class SpellCard extends StatelessWidget {
             onPressed: () {
               context.pop(true);
             },
-            child: const Text('Confirmar'),
+            child: const Text("Confirmar"),
           )
         ],
       ),

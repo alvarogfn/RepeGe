@@ -1,14 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/layout/sheet_service_wrapper.dart';
-import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/pages/sheet/sheet_character_details_page.dart';
-import 'package:repege/pages/sheet/sheet_spells_details_page.dart';
-import 'package:repege/pages/sheet/sheet_status_details_page.dart';
-import 'package:repege/pages/utils/loading_page.dart';
-import 'package:repege/services/sheet_service.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/layout/sheet_service_wrapper.dart";
+import "package:repege/icons/rpg_icons.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/pages/sheet/sheet_character_details_page.dart";
+import "package:repege/pages/sheet/sheet_spells_details_page.dart";
+import "package:repege/pages/sheet/sheet_status_details_page.dart";
+import "package:repege/pages/utils/loading_page.dart";
+import "package:repege/services/sheet_service.dart";
 
 class SheetPage extends StatefulWidget {
   const SheetPage({required this.id, super.key});
@@ -22,7 +22,7 @@ class _SheetHomePageState extends State<SheetPage> {
   List<Widget> pages(DocumentSnapshot<Sheet?> sheet) => [
         SheetCharacterDetailsPage(sheet),
         SheetStatusDetailsPage(sheet),
-        const Text('Inventário'),
+        const Text("Inventário"),
         SheetSpellsDetailsPage(sheet),
       ];
 
@@ -41,7 +41,7 @@ class _SheetHomePageState extends State<SheetPage> {
                 }
 
                 if (snap.hasError) {
-                  return const Text('Alguma coisa deu errado.');
+                  return const Text("Alguma coisa deu errado.");
                 }
 
                 final sheetDoc = snap.data!;

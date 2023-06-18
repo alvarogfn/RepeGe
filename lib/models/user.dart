@@ -1,11 +1,11 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/services/auth_service.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_storage/firebase_storage.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:repege/services/auth_service.dart";
 
 class User {
   final _firestone = FirebaseFirestore.instance;
@@ -16,7 +16,7 @@ class User {
         toFirestore: toFirestore,
       );
 
-  late final _bucketRef = _storage.ref('users/$uid/');
+  late final _bucketRef = _storage.ref("users/$uid/");
 
   final String username;
   final String uid;
@@ -41,7 +41,7 @@ class User {
 
     final url = await upload.ref.getDownloadURL();
 
-    await _ref.update({'avatarURL': url});
+    await _ref.update({"avatarURL": url});
 
     if (context != null && context.mounted) {
       final authService = context.read<AuthService>();
@@ -82,7 +82,7 @@ class User {
 
     final batch = firestone.batch();
 
-    batch.set(usernameRef, {'uid': uid});
+    batch.set(usernameRef, {"uid": uid});
 
     final user = User(
       username: username,
@@ -107,11 +107,11 @@ class User {
     if (user == null) return {};
 
     return {
-      'avatarURL': user.avatarURL,
-      'email': user.email,
-      'uid': user.uid,
-      'username': user.username,
-      'createdAt': FieldValue.serverTimestamp()
+      "avatarURL": user.avatarURL,
+      "email": user.email,
+      "uid": user.uid,
+      "username": user.username,
+      "createdAt": FieldValue.serverTimestamp()
     };
   }
 
@@ -124,11 +124,11 @@ class User {
     if (userDoc == null) return null;
 
     return User(
-      avatarURL: userDoc['avatarURL'],
-      email: userDoc['email'],
-      uid: userDoc['uid'],
-      username: userDoc['username'],
-      createdAt: userDoc['createdAt'] ?? Timestamp.fromDate(DateTime.now()),
+      avatarURL: userDoc["avatarURL"],
+      email: userDoc["email"],
+      uid: userDoc["uid"],
+      username: userDoc["username"],
+      createdAt: userDoc["createdAt"] ?? Timestamp.fromDate(DateTime.now()),
     );
   }
 

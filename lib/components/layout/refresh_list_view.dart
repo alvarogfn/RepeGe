@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/loading.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/loading.dart";
 
 class RefreshListView<T> extends StatefulWidget {
   const RefreshListView({

@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/organism/avatar_wallpaper.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/services/sheet_service.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/organism/avatar_wallpaper.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/services/sheet_service.dart";
 
 class SheetCharacterDetailsHeader extends StatelessWidget {
   const SheetCharacterDetailsHeader({

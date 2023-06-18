@@ -1,13 +1,13 @@
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
+import "dart:convert";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:http/http.dart" as http;
 
-import 'package:flutter/material.dart';
-import 'package:repege/models/dnd/spell.dart';
+import "package:flutter/material.dart";
+import "package:repege/models/dnd/spell.dart";
 
 class SpellService with ChangeNotifier {
   late final _firestoneRef = FirebaseFirestore.instance
-      .collection('sheets')
+      .collection("sheets")
       .doc(sheetID)
       .collection("spells")
       .withConverter(
@@ -28,11 +28,11 @@ class SpellService with ChangeNotifier {
     Query<Spell?> query = _firestoneRef;
 
     if (level != null) {
-      query = query.where('level', isEqualTo: level);
+      query = query.where("level", isEqualTo: level);
     }
 
     if (type != null) {
-      query = query.where('type', isEqualTo: type);
+      query = query.where("type", isEqualTo: type);
     }
 
     return query.snapshots().map((query) {
@@ -97,17 +97,17 @@ class SpellService with ChangeNotifier {
 
     return Spell(
       id: doc.id,
-      createdAt: spellDoc['createdAt'] ?? Timestamp.now(),
-      level: spellDoc['level'],
-      range: spellDoc['range'],
-      type: spellDoc['type'],
-      materials: spellDoc['materials'],
-      catalyts: List<String>.from(spellDoc['catalyts']).toList(),
-      castingTime: spellDoc['castingTime'],
-      effectType: spellDoc['effectType'],
-      duration: spellDoc['duration'],
-      name: spellDoc['name'],
-      description: spellDoc['description'],
+      createdAt: spellDoc["createdAt"] ?? Timestamp.now(),
+      level: spellDoc["level"],
+      range: spellDoc["range"],
+      type: spellDoc["type"],
+      materials: spellDoc["materials"],
+      catalyts: List<String>.from(spellDoc["catalyts"]).toList(),
+      castingTime: spellDoc["castingTime"],
+      effectType: spellDoc["effectType"],
+      duration: spellDoc["duration"],
+      name: spellDoc["name"],
+      description: spellDoc["description"],
     );
   }
 
@@ -118,17 +118,17 @@ class SpellService with ChangeNotifier {
     if (spell == null) return {};
 
     return {
-      'createdAt': FieldValue.serverTimestamp(),
-      'name': spell.name,
-      'description': spell.description,
-      'castingTime': spell.castingTime,
-      'materials': spell.materials,
-      'catalyts': spell.catalyts,
-      'effectType': spell.effectType,
-      'level': spell.level,
-      'type': spell.type,
-      'duration': spell.duration,
-      'range': spell.range,
+      "createdAt": FieldValue.serverTimestamp(),
+      "name": spell.name,
+      "description": spell.description,
+      "castingTime": spell.castingTime,
+      "materials": spell.materials,
+      "catalyts": spell.catalyts,
+      "effectType": spell.effectType,
+      "level": spell.level,
+      "type": spell.type,
+      "duration": spell.duration,
+      "range": spell.range,
     };
   }
 }

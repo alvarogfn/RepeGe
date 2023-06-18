@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/models/extensions.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:repege/config/route.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/models/extensions.dart";
 
 class SearchSpellCard extends StatelessWidget {
   const SearchSpellCard({
@@ -64,7 +64,7 @@ class SearchSpellCard extends StatelessWidget {
     return context.pushNamed(
       RoutesName.spellDetails.name,
       pathParameters: {
-        'id': sheetID,
+        "id": sheetID,
       },
       extra: spell,
     );

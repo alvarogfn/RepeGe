@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/headline.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/headline.dart";
 
 class CheckboxFormField extends StatefulWidget {
   const CheckboxFormField({

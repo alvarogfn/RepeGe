@@ -1,17 +1,17 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/input.dart';
-import 'package:repege/components/layout/full_screen_scroll.dart';
-import 'package:repege/components/molecules/checkbox_form_field.dart';
-import 'package:repege/components/shared/form/select_form_field.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/models/extensions.dart';
-import 'package:repege/models/utils/utils.dart';
-import 'package:repege/services/spells_service.dart';
-import 'package:repege/utils/validations/required_validation.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/input.dart";
+import "package:repege/components/layout/full_screen_scroll.dart";
+import "package:repege/components/molecules/checkbox_form_field.dart";
+import "package:repege/components/shared/form/select_form_field.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/models/extensions.dart";
+import "package:repege/models/utils/utils.dart";
+import "package:repege/services/spells_service.dart";
+import "package:repege/utils/validations/required_validation.dart";
 
 class SheetSpellCreate extends StatefulWidget {
   const SheetSpellCreate({required this.sheetID, this.spell, super.key});
@@ -25,17 +25,17 @@ class SheetSpellCreate extends StatefulWidget {
 
 class _SheetSpellCreateState extends State<SheetSpellCreate> {
   late final SpellModel _model = SpellModel(
-    id: widget.spell?.id ?? '',
-    name: widget.spell?.name ?? '',
-    description: widget.spell?.description ?? '',
-    castingTime: widget.spell?.castingTime ?? '',
+    id: widget.spell?.id ?? "",
+    name: widget.spell?.name ?? "",
+    description: widget.spell?.description ?? "",
+    castingTime: widget.spell?.castingTime ?? "",
     catalyts: widget.spell?.catalyts ?? [],
-    duration: widget.spell?.duration ?? '',
-    effectType: widget.spell?.effectType ?? '',
+    duration: widget.spell?.duration ?? "",
+    effectType: widget.spell?.effectType ?? "",
     level: widget.spell?.level ?? 0,
-    materials: widget.spell?.materials ?? '',
-    range: widget.spell?.range ?? '',
-    type: widget.spell?.type ?? '',
+    materials: widget.spell?.materials ?? "",
+    range: widget.spell?.range ?? "",
+    type: widget.spell?.type ?? "",
   );
 
   bool get edit => widget.spell != null;
@@ -50,67 +50,67 @@ class _SheetSpellCreateState extends State<SheetSpellCreate> {
       formKey: _formKey,
       children: [
         Input(
-          label: 'Nome',
+          label: "Nome",
           initialValue: _model.name.toCapitalize(),
-          onChanged: (value) => _model.name = value ?? '',
+          onChanged: (value) => _model.name = value ?? "",
           margin: const EdgeInsets.symmetric(vertical: 10),
           action: TextInputAction.next,
           validations: [RequiredValidation()],
         ),
         Input(
-          label: 'Descrição',
-          placeholder: 'O que a magia faz?',
+          label: "Descrição",
+          placeholder: "O que a magia faz?",
           initialValue: _model.description,
-          onChanged: (value) => _model.description = value ?? '',
+          onChanged: (value) => _model.description = value ?? "",
           margin: const EdgeInsets.symmetric(vertical: 10),
           maxLines: 10,
           action: TextInputAction.next,
           validations: [RequiredValidation()],
         ),
         Input(
-          label: 'Materiais',
+          label: "Materiais",
           placeholder:
-              'Algum item ou ritual que é necessário para fazer a magia.',
+              "Algum item ou ritual que é necessário para fazer a magia.",
           initialValue: _model.materials,
           maxLines: 2,
-          onChanged: (value) => _model.materials = value ?? '',
+          onChanged: (value) => _model.materials = value ?? "",
           margin: const EdgeInsets.symmetric(vertical: 10),
           action: TextInputAction.next,
         ),
         Select<String>(
           items: levels,
-          label: 'Nível',
+          label: "Nível",
           initialValue: _model.level.toString(),
           margin: const EdgeInsets.symmetric(vertical: 10),
           onChanged: (value) {
-            _model.level = int.parse(value ?? '0');
+            _model.level = int.parse(value ?? "0");
           },
         ),
         Input(
-          label: 'Tempo de Conjuração',
-          placeholder: '1 ação',
+          label: "Tempo de Conjuração",
+          placeholder: "1 ação",
           initialValue: _model.castingTime,
-          onChanged: (value) => _model.castingTime = value ?? '',
+          onChanged: (value) => _model.castingTime = value ?? "",
           margin: const EdgeInsets.symmetric(vertical: 10),
           action: TextInputAction.next,
         ),
         Input(
-          label: 'Alcance',
-          placeholder: '${Random().nextInt(10)} metros',
+          label: "Alcance",
+          placeholder: "${Random().nextInt(10)} metros",
           initialValue: _model.range,
-          onChanged: (value) => _model.range = value ?? '',
+          onChanged: (value) => _model.range = value ?? "",
           margin: const EdgeInsets.symmetric(vertical: 10),
           action: TextInputAction.next,
         ),
         Select(
           items: types,
-          label: 'Escola da magia:',
+          label: "Escola da magia:",
           initialValue: _model.type.isNotEmpty ? _model.type : null,
           margin: const EdgeInsets.symmetric(vertical: 10),
-          onChanged: (value) => _model.type = value ?? '',
+          onChanged: (value) => _model.type = value ?? "",
         ),
         CheckboxFormField(
-          label: 'Catalizadores',
+          label: "Catalizadores",
           options: catalytics,
           initialValues: _model.catalyts,
           onChanged: (values) => _model.catalyts = values,
@@ -144,7 +144,7 @@ class _SheetSpellCreateState extends State<SheetSpellCreate> {
 
   AppBar appBar(BuildContext context) {
     return AppBar(
-      title: Text(edit ? 'Editar' : 'Criar'),
+      title: Text(edit ? "Editar" : "Criar"),
       actions: [
         Consumer<SpellService>(
           builder: (context, service, child) {
@@ -172,7 +172,7 @@ class _SheetSpellCreateState extends State<SheetSpellCreate> {
       context: context,
       builder: (context) => const AlertDialog(
         title: Text(
-          'Não foi possível realizar esta ação, tente novamente.',
+          "Não foi possível realizar esta ação, tente novamente.",
         ),
       ),
     );

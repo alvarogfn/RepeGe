@@ -1,15 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/circle_icon.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/atoms/loading.dart';
-import 'package:repege/components/molecules/spell_card.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/services/spells_service.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/circle_icon.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/atoms/loading.dart";
+import "package:repege/components/molecules/spell_card.dart";
+import "package:repege/config/route.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/services/spells_service.dart";
 
 class SheetSpellsDetailsPage extends StatelessWidget {
   const SheetSpellsDetailsPage(this.sheetReference, {super.key});
@@ -47,7 +47,7 @@ class SheetSpellsDetailsPage extends StatelessWidget {
 
             if (snap.hasError) {
               return const Center(
-                child: Text('Error'),
+                child: Text("Error"),
               );
             }
 
@@ -55,7 +55,7 @@ class SheetSpellsDetailsPage extends StatelessWidget {
 
             if (entries.isEmpty) {
               return const Center(
-                child: Text('Vazio'),
+                child: Text("Vazio"),
               );
             }
 
@@ -64,7 +64,7 @@ class SheetSpellsDetailsPage extends StatelessWidget {
             return ListView(
               children: entries.map((e) {
                 return ExpansionTile(
-                  title: Headline('${e.key} nível', fontSize: 20),
+                  title: Headline("${e.key} nível", fontSize: 20),
                   children: e.value.map((spell) {
                     return SpellCard(
                       spellSnapshot: spell,
@@ -133,7 +133,7 @@ class _Layout extends StatelessWidget {
   Future<void> _addNewSpell(BuildContext context, SpellService service) async {
     await context.pushNamed<SpellModel>(
       RoutesName.sheetSpellCreate.name,
-      pathParameters: {'id': sheetReference.id},
+      pathParameters: {"id": sheetReference.id},
     );
   }
 
@@ -143,7 +143,7 @@ class _Layout extends StatelessWidget {
   ) async {
     final spell = await context.pushNamed<SpellModel>(
       RoutesName.sheetSpellSearch.name,
-      pathParameters: {'id': sheetReference.id},
+      pathParameters: {"id": sheetReference.id},
     );
 
     if (spell == null) return;
@@ -160,11 +160,11 @@ class _Layout extends StatelessWidget {
             return PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
-                  child: const Text('Preencher'),
+                  child: const Text("Preencher"),
                   onTap: () => _addNewSpell(context, service),
                 ),
                 PopupMenuItem(
-                  child: const Text('Buscar'),
+                  child: const Text("Buscar"),
                   onTap: () => _searchForSpell(context, service),
                 ),
               ],

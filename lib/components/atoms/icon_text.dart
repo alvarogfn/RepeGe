@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/paragraph.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/paragraph.dart";
 
 class IconText extends StatelessWidget {
   const IconText(

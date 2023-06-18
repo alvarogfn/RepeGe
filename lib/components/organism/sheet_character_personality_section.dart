@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
+import "package:flutter/material.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
 
 class SheetCharacterPersonalitySection extends StatelessWidget {
   const SheetCharacterPersonalitySection({required this.sheet, super.key});
@@ -15,7 +15,7 @@ class SheetCharacterPersonalitySection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Headline('Personalidade', fontSize: 20),
+            Headline("Personalidade", fontSize: 20),
           ],
         ),
       ),

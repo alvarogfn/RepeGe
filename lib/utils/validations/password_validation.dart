@@ -1,9 +1,9 @@
-import 'package:repege/utils/validations/validations.dart';
+import "package:repege/utils/validations/validations.dart";
 
 class PasswordValidation extends Validation {
   PasswordValidation({
     super.message =
-        'Use 8+ caracteres, letras maiúsculas/minúsculas e 1+ dígito. Evite informações pessoais.',
+        "Use 8+ caracteres, letras maiúsculas/minúsculas e 1+ dígito. Evite informações pessoais.",
   });
 
   @override

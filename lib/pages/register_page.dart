@@ -1,19 +1,19 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/button.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/atoms/input.dart';
-import 'package:repege/components/atoms/label.dart';
-import 'package:repege/components/atoms/paragraph.dart';
-import 'package:repege/components/molecules/input_password.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/services/auth_service.dart';
-import 'package:repege/utils/validations/email_validation.dart';
-import 'package:repege/utils/validations/required_validation.dart';
-import '../components/layout/full_screen_scroll.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/button.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/atoms/input.dart";
+import "package:repege/components/atoms/label.dart";
+import "package:repege/components/atoms/paragraph.dart";
+import "package:repege/components/molecules/input_password.dart";
+import "package:repege/config/route.dart";
+import "package:repege/services/auth_service.dart";
+import "package:repege/utils/validations/email_validation.dart";
+import "package:repege/utils/validations/required_validation.dart";
+import "../components/layout/full_screen_scroll.dart";
 
 class RegisterForm {
   late final TextEditingController username;
@@ -54,7 +54,7 @@ class RegisterForm {
   }
 
   String? get usernameValidity {
-    if (!RegExp(r'^[a-z]+$').hasMatch(usernameText)) {
+    if (!RegExp(r"^[a-z]+$").hasMatch(usernameText)) {
       return "Esse nome de usuário não é válido.";
     }
     return null;
@@ -103,9 +103,9 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Confirmação de E-mail.'),
+          title: const Text("Confirmação de E-mail."),
           content: Text(
-            'Uma confirmação de email foi enviada para ${_registerForm.emailText}. Você precisa confirmar antes de poder se logar.',
+            "Uma confirmação de email foi enviada para ${_registerForm.emailText}. Você precisa confirmar antes de poder se logar.",
           ),
         );
       },
@@ -125,13 +125,13 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   const Headline(
-                    'RepeGe',
+                    "RepeGe",
                     fontSize: 65,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
                   ),
                   const Headline(
-                    'Registro',
+                    "Registro",
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
@@ -147,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     validateFn: (_) => _registerForm.usernameValidity,
                   ),
                   Input(
-                    label: 'Email',
+                    label: "Email",
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     prefixIcon: Icons.alternate_email,
                     controller: _registerForm.email,
@@ -155,14 +155,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     action: TextInputAction.next,
                   ),
                   InputPassword(
-                    label: 'Senha',
+                    label: "Senha",
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     action: TextInputAction.next,
                     controller: _registerForm.password,
                     validateFn: (_) => _registerForm.passwordsValidity,
                   ),
                   InputPassword(
-                    label: 'Confirme sua senha',
+                    label: "Confirme sua senha",
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     action: TextInputAction.done,
                     controller: _registerForm.repassword,
@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () => setState(() {
                       _future = _handleSubmit(context);
                     }),
-                    child: const Text('Registrar'),
+                    child: const Text("Registrar"),
                   ),
                   if (snap.connectionState != ConnectionState.waiting &&
                       snap.hasError)
@@ -202,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextButton(
         onPressed: () => context.goNamed(RoutesName.login.name),
         child: const Paragraph(
-          'Já possui uma conta? **Entre!**',
+          "Já possui uma conta? **Entre!**",
         ),
       ),
     );

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/loading.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/services/sheet_service.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/loading.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/config/route.dart";
+import "package:repege/services/sheet_service.dart";
 
 class SheetListCard extends StatelessWidget {
   const SheetListCard({
@@ -28,7 +28,7 @@ class SheetListCard extends StatelessWidget {
   _navigateToSheet(BuildContext context, String id) {
     context.pushNamed(
       RoutesName.sheet.name,
-      pathParameters: {'id': sheet.id},
+      pathParameters: {"id": sheet.id},
     );
   }
 
@@ -51,7 +51,7 @@ class SheetListCard extends StatelessWidget {
                   child: ListTile(
                     title: Text(sheet.characterName),
                     subtitle: Text(
-                      '${sheet.characterRace}, ${sheet.characterClass}, ${sheet.alignment}.',
+                      "${sheet.characterRace}, ${sheet.characterClass}, ${sheet.alignment}.",
                     ),
                   ),
                 ),
@@ -87,13 +87,13 @@ class SheetListCard extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            'Tem certeza que deseja deletar a ficha ${sheet.characterName}?',
+            "Tem certeza que deseja deletar a ficha ${sheet.characterName}?",
           ),
-          content: const Text('Essa ação é irreversível.'),
+          content: const Text("Essa ação é irreversível."),
           actions: [
             ElevatedButton(
               onPressed: () => context.pop(true),
-              child: const Text('Excluir'),
+              child: const Text("Excluir"),
             )
           ],
         );

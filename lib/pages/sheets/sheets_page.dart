@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/label.dart';
-import 'package:repege/components/atoms/loading.dart';
-import 'package:repege/components/layout/sheet_service_wrapper.dart';
-import 'package:repege/components/layout/stream_list_view.dart';
-import 'package:repege/components/organism/sheet_list_card.dart';
-import 'package:repege/components/organism/custom_drawer.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/services/sheet_service.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/label.dart";
+import "package:repege/components/atoms/loading.dart";
+import "package:repege/components/layout/sheet_service_wrapper.dart";
+import "package:repege/components/layout/stream_list_view.dart";
+import "package:repege/components/organism/sheet_list_card.dart";
+import "package:repege/components/organism/custom_drawer.dart";
+import "package:repege/config/route.dart";
+import "package:repege/icons/rpg_icons.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/services/sheet_service.dart";
 
 class SheetsPage extends StatelessWidget {
   const SheetsPage({super.key});
@@ -30,7 +30,7 @@ class SheetsPage extends StatelessWidget {
               stream: sheets.streamAllSheets(),
               errorBuilder: (context, error) => errorWidget(),
               emptyWidget: const Center(
-                child: Text('Não existem fichas cadastradas.'),
+                child: Text("Não existem fichas cadastradas."),
               ),
               builder: (context, sheet) {
                 return SheetListCard(sheet: sheet);
@@ -46,7 +46,7 @@ class SheetsPage extends StatelessWidget {
     return const Center(
       child: Label(
         color: Colors.black87,
-        text: 'Alguma coisa deu errado',
+        text: "Alguma coisa deu errado",
         icon: Rpg.burning_book,
         width: 220,
       ),
@@ -77,7 +77,7 @@ class SheetsPage extends StatelessWidget {
             if (context.mounted) {
               context.pushNamed(
                 RoutesName.sheet.name,
-                pathParameters: {'id': sheetReference.id},
+                pathParameters: {"id": sheetReference.id},
               );
             }
           } catch (_) {

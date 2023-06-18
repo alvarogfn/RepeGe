@@ -1,40 +1,40 @@
-import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/models/dnd/spell.dart';
-import 'package:repege/pages/home_page.dart';
-import 'package:repege/pages/login_page.dart';
-import 'package:repege/pages/profile/profile_page.dart';
-import 'package:repege/pages/register_page.dart';
-import 'package:repege/pages/sheet/sub/sheet_spell_create.dart';
-import 'package:repege/pages/sheet/sub/sheet_spell_search.dart';
-import 'package:repege/pages/sheet/sub/spell_details_page.dart';
-import 'package:repege/pages/sheets/sheet_create_page.dart';
-import 'package:repege/pages/sheet/sheet_page.dart';
-import 'package:repege/pages/sheets/sheets_page.dart';
-import 'package:repege/pages/tables/tables_home_page.dart';
-import 'package:repege/pages/utils/loading_page.dart';
-import 'package:repege/services/auth_service.dart';
-import 'package:repege/config/environment_variables.dart';
+import "package:flutter/widgets.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/models/dnd/spell.dart";
+import "package:repege/pages/home_page.dart";
+import "package:repege/pages/login_page.dart";
+import "package:repege/pages/profile/profile_page.dart";
+import "package:repege/pages/register_page.dart";
+import "package:repege/pages/sheet/sub/sheet_spell_create.dart";
+import "package:repege/pages/sheet/sub/sheet_spell_search.dart";
+import "package:repege/pages/sheet/sub/spell_details_page.dart";
+import "package:repege/pages/sheets/sheet_create_page.dart";
+import "package:repege/pages/sheet/sheet_page.dart";
+import "package:repege/pages/sheets/sheets_page.dart";
+import "package:repege/pages/tables/tables_home_page.dart";
+import "package:repege/pages/utils/loading_page.dart";
+import "package:repege/services/auth_service.dart";
+import "package:repege/config/environment_variables.dart";
 
 enum RoutesName {
-  login(state: AuthState.unauth, name: 'login', path: '/login'),
-  register(state: AuthState.unauth, name: 'register', path: '/register'),
+  login(state: AuthState.unauth, name: "login", path: "/login"),
+  register(state: AuthState.unauth, name: "register", path: "/register"),
 
-  home(name: 'home', path: '/'),
-  profile(name: 'profile', path: 'profile'),
+  home(name: "home", path: "/"),
+  profile(name: "profile", path: "profile"),
 
-  sheets(name: 'sheets', path: '/sheets'),
-  sheet(name: 'sheet', path: 'sheet/:id'),
+  sheets(name: "sheets", path: "/sheets"),
+  sheet(name: "sheet", path: "sheet/:id"),
 
-  sheetSpellCreate(name: 'sheet-spell-create', path: 'spell-create'),
-  sheetSpellSearch(name: 'sheet-spell-search', path: 'spell-search'),
-  sheetCreate(name: 'sheet-create', path: 'create'),
+  sheetSpellCreate(name: "sheet-spell-create", path: "spell-create"),
+  sheetSpellSearch(name: "sheet-spell-search", path: "spell-search"),
+  sheetCreate(name: "sheet-create", path: "create"),
 
-  spellDetails(name: 'spell-details', path: 'spell-details'),
+  spellDetails(name: "spell-details", path: "spell-details"),
 
-  tables(name: 'tables', path: '/tables'),
-  loading(name: 'loading', path: '/loading');
+  tables(name: "tables", path: "/tables"),
+  loading(name: "loading", path: "/loading");
 
   const RoutesName({
     this.state = AuthState.auth,
@@ -49,13 +49,13 @@ enum RoutesName {
 
 class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'root');
+      GlobalKey<NavigatorState>(debugLabel: "root");
 
   Listenable? refreshListenable;
 
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
-    initialLocation: '/',
+    initialLocation: "/",
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
@@ -99,7 +99,7 @@ class CustomRouter {
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
             builder: (context, state) => SheetPage(
-              id: state.pathParameters['id']!,
+              id: state.pathParameters["id"]!,
             ),
             routes: [
               GoRoute(
@@ -107,14 +107,14 @@ class CustomRouter {
                 name: RoutesName.sheetSpellCreate.name,
                 builder: (context, state) => SheetSpellCreate(
                   spell: state.extra as Spell?,
-                  sheetID: state.pathParameters['id']!,
+                  sheetID: state.pathParameters["id"]!,
                 ),
               ),
               GoRoute(
                 path: RoutesName.sheetSpellSearch.path,
                 name: RoutesName.sheetSpellSearch.name,
                 builder: (context, state) => SheetSpellSearch(
-                  sheetID: state.pathParameters['id']!,
+                  sheetID: state.pathParameters["id"]!,
                 ),
               ),
               GoRoute(

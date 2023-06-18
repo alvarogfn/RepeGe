@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:repege/utils/if_prop.dart';
+import "package:flutter/material.dart";
+import "package:repege/utils/if_prop.dart";
 
-import '../../utils/validations/required_validation.dart';
-import '../../utils/validations/validations.dart';
+import "../../utils/validations/required_validation.dart";
+import "../../utils/validations/validations.dart";
 
 class InputField extends StatelessWidget {
   const InputField({
@@ -43,7 +43,7 @@ class InputField extends StatelessWidget {
           InputBorder.none,
         ),
       ),
-      onFieldSubmitted: (value) => updateSheetField('characterName', value),
+      onFieldSubmitted: (value) => updateSheetField("characterName", value),
       validator: (value) => Validator.validateWith(value, [
         RequiredValidation(),
       ]),

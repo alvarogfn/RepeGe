@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class FormTitle extends StatelessWidget {
   const FormTitle({
     required this.title,
     this.padding = const EdgeInsets.symmetric(vertical: 10),
-    this.subtitle = '',
+    this.subtitle = "",
     super.key,
   });
 

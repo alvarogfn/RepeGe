@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/atoms/input.dart';
-import 'package:repege/components/layout/full_screen_scroll.dart';
-import 'package:repege/components/organism/avatar_wallpaper.dart';
-import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/utils/validations/required_validation.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/atoms/input.dart";
+import "package:repege/components/layout/full_screen_scroll.dart";
+import "package:repege/components/organism/avatar_wallpaper.dart";
+import "package:repege/icons/rpg_icons.dart";
+import "package:repege/models/dnd/sheets/sheet.dart";
+import "package:repege/utils/validations/required_validation.dart";
 
 class SheetCreatePage extends StatefulWidget {
   const SheetCreatePage({super.key});
@@ -38,7 +38,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
                 label: "Nome",
                 placeholder: "Gandalf",
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
-                onChanged: (value) => _sheet.characterName = value ?? '',
+                onChanged: (value) => _sheet.characterName = value ?? "",
                 prefixIcon: Rpg.helmet,
                 validations: [RequiredValidation()],
                 action: TextInputAction.next,
@@ -46,7 +46,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
               Input(
                 label: "Classe",
                 placeholder: "Mago",
-                onChanged: (value) => _sheet.characterClass = value ?? '',
+                onChanged: (value) => _sheet.characterClass = value ?? "",
                 prefixIcon: Rpg.crossed_swords,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
@@ -55,7 +55,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
               Input(
                 label: "Raça",
                 placeholder: "Humano",
-                onChanged: (value) => _sheet.characterRace = value ?? '',
+                onChanged: (value) => _sheet.characterRace = value ?? "",
                 prefixIcon: Rpg.player,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
@@ -64,7 +64,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
               Input(
                 label: "Antepassado",
                 placeholder: "Eremita",
-                onChanged: (value) => _sheet.background = value ?? '',
+                onChanged: (value) => _sheet.background = value ?? "",
                 prefixIcon: Rpg.dead_tree,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
@@ -73,7 +73,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
               Input(
                 label: "Alinhamento",
                 placeholder: "Neutro/Bom",
-                onChanged: (value) => _sheet.alignment = value ?? '',
+                onChanged: (value) => _sheet.alignment = value ?? "",
                 prefixIcon: Rpg.player_pyromaniac,
                 margin: const EdgeInsets.symmetric(vertical: 7.5),
                 validations: [RequiredValidation()],
@@ -96,7 +96,7 @@ class _SheetCreatePageState extends State<SheetCreatePage> {
 
   AppBar appBar() {
     return AppBar(
-      title: const Text('Novo Personagem'),
+      title: const Text("Novo Personagem"),
       actions: [
         IconButton(
           onPressed: () {

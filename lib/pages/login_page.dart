@@ -1,20 +1,20 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/components/atoms/button.dart';
-import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/atoms/input.dart';
-import 'package:repege/components/atoms/label.dart';
-import 'package:repege/components/atoms/paragraph.dart';
-import 'package:repege/components/molecules/input_password.dart';
-import 'package:repege/config/route.dart';
-import 'package:repege/exceptions/auth_exceptions.dart';
-import 'package:repege/services/auth_service.dart';
-import 'package:repege/utils/validations/email_validation.dart';
-import 'package:repege/utils/validations/required_validation.dart';
-import '../components/layout/full_screen_scroll.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:provider/provider.dart";
+import "package:repege/components/atoms/button.dart";
+import "package:repege/components/atoms/headline.dart";
+import "package:repege/components/atoms/input.dart";
+import "package:repege/components/atoms/label.dart";
+import "package:repege/components/atoms/paragraph.dart";
+import "package:repege/components/molecules/input_password.dart";
+import "package:repege/config/route.dart";
+import "package:repege/exceptions/auth_exceptions.dart";
+import "package:repege/services/auth_service.dart";
+import "package:repege/utils/validations/email_validation.dart";
+import "package:repege/utils/validations/required_validation.dart";
+import "../components/layout/full_screen_scroll.dart";
 
 class LoginForm {
   String _password = "";
@@ -71,9 +71,9 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Email não confirmado.'),
+          title: const Text("Email não confirmado."),
           content: Paragraph(
-              'O endereço de email **${_loginForm.email}** ainda não foi confirmado na plataforma.'),
+              "O endereço de email **${_loginForm.email}** ainda não foi confirmado na plataforma."),
           actions: [
             TextButton(
               onPressed: () {
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 authService.sendEmailVerification();
                 context.pop();
               },
-              child: const Text('Reenviar Confirmação.'),
+              child: const Text("Reenviar Confirmação."),
             )
           ],
         );
@@ -102,20 +102,20 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   const Headline(
-                    'RepeGe',
+                    "RepeGe",
                     fontSize: 65,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
                   ),
                   const Headline(
-                    'Login',
+                    "Login",
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
                     margin: EdgeInsets.symmetric(vertical: 20),
                   ),
                   signupButon(context),
                   Input(
-                    label: 'Email',
+                    label: "Email",
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     prefixIcon: Icons.alternate_email,
                     onChanged: (value) => _loginForm.email = value,
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     action: TextInputAction.next,
                   ),
                   InputPassword(
-                    label: 'Senha',
+                    label: "Senha",
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     action: TextInputAction.done,
                     onChanged: (value) => _loginForm.password = value,
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () => setState(() {
                       _future = _handleSubmit(context);
                     }),
-                    child: const Text('Entrar'),
+                    child: const Text("Entrar"),
                   ),
                   if (snap.connectionState != ConnectionState.waiting &&
                       snap.hasError)
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
       child: TextButton(
         onPressed: () => context.goNamed(RoutesName.register.name),
         child: const Paragraph(
-          'Não possui uma conta? **Registre-se!**',
+          "Não possui uma conta? **Registre-se!**",
         ),
       ),
     );
