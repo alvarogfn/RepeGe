@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/atoms/circle_icon.dart';
 import 'package:repege/components/atoms/headline.dart';
-import 'package:repege/components/atoms/input.dart';
 import 'package:repege/components/atoms/loading.dart';
 import 'package:repege/components/molecules/spell_card.dart';
 import 'package:repege/config/route.dart';
