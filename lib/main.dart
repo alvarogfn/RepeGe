@@ -9,12 +9,12 @@ import "package:firebase_storage/firebase_storage.dart";
 import "package:provider/provider.dart";
 
 import "package:repege/config/route.dart";
-import "package:repege/services/auth_service.dart";
+import "package:repege/domains/authentication/services/auth_service.dart";
 import "package:repege/themes/dark_theme.dart";
 import "package:repege/themes/light_theme.dart";
 
 import "config/firebase_options.dart";
-
+ 
 import "package:repege/config/environment_variables.dart";
 
 Future<void> main() async {

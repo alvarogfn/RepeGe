@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
-import "package:repege/services/auth_service.dart";
-import "package:repege/services/sheet_service.dart";
+import "package:repege/domains/authentication/services/auth_service.dart";
+import "package:repege/domains/sheet/services/sheet_service.dart";
 
 class SheetServiceWrapper extends StatelessWidget {
   const SheetServiceWrapper({required this.builder, this.child, super.key});
