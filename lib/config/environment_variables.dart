@@ -1,6 +1,6 @@
 class EnvironmentVariables {
   static const production = bool.fromEnvironment(
-    "production",
+    'production',
     defaultValue: false,
   );
 }

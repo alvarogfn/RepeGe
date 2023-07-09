@@ -1,4 +1,4 @@
-import "package:repege/models/dnd/attributes.dart";
+import 'package:repege/models/dnd/attributes.dart';
 
 enum DndSkills {
   acrobatics(type: Attributes.charisma),

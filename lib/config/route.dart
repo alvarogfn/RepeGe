@@ -1,31 +1,32 @@
-import "package:flutter/widgets.dart";
-import "package:go_router/go_router.dart";
-import "package:provider/provider.dart";
-import "package:repege/config/routes_name.dart";
-import "package:repege/domains/authentication/screens/signin_screen.dart";
-import "package:repege/domains/authentication/screens/signup_screen.dart";
-import "package:repege/domains/authentication/services/auth_service.dart";
-import "package:repege/domains/authentication/services/auth_state.dart";
-import "package:repege/domains/home/screens/home_page.dart";
-import "package:repege/domains/sheet/screens/sheet_create_page.dart";
-import "package:repege/domains/sheet/screens/sheet_page.dart";
-import "package:repege/domains/sheet/screens/sheets_page.dart";
-import "package:repege/domains/sheet/screens/sub/sheet_spell_create.dart";
-import "package:repege/domains/sheet/screens/sub/sheet_spell_search.dart";
-import "package:repege/domains/sheet/screens/sub/spell_details_page.dart";
-import "package:repege/models/dnd/spell.dart";
-import "package:repege/screens/loading_page.dart";
-import "package:repege/config/environment_variables.dart";
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/config/routes_name.dart';
+import 'package:repege/modules/authentication/screens/signin_screen.dart';
+import 'package:repege/modules/authentication/screens/signup_screen.dart';
+import 'package:repege/modules/authentication/services/auth_service.dart';
+import 'package:repege/modules/authentication/models/auth_state.dart';
+import 'package:repege/modules/home/screens/home_page.dart';
+import 'package:repege/modules/sheet/screens/sheet_create_page.dart';
+import 'package:repege/modules/sheet/screens/sheet_page.dart';
+import 'package:repege/modules/sheet/screens/sheets_page.dart';
+import 'package:repege/modules/sheet/screens/sub/sheet_spell_create.dart';
+import 'package:repege/modules/sheet/screens/sub/sheet_spell_search.dart';
+import 'package:repege/modules/sheet/screens/sub/spell_details_page.dart';
+import 'package:repege/models/dnd/spell.dart';
+import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
+import 'package:repege/screens/loading_page.dart';
+import 'package:repege/config/environment_variables.dart';
 
 class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: "root");
+      GlobalKey<NavigatorState>(debugLabel: 'root');
 
   Listenable? refreshListenable;
 
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
-    initialLocation: "/",
+    initialLocation: '/',
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
@@ -50,6 +51,11 @@ class CustomRouter {
         builder: (context, state) => const LoadingPage(),
       ),
       GoRoute(
+        builder: (context, state) => const ProfileScreen(),
+        name: RoutesName.profile.name,
+        path: RoutesName.profile.path,
+      ),
+      GoRoute(
         path: RoutesName.sheets.path,
         name: RoutesName.sheets.name,
         builder: (context, state) => const SheetsPage(),
@@ -63,7 +69,7 @@ class CustomRouter {
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
             builder: (context, state) => SheetPage(
-              id: state.pathParameters["id"]!,
+              id: state.pathParameters['id']!,
             ),
             routes: [
               GoRoute(
@@ -71,14 +77,14 @@ class CustomRouter {
                 name: RoutesName.sheetSpellCreate.name,
                 builder: (context, state) => SheetSpellCreate(
                   spell: state.extra as Spell?,
-                  sheetID: state.pathParameters["id"]!,
+                  sheetID: state.pathParameters['id']!,
                 ),
               ),
               GoRoute(
                 path: RoutesName.sheetSpellSearch.path,
                 name: RoutesName.sheetSpellSearch.name,
                 builder: (context, state) => SheetSpellSearch(
-                  sheetID: state.pathParameters["id"]!,
+                  sheetID: state.pathParameters['id']!,
                 ),
               ),
               GoRoute(

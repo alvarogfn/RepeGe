@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/modules/shared/components/label.dart';
+import 'package:repege/modules/shared/components/loading.dart';
+import 'package:repege/modules/shared/components/sheet_service_wrapper.dart';
+import 'package:repege/modules/shared/components/stream_list_view.dart';
+import 'package:repege/config/routes_name.dart';
+import 'package:repege/modules/home/components/custom_drawer.dart';
+import 'package:repege/modules/sheet/components/sheet_list_card.dart';
+import 'package:repege/icons/rpg_icons.dart';
+import 'package:repege/models/dnd/sheets/sheet.dart';
+import 'package:repege/modules/sheet/services/sheet_service.dart';
+
+class SheetsPage extends StatelessWidget {
+  const SheetsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SheetServiceWrapper(
+      builder: (context, _) => Scaffold(
+        floatingActionButton: newSheetButton(context),
+        appBar: AppBar(
+          title: const Text('Fichas Cadastradas'),
+        ),
+        drawer: const CustomDrawer(),
+        body: Consumer<SheetService>(
+          builder: (context, sheets, _) {
+            return StreamListView(
+              stream: sheets.streamAllSheets(),
+              errorBuilder: (context, error) => errorWidget(),
+              emptyWidget: const Center(
+                child: Text('Não existem fichas cadastradas.'),
+              ),
+              builder: (context, sheet) {
+                return SheetListCard(sheet: sheet);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Center errorWidget() {
+    return const Center(
+      child: Label(
+        color: Colors.black87,
+        text: 'Alguma coisa deu errado',
+        icon: Rpg.burning_book,
+        width: 220,
+      ),
+    );
+  }
+
+  FloatingActionButton newSheetButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () async {
+        SheetModel? sheet = await context.pushNamed<SheetModel?>(
+          RoutesName.sheetCreate.name,
+        );
+
+        if (sheet == null) return;
+
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => const Dialog.fullscreen(child: Loading()),
+          );
+        }
+
+        if (context.mounted) {
+          final sheetService = context.read<SheetService>();
+          try {
+            final sheetReference = await sheetService.createSheet(sheet);
+
+            if (context.mounted) {
+              context.pushNamed(
+                RoutesName.sheet.name,
+                pathParameters: {'id': sheetReference.id},
+              );
+            }
+          } catch (_) {
+            context.pop();
+          }
+        }
+      },
+      child: const Icon(Icons.add),
+    );
+  }
+}

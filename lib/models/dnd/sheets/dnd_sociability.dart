@@ -35,19 +35,19 @@ class SheetCharacterPersonality {
 
   Map<String, Object> toMap() {
     return {
-      "age": age,
-      "eyesColor": eyesColor,
-      "skinColor": skinColor,
-      "hairColor": hairColor,
-      "height": height,
-      "weight": weight,
-      "characterAppearance": characterAppearance,
-      "characterBackstory": characterBackstory,
-      "personalityTraits": personalityTraits,
-      "ideals": ideals,
-      "bonds": bonds,
-      "flaws": flaws,
-      "languages": languages,
+      'age': age,
+      'eyesColor': eyesColor,
+      'skinColor': skinColor,
+      'hairColor': hairColor,
+      'height': height,
+      'weight': weight,
+      'characterAppearance': characterAppearance,
+      'characterBackstory': characterBackstory,
+      'personalityTraits': personalityTraits,
+      'ideals': ideals,
+      'bonds': bonds,
+      'flaws': flaws,
+      'languages': languages,
     };
   }
 }

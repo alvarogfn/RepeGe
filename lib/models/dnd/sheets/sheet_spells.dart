@@ -1,5 +1,5 @@
-import "package:repege/models/dnd/attributes.dart";
-import "package:repege/models/dnd/spell.dart";
+import 'package:repege/models/dnd/attributes.dart';
+import 'package:repege/models/dnd/spell.dart';
 
 class SheetSpells {
   final int spellAttackBonus;

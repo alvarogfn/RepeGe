@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 class Field {
   final String label;
@@ -45,7 +45,7 @@ class FieldCheckbox extends Field {
   final List<String> options;
 
   FieldCheckbox({
-    super.value = "",
+    super.value = '',
     required super.label,
     required super.propertyKey,
     required this.options,

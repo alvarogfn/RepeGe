@@ -1,8 +1,8 @@
-import "dart:io";
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
-import "package:repege/models/dnd/sheets/sheet_spells.dart";
-import "package:repege/models/utils/field.dart";
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:repege/models/dnd/sheets/sheet_spells.dart';
+import 'package:repege/models/utils/field.dart';
 
 class SheetModel {
   String characterName;
@@ -15,30 +15,30 @@ class SheetModel {
   SheetSpells sheetSpells;
 
   SheetModel({
-    this.characterName = "",
-    this.characterClass = "",
-    this.characterRace = "",
-    this.background = "",
-    this.alignment = "",
+    this.characterName = '',
+    this.characterClass = '',
+    this.characterRace = '',
+    this.background = '',
+    this.alignment = '',
     this.notes = const [],
     this.sheetSpells = const SheetSpells(),
   });
 
   factory SheetModel.fromMap(Map<String, dynamic> doc) {
     return SheetModel(
-      characterName: doc["characterName"],
-      characterClass: doc["characterClass"],
-      characterRace: doc["characterRace"],
-      background: doc["background"],
-      alignment: doc["alignment"],
-      notes: List<String>.from(doc["notes"]),
+      characterName: doc['characterName'],
+      characterClass: doc['characterClass'],
+      characterRace: doc['characterRace'],
+      background: doc['background'],
+      alignment: doc['alignment'],
+      notes: List<String>.from(doc['notes']),
       sheetSpells: const SheetSpells(),
     );
   }
 
   ImageProvider<Object> get avatar {
     if (avatarFile == null) {
-      return const AssetImage("assets/images/default_avatar.jpg");
+      return const AssetImage('assets/images/default_avatar.jpg');
     }
     return FileImage(avatarFile!);
   }
@@ -89,7 +89,7 @@ class Sheet extends SheetModel {
   @override
   ImageProvider<Object> get avatar {
     if (avatarURL == null) {
-      return const AssetImage("assets/images/default_avatar.jpg");
+      return const AssetImage('assets/images/default_avatar.jpg');
     }
     return NetworkImage(avatarURL!);
   }
@@ -97,29 +97,29 @@ class Sheet extends SheetModel {
   List<Field> get fields {
     return [
       Field(
-        label: "Nome",
+        label: 'Nome',
         value: characterName,
-        propertyKey: "characterName",
+        propertyKey: 'characterName',
       ),
       Field(
-        label: "Classe",
+        label: 'Classe',
         value: characterClass,
-        propertyKey: "characterClass",
+        propertyKey: 'characterClass',
       ),
       Field(
-        label: "Raça",
+        label: 'Raça',
         value: characterRace,
-        propertyKey: "characterRace",
+        propertyKey: 'characterRace',
       ),
       Field(
-        label: "Antepassado",
+        label: 'Antepassado',
         value: background,
-        propertyKey: "background",
+        propertyKey: 'background',
       ),
       Field(
-        label: "Alinhamento",
+        label: 'Alinhamento',
         value: alignment,
-        propertyKey: "alignment",
+        propertyKey: 'alignment',
       ),
     ];
   }
