@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/modules/shared/components/headline.dart';
+import 'package:repege/components/headline.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 
 class SheetCharacterPersonalitySection extends StatelessWidget {

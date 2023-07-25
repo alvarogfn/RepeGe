@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/modules/shared/components/headline.dart';
+import 'package:repege/components/headline.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/extensions.dart';

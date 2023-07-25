@@ -24,23 +24,23 @@ class SheetsHomePage extends StatelessWidget {
         return Scaffold(
           drawer: child,
           appBar: AppBar(title: const Text('Personagens')),
-          floatingActionButton: SheetsCharacterCreateActionButton(),
+          floatingActionButton: const SheetsCharacterCreateActionButton(),
           body: Consumer<SheetsService>(
             builder: (context, service, child) {
               return StreamBuilder(
                 stream: service.streamAllSheets(),
                 builder: (context, snapshot) {
                   if (isSnapshotLoading(snapshot)) {
-                    return SheetsLoadingIndicator();
+                    return const SheetsLoadingIndicator();
                   }
                   if (snapshot.hasError) {
-                    return SheetsErrorIndicator();
+                    return const SheetsErrorIndicator();
                   }
 
                   final sheets = snapshot.data!;
 
                   if (sheets.isEmpty) {
-                    return SheetsEmptyCard();
+                    return const SheetsEmptyCard();
                   }
 
                   return ListView.builder(

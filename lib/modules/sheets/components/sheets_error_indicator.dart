@@ -5,7 +5,7 @@ class SheetsErrorIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Alguma coisa deu errado.'),
     );
   }

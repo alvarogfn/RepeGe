@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/components/headline.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/user/modules/profile/model/profile_form_model.dart';
-import 'package:repege/modules/shared/components/headline.dart';
 import 'package:repege/modules/user/services/user.dart';
 import 'package:repege/modules/user/modules/profile/components/profile_picture.dart';
 

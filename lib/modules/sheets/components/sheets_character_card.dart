@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/modules/shared/components/loading.dart';
+import 'package:repege/components/loading.dart';
 import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetsCharacterCard extends StatelessWidget {

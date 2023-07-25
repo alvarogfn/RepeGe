@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/modules/shared/components/headline.dart';
-import 'package:repege/modules/shared/components/avatar_wallpaper.dart';
+import 'package:repege/components/headline.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
+import 'package:repege/modules/sheets/modules/sheet/components/character_avatar.dart';
 import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetCharacterDetailsHeader extends StatelessWidget {
@@ -21,7 +21,7 @@ class SheetCharacterDetailsHeader extends StatelessWidget {
     return Stack(
       children: [
         Consumer<SheetsService>(builder: (context, service, _) {
-          return AvatarWallpaper(
+          return CharacterAvatar(
             image: sheet.avatar,
             onChanged: (file) {
               if (file == null) return;

@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/modules/shared/components/show_snack_bar.dart';
 import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetsCharacterCreateActionButton extends StatelessWidget {
@@ -22,12 +21,11 @@ class SheetsCharacterCreateActionButton extends StatelessWidget {
               if (sheetModel != null) await service.createSheet(sheetModel);
             } catch (e) {
               if (context.mounted) {
-                showSnackBar(
-                  context,
-                  SnackBar(
-                    content: Text('Não foi possível criar seu personagem.'),
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text(
+                    'Não foi possível criar seu personagem.',
                   ),
-                );
+                ));
               }
             }
           },

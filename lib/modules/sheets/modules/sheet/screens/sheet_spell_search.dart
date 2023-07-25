@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/modules/shared/components/input_search_bar.dart';
-import 'package:repege/modules/shared/components/loading.dart';
+import 'package:repege/components/loading.dart';
+import 'package:repege/modules/sheets/modules/sheet/components/input_search_bar.dart';
 import 'package:repege/modules/spells/components/search_spell_card.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/icons/octicons_icons.dart';
@@ -30,7 +30,16 @@ class _SheetSpellSearchState extends State<SheetSpellSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(
+        title: const Text('Buscar Magia'),
+        actions: const [
+          IconButton(
+            onPressed: null,
+            icon: Icon(Octicons.search),
+            tooltip: 'Busca avançada',
+          )
+        ],
+      ),
       body: Column(
         children: [
           InputSearchBar(
@@ -80,19 +89,6 @@ class _SheetSpellSearchState extends State<SheetSpellSearch> {
           ),
         ],
       ),
-    );
-  }
-
-  AppBar appBar() {
-    return AppBar(
-      title: const Text('Buscar Magia'),
-      actions: const [
-        IconButton(
-          onPressed: null,
-          icon: Icon(Octicons.search),
-          tooltip: 'Busca avançada',
-        )
-      ],
     );
   }
 }

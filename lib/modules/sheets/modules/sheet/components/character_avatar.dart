@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AvatarWallpaper extends StatelessWidget {
-  AvatarWallpaper({
+class CharacterAvatar extends StatelessWidget {
+  CharacterAvatar({
     required this.image,
     super.key,
     this.onChanged,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/modules/shared/components/headline.dart';
-import 'package:repege/modules/shared/components/full_screen_scroll.dart';
+import 'package:repege/components/full_screen_scroll.dart';
+import 'package:repege/components/headline.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/modules/shared/utils/validations/required_validation.dart';

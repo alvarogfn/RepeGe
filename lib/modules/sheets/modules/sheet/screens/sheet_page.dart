@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/modules/shared/components/sheet_service_wrapper.dart';
+import 'package:repege/helpers/is_snapshot_loading.dart';
+import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/sheets/modules/sheet/screens/sheet_character_details_page.dart';
 import 'package:repege/modules/sheets/modules/sheet/screens/sheet_spells_details_page.dart';
 import 'package:repege/modules/sheets/modules/sheet/screens/sheet_status_details_page.dart';
@@ -28,65 +29,54 @@ class _SheetHomePageState extends State<SheetPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SheetServiceWrapper(builder: (context, _) {
-      return DefaultTabController(
-        length: 4,
-        child: Consumer<SheetsService>(
-          builder: (context, service, _) {
-            return StreamBuilder(
-              stream: service.getSheetRef(widget.id).snapshots(),
-              builder: (context, snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return const LoadingPage();
-                }
+    return ChangeNotifierProxyProvider<AuthService, SheetsService>(
+      create: (context) {
+        final user = context.read<AuthService>().user!;
+        return SheetsService(user: user);
+      },
+      update: (context, value, _) => SheetsService(user: value.user!),
+      builder: (context, _) {
+        return DefaultTabController(
+          length: 4,
+          child: Consumer<SheetsService>(
+            builder: (context, service, _) {
+              return StreamBuilder(
+                stream: service.getSheetRef(widget.id).snapshots(),
+                builder: (context, snap) {
+                  if (isSnapshotLoading(snap)) {
+                    return const LoadingPage();
+                  }
 
-                if (snap.hasError) {
-                  return const Text('Alguma coisa deu errado.');
-                }
+                  if (snap.hasError) {
+                    return const Text('Alguma coisa deu errado.');
+                  }
 
-                final sheetDoc = snap.data!;
+                  final sheet = snap.data!.data()!;
 
-                return Scaffold(
-                  appBar: _AppBar(
-                    characterName: sheetDoc.data()!.characterName,
-                  ),
-                  body: TabBarView(
-                    children: pages(sheetDoc),
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
-    });
-  }
-}
-
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _AppBar({required this.characterName});
-
-  @override
-  Size get preferredSize {
-    return const Size.fromHeight(kToolbarHeight + kTextTabBarHeight);
-  }
-
-  final String characterName;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(characterName),
-      bottom: const TabBar(
-        labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
-        isScrollable: true,
-        tabs: [
-          Tab(icon: Icon(Rpg.player)),
-          Tab(icon: Icon(Rpg.health)),
-          Tab(icon: Icon(Rpg.axe)),
-          Tab(icon: Icon(Rpg.book)),
-        ],
-      ),
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text(sheet.characterName),
+                      bottom: const TabBar(
+                        labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
+                        isScrollable: true,
+                        tabs: [
+                          Tab(icon: Icon(Rpg.player)),
+                          Tab(icon: Icon(Rpg.health)),
+                          Tab(icon: Icon(Rpg.axe)),
+                          Tab(icon: Icon(Rpg.book)),
+                        ],
+                      ),
+                    ),
+                    body: TabBarView(
+                      children: pages(snap.data!),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:repege/modules/shared/components/headline.dart';
-import 'package:repege/modules/shared/components/input.dart';
+import 'package:repege/components/headline.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/modules/shared/utils/validations/required_validation.dart';
+import 'package:repege/modules/shared/utils/validations/validations.dart';
 
 class SheetCharacterEditForm extends StatefulWidget {
   const SheetCharacterEditForm({
@@ -83,19 +83,23 @@ class _SheetCharacterEditFormState extends State<SheetCharacterEditForm> {
     );
   }
 
-  Input input({
+  Widget input({
     required String initialValue,
     required String label,
     required String propertyKey,
   }) {
-    return Input(
-      initialValue: initialValue,
-      label: label,
-      onChanged: (value) => _formData[propertyKey] = value,
-      placeholder: initialValue,
+    return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      action: TextInputAction.done,
-      validations: [RequiredValidation()],
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(
+          labelText: label,
+        ),
+        onChanged: (value) => _formData[propertyKey] = value,
+        validator: (value) =>
+            Validator.validateWith(value, [RequiredValidation()]),
+        textInputAction: TextInputAction.done,
+      ),
     );
   }
 }

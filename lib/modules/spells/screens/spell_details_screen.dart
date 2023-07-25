@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:repege/components/full_screen_scroll.dart';
+import 'package:repege/components/paragraph.dart';
 import 'package:repege/modules/shared/components/icon_text.dart';
-import 'package:repege/modules/shared/components/paragraph.dart';
-import 'package:repege/modules/shared/components/full_screen_scroll.dart';
 import 'package:repege/modules/shared/components/enchanced_card.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/spell.dart';
