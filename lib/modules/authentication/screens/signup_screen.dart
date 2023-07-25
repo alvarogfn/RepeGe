@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/helpers/dismiss_keyboard.dart';
 import 'package:repege/modules/authentication/components/email_form_field.dart';
 import 'package:repege/modules/authentication/components/authentication_error_card.dart';
 import 'package:repege/modules/authentication/components/layout.dart';
@@ -34,6 +35,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
     try {
       final authService = context.read<AuthService>();
+
+      dismissKeyboard(context);
 
       await authService.signup(
         username: _form.usernameText,

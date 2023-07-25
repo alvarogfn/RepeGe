@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/modules/shared/components/sheet_service_wrapper.dart';
-import 'package:repege/modules/sheet/screens/sheet_character_details_page.dart';
-import 'package:repege/modules/sheet/screens/sheet_spells_details_page.dart';
-import 'package:repege/modules/sheet/screens/sheet_status_details_page.dart';
+import 'package:repege/modules/sheets/modules/sheet/screens/sheet_character_details_page.dart';
+import 'package:repege/modules/sheets/modules/sheet/screens/sheet_spells_details_page.dart';
+import 'package:repege/modules/sheets/modules/sheet/screens/sheet_status_details_page.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/screens/loading_page.dart';
-import 'package:repege/modules/sheet/services/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetPage extends StatefulWidget {
   const SheetPage({required this.id, super.key});
@@ -31,7 +31,7 @@ class _SheetHomePageState extends State<SheetPage> {
     return SheetServiceWrapper(builder: (context, _) {
       return DefaultTabController(
         length: 4,
-        child: Consumer<SheetService>(
+        child: Consumer<SheetsService>(
           builder: (context, service, _) {
             return StreamBuilder(
               stream: service.getSheetRef(widget.id).snapshots(),

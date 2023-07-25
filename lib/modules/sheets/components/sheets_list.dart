@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
 import 'package:repege/modules/shared/components/loading.dart';
-import 'package:repege/modules/sheet/services/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 
-class SheetListCard extends StatelessWidget {
-  const SheetListCard({
+class SheetsList extends StatelessWidget {
+  const SheetsList({
     required this.sheet,
     super.key,
   });
@@ -18,7 +18,7 @@ class SheetListCard extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) {
-        final sheetService = context.read<SheetService>();
+        final sheetService = context.read<SheetsService>();
         sheetService.deleteSheet(sheet.id).then((_) => context.pop());
         return const Loading(color: Colors.white);
       },

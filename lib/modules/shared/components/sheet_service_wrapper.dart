@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
-import 'package:repege/modules/sheet/services/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetServiceWrapper extends StatelessWidget {
   const SheetServiceWrapper({required this.builder, this.child, super.key});
@@ -11,12 +11,12 @@ class SheetServiceWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProxyProvider<AuthService, SheetService>(
+    return ChangeNotifierProxyProvider<AuthService, SheetsService>(
       create: (context) {
         final user = context.read<AuthService>().user!;
-        return SheetService(user: user);
+        return SheetsService(user: user);
       },
-      update: (context, value, _) => SheetService(user: value.user!),
+      update: (context, value, _) => SheetsService(user: value.user!),
       builder: builder,
       child: child,
     );

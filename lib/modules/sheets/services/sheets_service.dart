@@ -8,7 +8,7 @@ import 'package:repege/models/dnd/sheets/sheet_spells.dart';
 import 'package:repege/models/extensions.dart';
 import 'package:repege/modules/user/services/user.dart';
 
-class SheetService with ChangeNotifier {
+class SheetsService with ChangeNotifier {
   late final _firestoneRef = FirebaseFirestore.instance
       .collection('sheets')
       .withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore);
@@ -19,7 +19,7 @@ class SheetService with ChangeNotifier {
 
   final User user;
 
-  SheetService({required this.user});
+  SheetsService({required this.user});
 
   DocumentReference<Sheet?> getSheetRef(String sheetID) {
     return _firestoneRef.doc(sheetID);

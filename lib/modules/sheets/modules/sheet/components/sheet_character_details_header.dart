@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:repege/modules/shared/components/headline.dart';
 import 'package:repege/modules/shared/components/avatar_wallpaper.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/modules/sheet/services/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetCharacterDetailsHeader extends StatelessWidget {
   const SheetCharacterDetailsHeader({
@@ -20,7 +20,7 @@ class SheetCharacterDetailsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Consumer<SheetService>(builder: (context, service, _) {
+        Consumer<SheetsService>(builder: (context, service, _) {
           return AvatarWallpaper(
             image: sheet.avatar,
             onChanged: (file) {

@@ -6,11 +6,11 @@ import 'package:repege/modules/shared/components/show_snack_bar.dart';
 import 'package:repege/modules/shared/components/show_keyboard_bottom_sheet.dart';
 import 'package:repege/modules/shared/components/avatar_wallpaper.dart';
 import 'package:repege/modules/shared/components/full_screen_scroll.dart';
-import 'package:repege/modules/sheet/components/sheet_character_details_edit_form.dart';
-import 'package:repege/modules/sheet/components/sheet_character_details_header.dart';
-import 'package:repege/modules/sheet/components/sheet_character_personality_section.dart';
 import 'package:repege/models/dnd/sheets/sheet.dart';
-import 'package:repege/modules/sheet/services/sheet_service.dart';
+import 'package:repege/modules/sheets/modules/sheet/components/sheet_character_details_edit_form.dart';
+import 'package:repege/modules/sheets/modules/sheet/components/sheet_character_details_header.dart';
+import 'package:repege/modules/sheets/modules/sheet/components/sheet_character_personality_section.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetCharacterDetailsPage extends StatelessWidget {
   const SheetCharacterDetailsPage(this.sheetReference, {super.key});
@@ -36,7 +36,7 @@ class SheetCharacterDetailsPage extends StatelessWidget {
     );
   }
 
-  AvatarWallpaper characterAvatar(SheetService service) {
+  AvatarWallpaper characterAvatar(SheetsService service) {
     return AvatarWallpaper(
       image: sheet.avatar,
       onChanged: (file) {
@@ -47,7 +47,7 @@ class SheetCharacterDetailsPage extends StatelessWidget {
   }
 
   FloatingActionButton floatingActionButton(BuildContext context) {
-    final service = context.read<SheetService>();
+    final service = context.read<SheetsService>();
 
     return FloatingActionButton(
       onPressed: () async {
@@ -105,7 +105,7 @@ class _Layout extends StatelessWidget {
 
   final AppBar appBar;
 
-  final Widget Function(BuildContext, SheetService, Widget?) builder;
+  final Widget Function(BuildContext, SheetsService, Widget?) builder;
 
   final FloatingActionButton floatingActionButton;
 
@@ -114,7 +114,7 @@ class _Layout extends StatelessWidget {
     return Scaffold(
       appBar: appBar,
       body: FullScreenScroll(
-        child: Consumer<SheetService>(
+        child: Consumer<SheetsService>(
           builder: builder,
         ),
       ),

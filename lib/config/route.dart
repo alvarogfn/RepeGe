@@ -7,12 +7,12 @@ import 'package:repege/modules/authentication/screens/signup_screen.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/authentication/models/auth_state.dart';
 import 'package:repege/modules/home/screens/home_page.dart';
-import 'package:repege/modules/sheet/screens/sheet_create_page.dart';
-import 'package:repege/modules/sheet/screens/sheet_page.dart';
-import 'package:repege/modules/sheet/screens/sheets_page.dart';
-import 'package:repege/modules/sheet/screens/sub/sheet_spell_create.dart';
-import 'package:repege/modules/sheet/screens/sub/sheet_spell_search.dart';
-import 'package:repege/modules/sheet/screens/sub/spell_details_page.dart';
+import 'package:repege/modules/spells/screens/spell_details_screen.dart';
+import 'package:repege/modules/sheets/modules/sheet/screens/sheet_page.dart';
+import 'package:repege/modules/sheets/modules/sheet/screens/sheet_spell_create.dart';
+import 'package:repege/modules/sheets/modules/sheet/screens/sheet_spell_search.dart';
+import 'package:repege/modules/sheets/modules/sheet/sheet_character_create_screen.dart';
+import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
 import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
 import 'package:repege/screens/loading_page.dart';
@@ -58,12 +58,12 @@ class CustomRouter {
       GoRoute(
         path: RoutesName.sheets.path,
         name: RoutesName.sheets.name,
-        builder: (context, state) => const SheetsPage(),
+        builder: (context, state) => const SheetsHomePage(),
         routes: [
           GoRoute(
             path: RoutesName.sheetCreate.path,
             name: RoutesName.sheetCreate.name,
-            builder: (context, state) => const SheetCreatePage(),
+            builder: (context, state) => const SheetCharacterCreateScreen(),
           ),
           GoRoute(
             path: RoutesName.sheet.path,
