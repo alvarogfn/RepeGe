@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/modules/shared/components/headline.dart';
+import 'package:repege/components/headline.dart';
 
 class ScreenTitle extends StatelessWidget {
   const ScreenTitle(this.title, {super.key});

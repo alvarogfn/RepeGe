@@ -94,7 +94,51 @@ class _Layout extends StatelessWidget {
       create: (context) => SpellService(sheetID: sheetReference.id),
       builder: (context, child) {
         return Scaffold(
-          floatingActionButton: floatingActionButton(),
+          floatingActionButton: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Material(
+              child: Consumer<SpellService>(
+                builder: (context, service, child) {
+                  return PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: const Text('Preencher'),
+                        onTap: () {
+                          context.pushNamed<SpellModel>(
+                            RoutesName.sheetSpellCreate.name,
+                            pathParameters: {'id': sheetReference.id},
+                          );
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: const Text('Buscar'),
+                        onTap: () async {
+                          final spell = await context.pushNamed<SpellModel>(
+                            RoutesName.sheetSpellSearch.name,
+                            pathParameters: {'id': sheetReference.id},
+                          );
+
+                          if (spell == null) return;
+
+                          await service.addSpell(spell);
+                        },
+                      ),
+                    ],
+                    child: child,
+                  );
+                },
+                child: const CircleIcon(
+                  height: 50,
+                  width: 50,
+                  backgroundColor: Colors.black,
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -127,61 +171,6 @@ class _Layout extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Future<void> _addNewSpell(BuildContext context, SpellService service) async {
-    await context.pushNamed<SpellModel>(
-      RoutesName.sheetSpellCreate.name,
-      pathParameters: {'id': sheetReference.id},
-    );
-  }
-
-  Future<void> _searchForSpell(
-    BuildContext context,
-    SpellService service,
-  ) async {
-    final spell = await context.pushNamed<SpellModel>(
-      RoutesName.sheetSpellSearch.name,
-      pathParameters: {'id': sheetReference.id},
-    );
-
-    if (spell == null) return;
-
-    await service.addSpell(spell);
-  }
-
-  ClipRRect floatingActionButton() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(50),
-      child: Material(
-        child: Consumer<SpellService>(
-          builder: (context, service, child) {
-            return PopupMenuButton(
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  child: const Text('Preencher'),
-                  onTap: () => _addNewSpell(context, service),
-                ),
-                PopupMenuItem(
-                  child: const Text('Buscar'),
-                  onTap: () => _searchForSpell(context, service),
-                ),
-              ],
-              child: child,
-            );
-          },
-          child: const CircleIcon(
-            height: 50,
-            width: 50,
-            backgroundColor: Colors.black,
-            icon: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

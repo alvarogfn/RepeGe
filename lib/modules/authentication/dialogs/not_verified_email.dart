@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/modules/shared/components/paragraph.dart';
+import 'package:repege/components/paragraph.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
 
 Future<dynamic> notVerifiedEmail(

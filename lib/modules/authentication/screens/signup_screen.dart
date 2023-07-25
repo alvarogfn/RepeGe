@@ -13,7 +13,7 @@ import 'package:repege/modules/authentication/components/username_form_field.dar
 import 'package:repege/modules/authentication/dialogs/send_email_confirmation.dart';
 import 'package:repege/modules/authentication/models/signup_form_model.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
-import 'package:repege/modules/shared/components/headline.dart';
+import 'package:repege/components/headline.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);

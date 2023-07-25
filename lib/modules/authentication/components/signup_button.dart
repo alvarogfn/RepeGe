@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/modules/shared/components/paragraph.dart';
+import 'package:repege/components/paragraph.dart';
 
 class SignupButton extends StatelessWidget {
   const SignupButton({required this.onPop, super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/modules/shared/components/full_screen_scroll.dart';
+import 'package:repege/components/full_screen_scroll.dart';
 
 class Layout extends StatelessWidget {
   const Layout({super.key, required this.child});
