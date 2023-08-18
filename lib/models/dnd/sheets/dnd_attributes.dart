@@ -1,6 +1,6 @@
 import 'package:repege/models/dnd/attributes.dart';
 
-class DnDSheetAttributes {
+class SheetAttributes {
   final int strength;
   final int dextery;
   final int constitution;
@@ -10,7 +10,7 @@ class DnDSheetAttributes {
 
   final List<Attributes> savingThrows;
 
-  DnDSheetAttributes({
+  SheetAttributes({
     this.strength = 0,
     this.dextery = 0,
     this.constitution = 0,
@@ -20,8 +20,8 @@ class DnDSheetAttributes {
     this.savingThrows = const [],
   });
 
-  factory DnDSheetAttributes.fromMap(Map<String, Object> data) {
-    return DnDSheetAttributes(
+  factory SheetAttributes.fromMap(Map<String, Object> data) {
+    return SheetAttributes(
       charisma: data['charisma'] as int,
       constitution: data['constitution'] as int,
       dextery: data['dextery'] as int,

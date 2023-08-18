@@ -6,10 +6,10 @@ class ProfileFormModel {
   late final TextEditingController email;
   File? profilePicture;
 
-  ProfileFormModel([
+  ProfileFormModel({
     String email = '',
     String username = '',
-  ]) {
+  }) {
     this.username = TextEditingController(text: username);
     this.email = TextEditingController(text: email);
   }

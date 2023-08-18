@@ -1,33 +1,33 @@
 import 'package:repege/models/dnd/attributes.dart';
 
-enum DndSkills {
+enum Skills {
   acrobatics(type: Attributes.charisma),
-  animalHandling(type: Attributes.wisdom),
-  arcana(type: Attributes.intelligence),
-  athletics(type: Attributes.strength),
-  deception(type: Attributes.charisma),
-  history(type: Attributes.intelligence),
-  insight(type: Attributes.wisdom),
-  intimidation(type: Attributes.charisma),
-  investigation(type: Attributes.intelligence),
-  medicine(type: Attributes.wisdom),
-  nature(type: Attributes.intelligence),
-  perception(type: Attributes.wisdom),
   performance(type: Attributes.charisma),
   persuasion(type: Attributes.charisma),
+  intimidation(type: Attributes.charisma),
+  deception(type: Attributes.charisma),
+  arcana(type: Attributes.intelligence),
+  history(type: Attributes.intelligence),
+  investigation(type: Attributes.intelligence),
+  nature(type: Attributes.intelligence),
   religion(type: Attributes.intelligence),
   sleightOfHand(type: Attributes.dextery),
   stealth(type: Attributes.dextery),
+  athletics(type: Attributes.strength),
+  animalHandling(type: Attributes.wisdom),
+  insight(type: Attributes.wisdom),
+  medicine(type: Attributes.wisdom),
+  perception(type: Attributes.wisdom),
   survival(type: Attributes.wisdom);
 
-  const DndSkills({
+  const Skills({
     required this.type,
   });
 
   final Attributes type;
 }
 
-class DnDSheetSkills {
+class SheetSkills {
   final int acrobatics;
   final int animalHandling;
   final int arcana;
@@ -47,9 +47,9 @@ class DnDSheetSkills {
   final int stealth;
   final int survival;
 
-  final List<DndSkills> proficiencies = [];
+  final List<Skills> proficiencies = [];
 
-  DnDSheetSkills(
+  SheetSkills(
     this.acrobatics,
     this.animalHandling,
     this.arcana,

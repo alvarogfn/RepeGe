@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:repege/models/dnd/sheets/sheet_spells.dart';
+import 'package:repege/models/dnd/attributes.dart';
+import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/models/utils/field.dart';
 
 class SheetModel {
@@ -12,7 +13,11 @@ class SheetModel {
   String background;
   String alignment;
   List<String> notes;
-  SheetSpells sheetSpells;
+  int spellAttackBonus;
+  int spellCastingHability;
+  int spellSaveDc;
+  Attributes? spellCastingClass;
+  List<Spell> spells;
 
   SheetModel({
     this.characterName = '',
@@ -21,7 +26,11 @@ class SheetModel {
     this.background = '',
     this.alignment = '',
     this.notes = const [],
-    this.sheetSpells = const SheetSpells(),
+    this.spellAttackBonus = 0,
+    this.spellCastingHability = 0,
+    this.spellSaveDc = 0,
+    this.spellCastingClass,
+    this.spells = const [],
   });
 
   factory SheetModel.fromMap(Map<String, dynamic> doc) {
@@ -32,7 +41,11 @@ class SheetModel {
       background: doc['background'],
       alignment: doc['alignment'],
       notes: List<String>.from(doc['notes']),
-      sheetSpells: const SheetSpells(),
+      spellAttackBonus: doc['spellAttackBonus'],
+      spellCastingHability: doc['spellAttackBonus'],
+      spellSaveDc: doc['spellAttackBonus'],
+      spellCastingClass: doc['spellCastingClass'],
+      spells: const [],
     );
   }
 
@@ -61,7 +74,6 @@ class Sheet extends SheetModel {
     required super.background,
     required super.alignment,
     required super.notes,
-    required super.sheetSpells,
   });
 
   factory Sheet.fromModel(
@@ -82,7 +94,6 @@ class Sheet extends SheetModel {
       background: model.background,
       alignment: model.alignment,
       notes: model.notes,
-      sheetSpells: model.sheetSpells,
     );
   }
 

@@ -7,13 +7,6 @@ import 'package:repege/modules/authentication/screens/signup_screen.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/authentication/models/auth_state.dart';
 import 'package:repege/modules/home/screens/home_page.dart';
-import 'package:repege/modules/spells/screens/spell_details_screen.dart';
-import 'package:repege/modules/sheets/modules/sheet/screens/sheet_page.dart';
-import 'package:repege/modules/sheets/modules/sheet/screens/sheet_spell_create.dart';
-import 'package:repege/modules/sheets/modules/sheet/screens/sheet_spell_search.dart';
-import 'package:repege/modules/sheets/modules/sheet/sheet_character_create_screen.dart';
-import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
-import 'package:repege/models/dnd/spell.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
@@ -54,49 +47,6 @@ class CustomRouter {
         builder: (context, state) => const ProfileScreen(),
         name: RoutesName.profile.name,
         path: RoutesName.profile.path,
-      ),
-      GoRoute(
-        path: RoutesName.sheets.path,
-        name: RoutesName.sheets.name,
-        builder: (context, state) => const SheetsHomePage(),
-        routes: [
-          GoRoute(
-            path: RoutesName.sheetCreate.path,
-            name: RoutesName.sheetCreate.name,
-            builder: (context, state) => const SheetCharacterCreateScreen(),
-          ),
-          GoRoute(
-            path: RoutesName.sheet.path,
-            name: RoutesName.sheet.name,
-            builder: (context, state) => SheetPage(
-              id: state.pathParameters['id']!,
-            ),
-            routes: [
-              GoRoute(
-                path: RoutesName.sheetSpellCreate.path,
-                name: RoutesName.sheetSpellCreate.name,
-                builder: (context, state) => SheetSpellCreate(
-                  spell: state.extra as Spell?,
-                  sheetID: state.pathParameters['id']!,
-                ),
-              ),
-              GoRoute(
-                path: RoutesName.sheetSpellSearch.path,
-                name: RoutesName.sheetSpellSearch.name,
-                builder: (context, state) => SheetSpellSearch(
-                  sheetID: state.pathParameters['id']!,
-                ),
-              ),
-              GoRoute(
-                path: RoutesName.spellDetails.path,
-                name: RoutesName.spellDetails.name,
-                builder: (context, state) {
-                  return SpellDetailsPage(spell: state.extra as SpellModel);
-                },
-              ),
-            ],
-          ),
-        ],
       ),
     ],
     redirect: (context, state) async {
