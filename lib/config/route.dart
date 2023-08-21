@@ -7,6 +7,10 @@ import 'package:repege/modules/authentication/screens/signup_screen.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/authentication/models/auth_state.dart';
 import 'package:repege/modules/home/screens/home_page.dart';
+import 'package:repege/modules/sheets/screens/sheet_screen.dart';
+import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
+import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
+import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
@@ -47,6 +51,25 @@ class CustomRouter {
         builder: (context, state) => const ProfileScreen(),
         name: RoutesName.profile.name,
         path: RoutesName.profile.path,
+      ),
+      GoRoute(
+        builder: (context, state) => const SheetsHomeScreen(),
+        name: RoutesName.sheets.name,
+        path: RoutesName.sheets.path,
+        routes: [
+          GoRoute(
+            builder: (context, state) => const SheetsCreateScreen(),
+            path: RoutesName.sheetCreate.path,
+            name: RoutesName.sheetCreate.name,
+          ),
+          GoRoute(
+            path: RoutesName.sheet.path,
+            name: RoutesName.sheet.name,
+            builder: (context, state) => SheetScreen(
+              sheet: state.extra as Sheet,
+            ),
+          )
+        ],
       ),
     ],
     redirect: (context, state) async {

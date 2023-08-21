@@ -66,7 +66,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   route: RoutesName.tables,
                 ),
               ],
-            ),
+          ),
           )
         ],
       ),
