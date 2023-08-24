@@ -68,23 +68,23 @@ class Character {
     this.languages = const [],
   });
 
-  static Character fromMap(Map<String, Object?> data) {
+  static Character fromMap(Map<String, dynamic> data) {
     return Character(
-      alignment: data['alignment'] as String? ?? '',
-      avatarURL: data['avatarURL'] as String? ?? '',
-      background: data['background'] as String? ?? '',
-      characterClass: data['characterClass'] as String? ?? '',
-      characterName: data['characterName'] as String? ?? '',
-      characterRace: data['characterRace'] as String? ?? '',
-      createdAt: data['createdAt'] as String? ?? '',
-      notes: data['notes'] as String? ?? '',
-      ownerUID: data['ownerUID'] as String? ?? '',
-      saveDice: data['saveDice'] as String? ?? '',
-      languages: data['languages'] as List<String>? ?? [],
+      alignment: data['alignment'],
+      avatarURL: data['avatarURL'],
+      background: data['background'],
+      characterClass: data['characterClass'],
+      characterName: data['characterName'],
+      characterRace: data['characterRace'],
+      createdAt: data['createdAt'],
+      notes: data['notes'],
+      ownerUID: data['ownerUID'],
+      saveDice: data['saveDice'],
+      languages: List.from(data['languages']).map((e) => e.toString()).toList(),
     );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'alignment': alignment,
       'avatarURL': avatarURL,

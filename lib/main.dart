@@ -14,7 +14,7 @@ import 'package:repege/themes/dark_theme.dart';
 import 'package:repege/themes/light_theme.dart';
 
 import 'config/firebase_options.dart';
- 
+
 import 'package:repege/config/environment_variables.dart';
 
 Future<void> main() async {

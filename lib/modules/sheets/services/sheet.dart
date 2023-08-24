@@ -8,7 +8,6 @@ import 'package:repege/modules/sheets/models/status.dart';
 import 'package:repege/modules/user/services/user.dart';
 
 class Sheet {
-  final DocumentReference<Sheet> ref;
   final String id;
   final String ownerUID;
   final Appearance appearance;
@@ -17,9 +16,11 @@ class Sheet {
   final Casting casting;
   final Character character;
   final Status status;
+  final Timestamp createdAt;
+
+  late final DocumentReference<Sheet> ref = collection().doc(id);
 
   Sheet({
-    required this.ref,
     required this.id,
     required this.ownerUID,
     required this.appearance,
@@ -28,35 +29,24 @@ class Sheet {
     required this.casting,
     required this.character,
     required this.status,
+    required this.createdAt,
   });
 
   static Sheet fromMap(
-    Map<String, Object?> data, {
+    Map<String, dynamic> data, {
     required String id,
-    required DocumentReference<Sheet> ref,
   }) {
     return Sheet(
-      ref: ref,
       id: id,
       ownerUID: data['ownerUID'] as String,
-      appearance: Appearance.fromMap(
-        data['appearance'] as Map<String, Object?>,
-      ),
-      attributes: Attributes.fromMap(
-        data['attributes'] as Map<String, Object?>,
-      ),
-      bag: Bag.fromMap(
-        data['bag'] as Map<String, Object?>,
-      ),
-      casting: Casting.fromMap(
-        data['casting'] as Map<String, Object?>,
-      ),
-      character: Character.fromMap(
-        data['character'] as Map<String, Object?>,
-      ),
-      status: Status.fromMap(
-        data['status'] as Map<String, Object?>,
-      ),
+      appearance: Appearance.fromMap(data['appearance']),
+      attributes: Attributes.fromMap(data['attributes']),
+      bag: Bag.fromMap(data['bag']),
+      casting: Casting.fromMap(data['casting']),
+      character: Character.fromMap(data['character']),
+      status: Status(),
+      createdAt:
+          data['createdAt'] as Timestamp? ?? Timestamp.fromDate(DateTime.now()),
     );
   }
 
@@ -74,14 +64,13 @@ class Sheet {
   }
 
   static CollectionReference<Sheet> collection() {
-    return FirebaseFirestore.instance.collection('sheets').withConverter(
-          fromFirestore: (doc, _) => Sheet.fromMap(
-            doc.data()!,
-            id: doc.id,
-            ref: doc.reference as DocumentReference<Sheet>,
-          ),
-          toFirestore: (sheet, _) => sheet.toMap(),
-        );
+    return FirebaseFirestore.instance.collection('sheets').withConverter<Sheet>(
+        fromFirestore: (doc, _) => Sheet.fromMap(
+              doc.data()!,
+              id: doc.id,
+            ),
+        toFirestore: (sheet, _) =>
+            sheet.toMap()..addAll({'createdAt': FieldValue.serverTimestamp()}));
   }
 
   static Future<Sheet> createSheet(
@@ -96,7 +85,6 @@ class Sheet {
     final sheetDoc = Sheet.collection().doc();
 
     final sheet = Sheet(
-      ref: sheetDoc,
       id: sheetDoc.id,
       ownerUID: user.uid,
       appearance: appearance ?? Appearance(),
@@ -105,6 +93,7 @@ class Sheet {
       casting: casting ?? Casting(),
       character: character ?? Character(),
       status: status ?? Status(),
+      createdAt: Timestamp.fromDate(DateTime.now()),
     );
 
     await commit(sheet: sheet);
@@ -131,8 +120,10 @@ class Sheet {
   }
 
   static Stream<List<Sheet>> stream() {
-    return collection()
-        .snapshots()
-        .map((event) => event.docs.map((e) => e.data()).toList());
+    return collection().snapshots().map((snapshots) {
+      return snapshots.docs.map((doc) {
+        return doc.data();
+      }).toList();
+    });
   }
 }

@@ -46,13 +46,13 @@ class Status {
 
   static Status fromMap(Map<String, Object?> data) {
     return Status(
-      armorClass: int.parse(data['armorClass'] as String),
-      currentHp: int.parse(data['currentHp'] as String),
+      armorClass: data['armorClass'] as int,
+      currentHp: data['currentHp'] as int,
       hitDice: data['hitDice'] as String,
-      iniative: int.parse(data['iniative'] as String),
-      maxHp: int.parse(data['maxHp'] as String),
-      speed: int.parse(data['speed'] as String),
-      temporaryHp: int.parse(data['temporaryHp'] as String),
+      iniative: data['iniative'] as int,
+      maxHp: data['maxHp'] as int,
+      speed: data['speed'] as int,
+      temporaryHp: data['temporaryHp'] as int,
       deathSaves: DeathSaves(
         sucesses: data['deathSavesSucess'] as int,
         failures: data['deathSavesFailures'] as int,

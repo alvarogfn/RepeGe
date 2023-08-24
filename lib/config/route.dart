@@ -10,7 +10,6 @@ import 'package:repege/modules/home/screens/home_page.dart';
 import 'package:repege/modules/sheets/screens/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
@@ -66,7 +65,7 @@ class CustomRouter {
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
             builder: (context, state) => SheetScreen(
-              sheet: state.extra as Sheet,
+              sheetId: state.pathParameters['id'] as String,
             ),
           )
         ],

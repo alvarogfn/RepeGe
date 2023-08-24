@@ -13,16 +13,16 @@ class Casting {
     this.spells = const [],
   });
 
-  static fromMap(Map<String, Object?> data) {
+  static fromMap(Map<String, dynamic> data) {
     return Casting(
-      attackBonus: int.parse(data['attackBonus'] as String),
+      attackBonus: data['attackBonus'] as int,
       castingClass: data['castingClass'] as String,
-      castingHability: int.parse(data['castingHability'] as String),
-      spells: data['spells'] as List,
+      castingHability: data['castingHability'] as int,
+      spells: data['spells'] as List<dynamic>,
     );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'attackBonus': attackBonus,
       'castingClass': castingClass,

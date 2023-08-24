@@ -43,12 +43,12 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
       if (context.mounted) {
         context.pushReplacementNamed(
           RoutesName.sheet.name,
-          extra: sheet,
+          pathParameters: {
+            'id': sheet.id,
+          },
         );
       }
     } catch (e) {
-      print(e);
-
       context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Não foi possível criar o personagem')),

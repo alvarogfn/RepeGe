@@ -7,21 +7,21 @@ abstract class Attribute {
 }
 
 class Strength extends Attribute {
-  final bool strength;
+  final bool atletism;
 
-  const Strength({super.value, this.strength = false});
+  const Strength({super.value, this.atletism = false});
 
   static Strength fromMap(Map<String, dynamic> data) {
     return Strength(
-      value: int.parse(data['value'] as String),
-      strength: data['strength'] as bool,
+      value: data['value'] as int,
+      atletism: data['atletism'] as bool,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'value': value.toString(),
-      'strength': strength,
+      'value': value,
+      'atletism': atletism,
     };
   }
 }
@@ -38,7 +38,7 @@ class Dextery extends Attribute {
 
   static Dextery fromMap(Map<String, dynamic> data) {
     return Dextery(
-      value: int.parse(data['value'] as String),
+      value: data['value'] as int,
       sleightOfHand: data['sleightOfHand'] as bool,
       stealth: data['stealth'] as bool,
     );
@@ -46,7 +46,7 @@ class Dextery extends Attribute {
 
   Map<String, dynamic> toMap() {
     return {
-      'value': value.toString(),
+      'value': value,
       'sleightOfHand': sleightOfHand,
       'stealth': stealth,
     };
@@ -58,13 +58,13 @@ class Constitution extends Attribute {
 
   static Constitution fromMap(Map<String, dynamic> data) {
     return Constitution(
-      value: int.parse(data['value'] as String),
+      value: data['value'] as int,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'value': value.toString(),
+      'value': value,
     };
   }
 }
@@ -87,7 +87,7 @@ class Intelligence extends Attribute {
 
   static Intelligence fromMap(Map<String, dynamic> data) {
     return Intelligence(
-      value: int.parse(data['value'] as String),
+      value: data['value'] as int,
       arcana: data['arcana'] as bool,
       history: data['history'] as bool,
       investigation: data['investigation'] as bool,
@@ -98,7 +98,7 @@ class Intelligence extends Attribute {
 
   Map<String, dynamic> toMap() {
     return {
-      'value': value.toString(),
+      'value': value,
       'arcana': false,
       'history': false,
       'investigation': false,
@@ -124,7 +124,7 @@ class Wisdom extends Attribute {
 
   static Wisdom fromMap(Map<String, dynamic> data) {
     return Wisdom(
-      value: int.parse(data['value'] as String),
+      value: data['value'] as int,
       insight: data['insight'] as bool,
       medicine: data['medicine'] as bool,
       perception: data['perception'] as bool,
@@ -161,7 +161,7 @@ class Charisma extends Attribute {
 
   static Charisma fromMap(Map<String, dynamic> data) {
     return Charisma(
-      value: int.parse(data['value'] as String),
+      value: data['value'] as int,
       acrobatics: data['acrobatics'] as bool,
       performance: data['performance'] as bool,
       persuasion: data['persuasion'] as bool,
@@ -212,24 +212,12 @@ class Attributes {
 
   static Attributes fromMap(Map<String, dynamic> data) {
     return Attributes(
-      strength: Strength.fromMap(
-        data['strengh'] as Map<String, dynamic>,
-      ),
-      dextery: Dextery.fromMap(
-        data['dextery'] as Map<String, dynamic>,
-      ),
-      constitution: Constitution.fromMap(
-        data['constitution'] as Map<String, dynamic>,
-      ),
-      intelligence: Intelligence.fromMap(
-        data['intelligence'] as Map<String, dynamic>,
-      ),
-      wisdom: Wisdom.fromMap(
-        data['wisdom'] as Map<String, dynamic>,
-      ),
-      charisma: Charisma.fromMap(
-        data['charisma'] as Map<String, dynamic>,
-      ),
+      strength: Strength.fromMap(data['strength']),
+      dextery: Dextery.fromMap(data['dextery']),
+      constitution: Constitution.fromMap(data['constitution']),
+      intelligence: Intelligence.fromMap(data['intelligence']),
+      wisdom: Wisdom.fromMap(data['wisdom']),
+      charisma: Charisma.fromMap(data['charisma']),
     );
   }
 

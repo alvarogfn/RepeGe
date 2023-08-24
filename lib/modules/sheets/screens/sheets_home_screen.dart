@@ -22,7 +22,7 @@ class SheetsHomeScreen extends StatelessWidget {
         ],
       ),
       drawer: const CustomDrawer(),
-      body: StreamBuilder<List<Sheet>>(
+      body: StreamBuilder(
         stream: Sheet.stream(),
         initialData: const [],
         builder: (context, snapshot) {
@@ -37,7 +37,9 @@ class SheetsHomeScreen extends StatelessWidget {
           final sheets = snapshot.data!;
 
           if (sheets.isEmpty) {
-            return const Text('h');
+            return const Text(
+              'Não há nenhum personagem. Que tal adicionar algum?',
+            );
           }
 
           return ListView.builder(
