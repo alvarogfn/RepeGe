@@ -8,14 +8,12 @@ enum RoutesName {
   profile(name: 'profile', path: '/profile'),
 
   sheets(name: 'sheets', path: '/sheets'),
-
-  sheet(name: 'sheet', path: 'sheet/:id'),
-
-  sheetSpellCreate(name: 'sheet-spell-create', path: 'spell-create'),
-  sheetSpellSearch(name: 'sheet-spell-search', path: 'spell-search'),
+  sheet(name: 'sheet', path: ':id'),
   sheetCreate(name: 'sheet-create', path: 'create'),
 
-  spellDetails(name: 'spell-details', path: 'spell-details'),
+  spells(name: 'spell', path: '/spells'),
+  spellsSearch(name: 'spells-search', path: 'search'),
+  spellDetails(name: 'spell-details', path: 'details'),
 
   tables(name: 'tables', path: '/tables'),
   loading(name: 'loading', path: '/loading');

@@ -10,6 +10,9 @@ import 'package:repege/modules/home/screens/home_page.dart';
 import 'package:repege/modules/sheets/screens/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
+import 'package:repege/modules/spell/models/spell.dart';
+import 'package:repege/modules/spell/screens/spell_details_screen.dart';
+import 'package:repege/modules/spell/screens/spell_search_screen.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
@@ -68,6 +71,25 @@ class CustomRouter {
               sheetId: state.pathParameters['id'] as String,
             ),
           )
+        ],
+      ),
+      GoRoute(
+        builder: (context, state) => const SpellSearchScreen(),
+        name: RoutesName.spells.name,
+        path: RoutesName.spells.path,
+        routes: [
+          GoRoute(
+            builder: (context, state) => const SpellSearchScreen(),
+            path: RoutesName.spellsSearch.path,
+            name: RoutesName.spellsSearch.name,
+          ),
+          GoRoute(
+            builder: (context, state) => SpellDetailsScreen(
+              spell: state.extra as Spell,
+            ),
+            path: RoutesName.spellDetails.path,
+            name: RoutesName.spellDetails.name,
+          ),
         ],
       ),
     ],

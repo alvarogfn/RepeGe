@@ -13,7 +13,7 @@ class SheetStatusScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text('Status'),
       ),
-      body: Column(
+      body: const Column(
         children: [],
       ),
     );

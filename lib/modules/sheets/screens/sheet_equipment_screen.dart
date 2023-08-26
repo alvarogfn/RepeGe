@@ -12,7 +12,7 @@ class SheetEquipmentScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text('Equipamento'),
       ),
-      body: Column(
+      body: const Column(
         children: [],
       ),
     );

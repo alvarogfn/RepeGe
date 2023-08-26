@@ -4,6 +4,7 @@ import 'package:repege/modules/sheets/models/attributes.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
 import 'package:repege/modules/sheets/models/casting.dart';
 import 'package:repege/modules/sheets/models/character.dart';
+import 'package:repege/modules/sheets/models/spells.dart';
 import 'package:repege/modules/sheets/models/status.dart';
 import 'package:repege/modules/user/services/user.dart';
 
@@ -19,6 +20,7 @@ class Sheet {
   final Timestamp createdAt;
 
   late final DocumentReference<Sheet> ref = collection().doc(id);
+  late final Spells spells = Spells(sheetID: id, sheetRef: ref);
 
   Sheet({
     required this.id,
@@ -96,19 +98,9 @@ class Sheet {
       createdAt: Timestamp.fromDate(DateTime.now()),
     );
 
-    await commit(sheet: sheet);
+    await sheetDoc.set(sheet);
 
     return sheet;
-  }
-
-  static Future<void> commit({
-    required Sheet sheet,
-  }) async {
-    final batch = FirebaseFirestore.instance.batch();
-
-    batch.set(sheet.ref, sheet);
-
-    await batch.commit();
   }
 
   static DocumentReference<Sheet> getSheet(String id) {

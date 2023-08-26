@@ -32,7 +32,7 @@ class AuthService with ChangeNotifier {
       }
 
       notifyListeners();
-    });
+    }, onError: (v) => print(v));
   }
 
   Future<bool> signup({
