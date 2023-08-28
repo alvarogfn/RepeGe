@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/paragraph.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/models/extensions.dart';
+import 'package:repege/helpers/extensions.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 
 class SpellListItem extends StatelessWidget {

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_int.dart';
 
 class DeathSaves {
   final int sucesses;
@@ -9,12 +10,14 @@ class DeathSaves {
     this.failures = 0,
   });
 
-  static DeathSaves fromMap(Map<String, Object?> data) {
+  static DeathSaves fromMap(Map<String, dynamic> data) {
     return DeathSaves(
-        sucesses: data['sucesses'] as int, failures: data['failures'] as int);
+      sucesses: parseInt(data['sucesses']),
+      failures: parseInt(data['failures']),
+    );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'sucesses': sucesses,
       'failures': failures,
@@ -44,23 +47,23 @@ class Status {
     this.deathSaves = const DeathSaves(),
   });
 
-  static Status fromMap(Map<String, Object?> data) {
+  static Status fromMap(Map<String, dynamic> data) {
     return Status(
-      armorClass: data['armorClass'] as int,
-      currentHp: data['currentHp'] as int,
-      hitDice: data['hitDice'] as String,
-      iniative: data['iniative'] as int,
-      maxHp: data['maxHp'] as int,
-      speed: data['speed'] as int,
-      temporaryHp: data['temporaryHp'] as int,
+      armorClass: parseInt(data['armorClass']),
+      currentHp: parseInt(data['currentHp']),
+      hitDice: data['hitDice'].toString(),
+      iniative: parseInt(data['iniative']),
+      maxHp: parseInt(data['maxHp']),
+      speed: parseInt(data['speed']),
+      temporaryHp: parseInt(data['temporaryHp']),
       deathSaves: DeathSaves(
-        sucesses: data['deathSavesSucess'] as int,
-        failures: data['deathSavesFailures'] as int,
+        sucesses: parseInt(data['deathSavesSucess']),
+        failures: parseInt(data['deathSavesFailures']),
       ),
     );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'armorClass': armorClass,
       'currentHp': currentHp,

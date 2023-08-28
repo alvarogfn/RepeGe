@@ -53,8 +53,8 @@ class _SheetScreenState extends State<SheetScreen> {
               body: TabBarView(
                 children: [
                   SheetCharacterScreen(sheet: sheet),
-                  SheetStatusScreen(status: sheet.status),
-                  SheetEquipmentScreen(equipment: sheet.character),
+                  SheetStatusScreen(sheet: sheet),
+                  SheetEquipmentScreen(sheet: sheet),
                   SheetCastingScreen(sheet: sheet),
                 ],
               ),

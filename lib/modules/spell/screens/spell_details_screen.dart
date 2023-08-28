@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/components/paragraph.dart';
 import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/models/extensions.dart';
+import 'package:repege/helpers/extensions.dart';
 import 'package:repege/models/utils.dart';
 import 'package:repege/components/card_tile.dart';
 import 'package:repege/modules/spell/models/spell.dart';

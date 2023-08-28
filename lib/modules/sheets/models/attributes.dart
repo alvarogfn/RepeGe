@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_bool.dart';
+import 'package:repege/helpers/parse_int.dart';
 
 abstract class Attribute {
   final int value;
@@ -13,8 +15,8 @@ class Strength extends Attribute {
 
   static Strength fromMap(Map<String, dynamic> data) {
     return Strength(
-      value: data['value'] as int,
-      atletism: data['atletism'] as bool,
+      value: parseInt(data['value']),
+      atletism: parseBool(data['atletism']),
     );
   }
 
@@ -29,18 +31,21 @@ class Strength extends Attribute {
 class Dextery extends Attribute {
   final bool sleightOfHand;
   final bool stealth;
+  final bool acrobatics;
 
   const Dextery({
     super.value,
+    this.acrobatics = false,
     this.sleightOfHand = false,
     this.stealth = false,
   });
 
   static Dextery fromMap(Map<String, dynamic> data) {
     return Dextery(
-      value: data['value'] as int,
-      sleightOfHand: data['sleightOfHand'] as bool,
-      stealth: data['stealth'] as bool,
+      value: parseInt(data['value']),
+      sleightOfHand: parseBool(data['sleightOfHand']),
+      stealth: parseBool(data['stealth']),
+      acrobatics: parseBool(data['acrobatics']),
     );
   }
 
@@ -49,6 +54,7 @@ class Dextery extends Attribute {
       'value': value,
       'sleightOfHand': sleightOfHand,
       'stealth': stealth,
+      'acrobatics': acrobatics,
     };
   }
 }
@@ -58,7 +64,7 @@ class Constitution extends Attribute {
 
   static Constitution fromMap(Map<String, dynamic> data) {
     return Constitution(
-      value: data['value'] as int,
+      value: parseInt(data['value']),
     );
   }
 
@@ -87,12 +93,12 @@ class Intelligence extends Attribute {
 
   static Intelligence fromMap(Map<String, dynamic> data) {
     return Intelligence(
-      value: data['value'] as int,
-      arcana: data['arcana'] as bool,
-      history: data['history'] as bool,
-      investigation: data['investigation'] as bool,
-      nature: data['nature'] as bool,
-      religion: data['religion'] as bool,
+      value: parseInt(data['value']),
+      arcana: parseBool(data['arcana']),
+      history: parseBool(data['history']),
+      investigation: parseBool(data['investigation']),
+      nature: parseBool(data['nature']),
+      religion: parseBool(data['religion']),
     );
   }
 
@@ -124,11 +130,11 @@ class Wisdom extends Attribute {
 
   static Wisdom fromMap(Map<String, dynamic> data) {
     return Wisdom(
-      value: data['value'] as int,
-      insight: data['insight'] as bool,
-      medicine: data['medicine'] as bool,
-      perception: data['perception'] as bool,
-      survival: data['survival'] as bool,
+      value: parseInt(data['value']),
+      insight: parseBool(data['insight']),
+      medicine: parseBool(data['medicine']),
+      perception: parseBool(data['perception']),
+      survival: parseBool(data['survival']),
     );
   }
 
@@ -144,7 +150,6 @@ class Wisdom extends Attribute {
 }
 
 class Charisma extends Attribute {
-  final bool acrobatics;
   final bool performance;
   final bool persuasion;
   final bool intimidation;
@@ -152,7 +157,6 @@ class Charisma extends Attribute {
 
   const Charisma({
     super.value,
-    this.acrobatics = false,
     this.performance = false,
     this.persuasion = false,
     this.intimidation = false,
@@ -160,20 +164,19 @@ class Charisma extends Attribute {
   });
 
   static Charisma fromMap(Map<String, dynamic> data) {
+    print(data);
     return Charisma(
-      value: data['value'] as int,
-      acrobatics: data['acrobatics'] as bool,
-      performance: data['performance'] as bool,
-      persuasion: data['persuasion'] as bool,
-      intimidation: data['intimidation'] as bool,
-      deception: data['deception'] as bool,
+      value: parseInt(data['value']),
+      performance: parseBool(data['performance']),
+      persuasion: parseBool(data['persuasion']),
+      intimidation: parseBool(data['intimidation']),
+      deception: parseBool(data['deception']),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'value': value,
-      'acrobatics': acrobatics,
       'performance': performance,
       'persuasion': persuasion,
       'intimidation': intimidation,

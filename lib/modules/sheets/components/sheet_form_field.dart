@@ -7,11 +7,19 @@ class SheetFormField extends StatefulWidget {
     required this.label,
     required this.initialValue,
     required this.onSubmit,
+    this.isNumeric = false,
+    this.small = false,
+    this.isInsideRow = false,
+    this.textAlign = TextAlign.left,
     this.helperText,
     super.key,
   });
 
+  final bool isInsideRow;
+  final bool small;
+  final bool isNumeric;
   final String? helperText;
+  final TextAlign textAlign;
   final String label;
   final String initialValue;
   final Future<void> Function(String value) onSubmit;
@@ -25,10 +33,20 @@ class _SheetFormFieldState extends State<SheetFormField> {
   String value = '';
   late FocusNode focusNode;
 
-  void makeReadOnlyOnBlur() {
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+
+  void makeReadOnly() {
     if (!focusNode.hasFocus) {
       setState(() => readOnly = true);
     }
+  }
+
+  void makeWritable() {
+    setState(() => readOnly = false);
   }
 
   FutureOr<void> onSubmit() async {
@@ -58,21 +76,9 @@ class _SheetFormFieldState extends State<SheetFormField> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    focusNode = FocusNode();
+  IconButton? get suffixIcon {
+    if (widget.small) return null;
 
-    focusNode.addListener(makeReadOnlyOnBlur);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    focusNode.removeListener(makeReadOnlyOnBlur);
-  }
-
-  IconButton get suffixIcon {
     if (readOnly) {
       return IconButton(
         iconSize: 20,
@@ -96,19 +102,42 @@ class _SheetFormFieldState extends State<SheetFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: widget.label,
-        border: InputBorder.none,
-        suffixIcon: suffixIcon,
-        helperText: widget.helperText,
+    if (widget.isInsideRow) {
+      return Expanded(child: field());
+    }
+    return field();
+  }
+
+  Widget field() {
+    return GestureDetector(
+      onDoubleTap: makeWritable,
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: widget.label,
+          border: InputBorder.none,
+          suffixIcon: suffixIcon,
+          helperText: widget.helperText,
+        ),
+        focusNode: focusNode,
+        expands: false,
+        readOnly: readOnly,
+        textAlign: widget.textAlign,
+        onFieldSubmitted: (_) => onSubmit(),
+        initialValue: widget.initialValue,
+        keyboardType: TextInputType.number,
+        onTapOutside: (_) => makeReadOnly(),
+        validator: (value) {
+          if (!widget.isNumeric) return '';
+          if (value == null || value.isEmpty) return '';
+          try {
+            int.parse(value);
+            return '';
+          } catch (_) {
+            return 'Esse campo é somente númerico.';
+          }
+        },
+        onChanged: (newValue) => setState(() => value = newValue),
       ),
-      focusNode: focusNode,
-      expands: false,
-      readOnly: readOnly,
-      onFieldSubmitted: (_) => onSubmit(),
-      initialValue: widget.initialValue,
-      onChanged: (newValue) => setState(() => value = newValue),
     );
   }
 }

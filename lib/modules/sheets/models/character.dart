@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:repege/helpers/parse_string.dart';
 
 class CharacterForm {
   late final TextEditingController alignment;
@@ -48,7 +49,6 @@ class Character {
   final String characterClass;
   final String characterName;
   final String characterRace;
-  final String createdAt;
   final String notes;
   final String ownerUID;
   final String saveDice;
@@ -61,7 +61,6 @@ class Character {
     this.characterClass = '',
     this.characterName = '',
     this.characterRace = '',
-    this.createdAt = '',
     this.notes = '',
     this.ownerUID = '',
     this.saveDice = '',
@@ -70,17 +69,18 @@ class Character {
 
   static Character fromMap(Map<String, dynamic> data) {
     return Character(
-      alignment: data['alignment'],
-      avatarURL: data['avatarURL'],
-      background: data['background'],
-      characterClass: data['characterClass'],
-      characterName: data['characterName'],
-      characterRace: data['characterRace'],
-      createdAt: data['createdAt'],
-      notes: data['notes'],
-      ownerUID: data['ownerUID'],
-      saveDice: data['saveDice'],
-      languages: List.from(data['languages']).map((e) => e.toString()).toList(),
+      alignment: parseString(data['alignment']),
+      avatarURL: parseString(data['avatarURL']),
+      background: parseString(data['background']),
+      characterClass: parseString(data['characterClass']),
+      characterName: parseString(data['characterName']),
+      characterRace: parseString(data['characterRace']),
+      notes: parseString(data['notes']),
+      ownerUID: parseString(data['ownerUID']),
+      saveDice: parseString(data['saveDice']),
+      languages: List.from(
+        data['languages'] ?? [],
+      ).map((e) => e.toString()).toList(),
     );
   }
 
@@ -92,7 +92,6 @@ class Character {
       'characterClass': characterClass,
       'characterName': characterName,
       'characterRace': characterRace,
-      'createdAt': createdAt,
       'notes': notes,
       'ownerUID': ownerUID,
       'saveDice': saveDice,
@@ -114,7 +113,7 @@ class Character {
   }
 
   ImageProvider<Object> get avatar {
-    if (avatarURL != null) {
+    if (avatarURL != null && avatarURL!.isNotEmpty) {
       return NetworkImage(avatarURL!);
     }
     return const AssetImage('assets/images/default_avatar.jpg');

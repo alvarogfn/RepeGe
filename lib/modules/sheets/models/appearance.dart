@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_string.dart';
 
 class Appearance {
   final String age;
@@ -29,24 +30,24 @@ class Appearance {
     this.weight = '',
   });
 
-  static Appearance fromMap(Map<String, Object?> data) {
+  static Appearance fromMap(Map<String, dynamic> data) {
     return Appearance(
-      age: data['age'] as String,
-      bonds: data['bonds'] as String,
-      characterAppearance: data['characterAppearance'] as String,
-      characterBackstory: data['characterBackstory'] as String,
-      eyesColor: data['eyesColor'] as String,
-      flaws: data['flaws'] as String,
-      hairColor: data['hairColor'] as String,
-      height: data['height'] as String,
-      ideals: data['ideals'] as String,
-      personalityTraits: data['personalityTraits'] as String,
-      skinColor: data['skinColor'] as String,
-      weight: data['weight'] as String,
+      age: parseString(data['age']),
+      bonds: parseString(data['bonds']),
+      characterAppearance: parseString(data['characterAppearance']),
+      characterBackstory: parseString(data['characterBackstory']),
+      eyesColor: parseString(data['eyesColor']),
+      flaws: parseString(data['flaws']),
+      hairColor: parseString(data['hairColor']),
+      height: parseString(data['height']),
+      ideals: parseString(data['ideals']),
+      personalityTraits: parseString(data['personalityTraits']),
+      skinColor: parseString(data['skinColor']),
+      weight: parseString(data['weight']),
     );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'age': age,
       'bonds': bonds,

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_int.dart';
+import 'package:repege/helpers/parse_string.dart';
 
 class Casts {
   final int level;
@@ -31,12 +33,13 @@ class Casting {
     this.casts = const [],
   });
 
-  static fromMap(Map<String, dynamic> data) {
+  static Casting fromMap(Map<String, dynamic> data) {
+    print(data);
     return Casting(
-      attackBonus: data['attackBonus'] as int,
-      castingClass: data['castingClass'] as String,
-      castingHability: data['castingHability'] as int,
-      magicResistance: data['magicResistance'] as int,
+      attackBonus: parseInt(data['attackBonus']),
+      castingClass: parseString(data['castingClass']),
+      castingHability: parseInt(data['castingHability']),
+      magicResistance: parseInt(data['magicResistance']),
     );
   }
 

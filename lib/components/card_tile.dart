@@ -23,30 +23,25 @@ class CardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        padding: padding,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (subtitle != null ||
-                title != null ||
-                trailing != null ||
-                leading != null)
-              ListTile(
-                titleTextStyle: Theme.of(context).textTheme.titleSmall,
-                subtitle: subtitle,
-                title: title,
-                leading: leading,
-                trailing: trailing,
-                minLeadingWidth: 20,
-              ),
-            if (content != null) content!,
-            Row(
-              children: actions,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (subtitle != null ||
+              title != null ||
+              trailing != null ||
+              leading != null)
+            ListTile(
+              subtitle: subtitle,
+              title: title,
+              leading: leading,
+              trailing: trailing,
             ),
-          ],
-        ),
+          if (content != null) content!,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: actions,
+          ),
+        ],
       ),
     );
   }

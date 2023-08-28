@@ -6,6 +6,7 @@ import 'package:repege/components/loading.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/sheets/components/character_avatar_picker.dart';
+import 'package:repege/modules/sheets/components/sheet_form_create_field.dart';
 import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
@@ -116,39 +117,6 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SheetField extends StatelessWidget {
-  const SheetField({
-    required this.label,
-    required this.controller,
-    this.textInputAction = TextInputAction.next,
-    super.key,
-  });
-
-  final TextEditingController controller;
-  final String label;
-  final TextInputAction textInputAction;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      child: TextFormField(
-        textInputAction: textInputAction,
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Campo obrigátorio';
-          }
-          return null;
-        },
       ),
     );
   }

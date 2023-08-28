@@ -42,17 +42,17 @@ class Sheet {
       id: id,
       ownerUID: data['ownerUID'] as String,
       appearance: Appearance.fromMap(data['appearance']),
-      attributes: Attributes.fromMap(data['attributes']),
       bag: Bag.fromMap(data['bag']),
       casting: Casting.fromMap(data['casting']),
       character: Character.fromMap(data['character']),
-      status: Status(),
+      status: Status.fromMap(data['status']),
+      attributes: Attributes.fromMap(data['attributes']),
       createdAt:
           data['createdAt'] as Timestamp? ?? Timestamp.fromDate(DateTime.now()),
     );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'ownerUID': ownerUID,

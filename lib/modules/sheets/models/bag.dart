@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_int.dart';
 
 class Bag {
   final int copper;
@@ -17,11 +18,11 @@ class Bag {
 
   static Bag fromMap(Map<String, Object?> data) {
     return Bag(
-      copper: data['copper'] as int,
-      electrum: data['electrum'] as int,
-      gold: data['gold'] as int,
-      platinum: data['platinum'] as int,
-      silver: data['silver'] as int,
+      copper: parseInt(data['copper']),
+      electrum: parseInt(data['electrum']),
+      gold: parseInt(data['gold']),
+      platinum: parseInt(data['platinum']),
+      silver: parseInt(data['silver']),
     );
   }
 
