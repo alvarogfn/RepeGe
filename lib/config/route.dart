@@ -13,6 +13,8 @@ import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 import 'package:repege/modules/spell/screens/spell_details_screen.dart';
 import 'package:repege/modules/spell/screens/spell_search_screen.dart';
+import 'package:repege/modules/tables/screens/table_create_screen.dart';
+import 'package:repege/modules/tables/screens/table_home_screen.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
@@ -92,6 +94,18 @@ class CustomRouter {
           ),
         ],
       ),
+      GoRoute(
+        path: RoutesName.tables.path,
+        name: RoutesName.tables.name,
+        builder: (context, state) => const TableHomeScreen(),
+        routes: [
+          GoRoute(
+            path: RoutesName.tablesCreate.path,
+            name: RoutesName.tablesCreate.name,
+            builder: (context, state) => const TableCreateScreen(),
+          ),
+        ],
+      )
     ],
     redirect: (context, state) async {
       final authState = context.read<AuthService>().state;

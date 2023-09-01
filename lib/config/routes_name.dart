@@ -16,6 +16,7 @@ enum RoutesName {
   spellDetails(name: 'spell-details', path: 'details'),
 
   tables(name: 'tables', path: '/tables'),
+  tablesCreate(name: 'tables-create', path: 'create'),
   loading(name: 'loading', path: '/loading');
 
   const RoutesName({
