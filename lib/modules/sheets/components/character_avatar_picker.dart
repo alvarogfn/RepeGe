@@ -43,9 +43,7 @@ class _CharacterAvatarPickerState extends State<CharacterAvatarPicker> {
             top: 0,
             right: 0,
             child: IconButton(
-              onPressed: () {
-                print('hey');
-              },
+              onPressed: () {},
               color: Colors.white,
               icon: const Icon(
                 Icons.camera_alt,

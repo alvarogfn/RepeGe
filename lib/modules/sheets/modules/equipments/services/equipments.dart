@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_string.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
+import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
+import 'package:repege/modules/sheets/modules/equipments/models/weapon.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class Equipments {
@@ -7,26 +10,61 @@ class Equipments {
 
   late final CollectionReference<Equipment> collectionReference =
       sheetReference.collection('equipments').withConverter(
-            fromFirestore: (snapshot, options) =>
-                Equipment.fromMap(snapshot.data()!),
-            toFirestore: (equipment, options) => equipment.toMap(),
+            fromFirestore: _fromFirestore,
+            toFirestore: _toFirestore,
           );
 
   Equipments({
     required this.sheetReference,
   });
 
-  Future<Equipment> createEquipment(Map<String, dynamic> data) async {
-    final equipmentReference = collectionReference.doc();
+  Equipment _fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data()!;
+    final type = equipmentTypesFromString(data['type']);
+    final name = parseString(data['name']);
+    final description = parseString(data['description']);
+    final weight = parseString(data['weight']);
+    final id = parseString(data['id']);
+    final price = parseString(data['price']);
+    final ref = data['ref'];
+    final createdAt = data['createdAt'];
 
-    data.putIfAbsent('ref', () => equipmentReference);
-    data.putIfAbsent('createdAt', () => FieldValue.serverTimestamp());
+    if (type == EquipmentTypes.weapon) {
+      return Weapon(
+        kind: parseString(data['kind']),
+        damage: parseString(data['damage']),
+        description: description,
+        ref: ref,
+        id: id,
+        createdAt: createdAt,
+        name: name,
+        price: price,
+        weight: weight,
+      );
+    }
 
-    final equipment = Equipment.fromMap(data);
+    return Equipment(
+      id: id,
+      ref: ref,
+      name: name,
+      description: description,
+      createdAt: createdAt,
+      price: price,
+      weight: weight,
+      type: type,
+    );
+  }
 
-    await equipmentReference.set(equipment);
-
-    return equipment;
+  Map<String, dynamic> _toFirestore(
+    Equipment equipment,
+    SetOptions? options,
+  ) {
+    return equipment
+        .toMap()
+        .putIfAbsent('createdAt', () => FieldValue.serverTimestamp());
   }
 
   Future<void> deleteEquipment(Equipment equipment) async {

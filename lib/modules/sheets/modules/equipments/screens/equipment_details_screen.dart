@@ -10,8 +10,12 @@ class EquipmentDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: FullScreenScroll(child: Container()),
+      appBar: AppBar(
+        title: Text(equipment.name),
+      ),
+      body: FullScreenScroll(
+        child: Container(),
+      ),
     );
   }
 }

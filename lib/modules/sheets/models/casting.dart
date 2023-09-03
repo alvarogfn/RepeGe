@@ -34,7 +34,6 @@ class Casting {
   });
 
   static Casting fromMap(Map<String, dynamic> data) {
-    print(data);
     return Casting(
       attackBonus: parseInt(data['attackBonus']),
       castingClass: parseString(data['castingClass']),

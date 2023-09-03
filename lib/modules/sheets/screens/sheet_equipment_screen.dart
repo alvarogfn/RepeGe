@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/helpers/show_keyboard_bottom_sheet.dart';
+import 'package:go_router/go_router.dart';
+import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/sheets/components/bag_form.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
+import 'package:repege/modules/sheets/modules/equipments/components/equipment_list.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class SheetEquipmentScreen extends StatelessWidget {
@@ -27,58 +28,40 @@ class SheetEquipmentScreen extends StatelessWidget {
           BagForm(bag: bag, ref: ref),
           Flexible(
             child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           'Equipamentos',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w900),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         IconButton(
+                          icon: const Icon(Icons.add),
                           onPressed: () {
-                            showKeyboardBottomSheet(
-                              context,
-                              builder: (context) {
-                                return const Column(
-                                  children: [],
-                                );
-                              },
+                            final equipment =
+                                context.pushNamed<Map<String, dynamic>>(
+                              RoutesName.equipments.name,
                             );
                           },
-                          icon: const Icon(Icons.search),
                         )
                       ],
                     ),
-                    Expanded(
-                      child: StreamBuilder(
-                        initialData: const [],
-                        builder: (context, snapshot) {
-                          if (isSnapshotLoading(snapshot)) {
-                            return const Text('carregando...');
-                          }
-
-                          return ListView.builder(
-                            itemCount: 40,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(index.toString()),
-                                subtitle: Text(index.toString()),
-                                trailing: Text(index.toString()),
-                                leading: Text(index.toString()),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                  ),
+                  Expanded(
+                    child: EquipmentList(
+                      equipments: sheet.equipments,
+                      sheet: sheet,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           )

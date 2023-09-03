@@ -20,7 +20,6 @@ class BagForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(bag.copper);
     return Card(
       child: Container(
         padding: const EdgeInsets.all(10),

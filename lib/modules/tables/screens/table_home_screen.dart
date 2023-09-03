@@ -15,16 +15,16 @@ class TableHomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () => context.pushNamed(RoutesName.tablesCreate.name),
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
           )
         ],
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: StreamBuilder(
-        initialData: ['a', 'b', 'c'],
+        initialData: const ['a', 'b', 'c'],
         builder: (context, snapshot) {
           if (isSnapshotLoading(snapshot)) {
-            return Loading();
+            return const Loading();
           }
 
           if (snapshot.hasError) {
@@ -48,8 +48,8 @@ class TableHomeScreen extends StatelessWidget {
                         trailing: PopupMenuButton(
                           itemBuilder: (context) {
                             return [
-                              PopupMenuItem(child: Text('Detalhes')),
-                              PopupMenuItem(child: Text('Excluir')),
+                              const PopupMenuItem(child: Text('Detalhes')),
+                              const PopupMenuItem(child: Text('Excluir')),
                             ];
                           },
                         ),
@@ -59,11 +59,11 @@ class TableHomeScreen extends StatelessWidget {
                             'assets/images/default_profile_picture.png',
                           ),
                         ),
-                        title: Text(
+                        title: const Text(
                           'Bastardos em Glórios',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text('Mestre Fernando'),
+                        subtitle: const Text('Mestre Fernando'),
                       ),
                       Image.asset(
                         'assets/images/default_avatar.jpg',

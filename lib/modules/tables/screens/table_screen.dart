@@ -14,7 +14,7 @@ class _TableScreenState extends State<TableScreen> {
       appBar: AppBar(),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (destination) {},
-        destinations: [
+        destinations: const [
           NavigationDestination(icon: Icon(Icons.history), label: 'Atos')
         ],
       ),

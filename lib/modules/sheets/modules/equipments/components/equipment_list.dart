@@ -17,22 +17,26 @@ class EquipmentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      initialData: const [],
       stream: equipments.stream(),
       builder: (context, snapshot) {
         if (isSnapshotLoading(snapshot)) {
-          return const Text('Carregando...');
+          return const Text('carregando...');
         }
 
         if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
+          return Text(snapshot.error!.toString());
         }
 
         final equipments = snapshot.data!;
 
-        return ListView.builder(itemBuilder: (context, index) {
-          final equipment = equipments[index];
-          return EquipmentItem(equipment);
-        });
+        return ListView.builder(
+          itemCount: equipments.length,
+          itemBuilder: (context, index) {
+            final equipment = equipments[index];
+            return EquipmentItem(equipment);
+          },
+        );
       },
     );
   }

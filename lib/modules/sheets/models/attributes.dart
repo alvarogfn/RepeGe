@@ -164,7 +164,6 @@ class Charisma extends Attribute {
   });
 
   static Charisma fromMap(Map<String, dynamic> data) {
-    print(data);
     return Charisma(
       value: parseInt(data['value']),
       performance: parseBool(data['performance']),

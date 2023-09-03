@@ -6,6 +6,7 @@ import 'package:repege/modules/sheets/models/casting.dart';
 import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/models/spells.dart';
 import 'package:repege/modules/sheets/models/status.dart';
+import 'package:repege/modules/sheets/modules/equipments/services/equipments.dart';
 import 'package:repege/modules/user/services/user.dart';
 
 class Sheet {
@@ -21,6 +22,7 @@ class Sheet {
 
   late final DocumentReference<Sheet> ref = collection().doc(id);
   late final Spells spells = Spells(sheetID: id, sheetRef: ref);
+  late final Equipments equipments = Equipments(sheetReference: ref);
 
   Sheet({
     required this.id,
@@ -47,8 +49,8 @@ class Sheet {
       character: Character.fromMap(data['character']),
       status: Status.fromMap(data['status']),
       attributes: Attributes.fromMap(data['attributes']),
-      createdAt:
-          data['createdAt'] as Timestamp? ?? Timestamp.fromDate(DateTime.now()),
+      createdAt: (data['createdAt'] as Timestamp?) ??
+          Timestamp.fromDate(DateTime.now()),
     );
   }
 

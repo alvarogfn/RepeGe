@@ -7,16 +7,16 @@ class TableCreateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criar nova campanha'),
+        title: const Text('Criar nova campanha'),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
           ),
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         child: Form(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,7 +42,7 @@ class TableCreateScreen extends StatelessWidget {
               const SizedBox(height: 30),
               OutlinedButton(
                 onPressed: () {},
-                child: SizedBox(
+                child: const SizedBox(
                   height: 70,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
