@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_string.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
 
 class Equipment {
@@ -9,7 +10,7 @@ class Equipment {
   final String description;
   final String price;
   final String weight;
-  final Timestamp createdAt;
+  final Timestamp? createdAt;
 
   Equipment({
     required this.id,
@@ -19,8 +20,20 @@ class Equipment {
     required this.createdAt,
     required this.price,
     required this.weight,
-    required this.type,
+    this.type = EquipmentTypes.item,
   });
+
+  static Equipment fromMap(Map<String, dynamic> data) {
+    return Equipment(
+      description: parseString(data['description']),
+      ref: data['ref'],
+      id: parseString(data['id']),
+      createdAt: data['createdAt'],
+      name: parseString(data['name']),
+      price: parseString(data['price']),
+      weight: parseString(data['weight']),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -31,7 +44,7 @@ class Equipment {
       'createdAt': createdAt,
       'price': price,
       'weight': weight,
-      'type': type,
+      'type': type.name,
     };
   }
 }

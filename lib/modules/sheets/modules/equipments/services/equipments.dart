@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_bool.dart';
+import 'package:repege/helpers/parse_int.dart';
 import 'package:repege/helpers/parse_string.dart';
+import 'package:repege/modules/sheets/modules/equipments/models/armor.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/weapon.dart';
@@ -8,7 +11,7 @@ import 'package:repege/modules/sheets/services/sheet.dart';
 class Equipments {
   late final DocumentReference<Sheet> sheetReference;
 
-  late final CollectionReference<Equipment> collectionReference =
+  late final CollectionReference<Equipment> ref =
       sheetReference.collection('equipments').withConverter(
             fromFirestore: _fromFirestore,
             toFirestore: _toFirestore,
@@ -23,21 +26,40 @@ class Equipments {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data()!;
-    final type = equipmentTypesFromString(data['type']);
     final name = parseString(data['name']);
     final description = parseString(data['description']);
     final weight = parseString(data['weight']);
-    final id = parseString(data['id']);
+    final id = snapshot.id;
     final price = parseString(data['price']);
-    final ref = data['ref'];
-    final createdAt = data['createdAt'];
+
+    final equipmentRef = ref.doc(snapshot.id);
+
+    final createdAt = data['createdAt'] ?? Timestamp.fromDate(DateTime.now());
+
+    final type = equipmentTypesFromString(data['type']);
 
     if (type == EquipmentTypes.weapon) {
       return Weapon(
         kind: parseString(data['kind']),
         damage: parseString(data['damage']),
         description: description,
-        ref: ref,
+        ref: equipmentRef,
+        id: id,
+        createdAt: createdAt,
+        name: name,
+        price: price,
+        weight: weight,
+      );
+    }
+
+    if (type == EquipmentTypes.armor) {
+      return Armor(
+        kind: parseString(data['kind']),
+        armorClass: parseString(data['armorClass']),
+        isStealth: parseBool(data['isStealth']),
+        minStrength: parseInt(data['minStrength']),
+        description: description,
+        ref: equipmentRef,
         id: id,
         createdAt: createdAt,
         name: name,
@@ -48,7 +70,7 @@ class Equipments {
 
     return Equipment(
       id: id,
-      ref: ref,
+      ref: equipmentRef,
       name: name,
       description: description,
       createdAt: createdAt,
@@ -62,17 +84,32 @@ class Equipments {
     Equipment equipment,
     SetOptions? options,
   ) {
-    return equipment
-        .toMap()
-        .putIfAbsent('createdAt', () => FieldValue.serverTimestamp());
+    return equipment.toMap()
+      ..putIfAbsent('createdAt', () => FieldValue.serverTimestamp());
   }
 
   Future<void> deleteEquipment(Equipment equipment) async {
     return equipment.ref.delete();
   }
 
+  Future<void> addEquipmentFromMap(Map<String, dynamic> data) {
+    final equipmentRef = ref.doc();
+
+    EquipmentTypes type = data['type'];
+
+    data.putIfAbsent('ref', () => equipmentRef);
+    switch (type) {
+      case EquipmentTypes.armor:
+        return equipmentRef.set(Armor.fromMap(data));
+      case EquipmentTypes.weapon:
+        return equipmentRef.set(Weapon.fromMap(data));
+      default:
+        return equipmentRef.set(Equipment.fromMap(data));
+    }
+  }
+
   Stream<List<Equipment>> stream() {
-    return collectionReference.snapshots().map((snapshots) {
+    return ref.snapshots().map((snapshots) {
       return snapshots.docs.map((doc) {
         return doc.data();
       }).toList();

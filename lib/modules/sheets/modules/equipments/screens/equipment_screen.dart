@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
 
-class EquipmentDetailsScreen extends StatelessWidget {
-  const EquipmentDetailsScreen(this.equipment, {super.key});
+class EquipmentScreen extends StatelessWidget {
+  const EquipmentScreen(this.equipment, {super.key});
 
   final Equipment equipment;
 

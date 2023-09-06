@@ -5,6 +5,7 @@ import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/sheets/components/bag_form.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
 import 'package:repege/modules/sheets/modules/equipments/components/equipment_list.dart';
+import 'package:repege/modules/sheets/modules/equipments/services/equipments.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class SheetEquipmentScreen extends StatelessWidget {
@@ -14,6 +15,17 @@ class SheetEquipmentScreen extends StatelessWidget {
 
   DocumentReference<Sheet> get ref => sheet.ref;
   Bag get bag => sheet.bag;
+  Equipments get equipments => sheet.equipments;
+
+  Future<void> createEquipment(BuildContext context) async {
+    final equipment = await context.pushNamed<Map<String, dynamic>>(
+      RoutesName.equipmentsForm.name,
+    );
+
+    if (equipment == null) return;
+
+    return equipments.addEquipmentFromMap(equipment);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +57,7 @@ class SheetEquipmentScreen extends StatelessWidget {
                         ),
                         IconButton(
                           icon: const Icon(Icons.add),
-                          onPressed: () {
-                            final equipment =
-                                context.pushNamed<Map<String, dynamic>>(
-                              RoutesName.equipments.name,
-                            );
-                          },
+                          onPressed: () => createEquipment(context),
                         )
                       ],
                     ),

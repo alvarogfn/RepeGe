@@ -36,15 +36,16 @@ class Weapon extends Equipment {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'kind': '',
-      'damage': '',
-      'description': '',
-      'ref': '',
-      'id': '',
-      'createdAt': '',
-      'name': '',
-      'price': '',
-      'weight': '',
+      'kind': kind,
+      'damage': damage,
+      'description': description,
+      'ref': ref,
+      'id': id,
+      'createdAt': createdAt,
+      'name': name,
+      'price': price,
+      'weight': weight,
+      'type': type.name,
     };
   }
 }

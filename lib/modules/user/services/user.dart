@@ -103,9 +103,7 @@ class User {
     return userDoc.data()!;
   }
 
-  static Map<String, Object?> toFirestore(User? user, SetOptions? options) {
-    if (user == null) return {};
-
+  static Map<String, Object?> toFirestore(User user, SetOptions? options) {
     return {
       'avatarURL': user.avatarURL,
       'email': user.email,
@@ -115,13 +113,11 @@ class User {
     };
   }
 
-  static User? fromFirestore(
+  static User fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> doc,
     SnapshotOptions? options,
   ) {
-    final userDoc = doc.data();
-
-    if (userDoc == null) return null;
+    final userDoc = doc.data()!;
 
     return User(
       avatarURL: userDoc['avatarURL'],

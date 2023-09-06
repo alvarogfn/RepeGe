@@ -8,7 +8,7 @@ import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/authentication/models/auth_state.dart';
 import 'package:repege/modules/home/screens/home_page.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
-import 'package:repege/modules/sheets/modules/equipments/screens/equipment_details_screen.dart';
+import 'package:repege/modules/sheets/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/sheets/modules/equipments/screens/equipment_form_screen.dart';
 import 'package:repege/modules/sheets/modules/equipments/screens/equipment_search_screen.dart';
 import 'package:repege/modules/sheets/screens/sheet_screen.dart';
@@ -99,7 +99,7 @@ class CustomRouter {
         ],
       ),
       GoRoute(
-        builder: (context, state) => const EquipmentFormScreen(),
+        builder: (context, state) => EquipmentScreen(state.extra as Equipment),
         name: RoutesName.equipments.name,
         path: RoutesName.equipments.path,
         routes: [
@@ -109,11 +109,11 @@ class CustomRouter {
             name: RoutesName.equipmentsSearch.name,
           ),
           GoRoute(
-            builder: (context, state) => EquipmentDetailsScreen(
-              state.extra as Equipment,
+            builder: (context, state) => EquipmentFormScreen(
+              state.extra as Equipment?,
             ),
-            path: RoutesName.equipmentsDetails.path,
-            name: RoutesName.equipmentsDetails.name,
+            path: RoutesName.equipmentsForm.path,
+            name: RoutesName.equipmentsForm.name,
           ),
         ],
       ),

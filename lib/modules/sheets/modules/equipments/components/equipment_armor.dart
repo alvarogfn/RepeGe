@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
+import 'package:repege/modules/sheets/modules/equipments/models/armor.dart';
 
-class EquipmentItem extends StatelessWidget {
-  const EquipmentItem({
+class EquipmentArmor extends StatelessWidget {
+  const EquipmentArmor({
     super.key,
-    required this.equipment,
+    required this.armor,
   });
 
-  final Equipment equipment;
+  final Armor armor;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(equipment.name),
-      trailing: Text('${equipment.price}, ${equipment.weight}'),
+      title: Text(armor.name),
+      trailing: Text('${armor.price}, ${armor.weight}'),
       subtitle: Text(
-        equipment.description,
+        armor.description,
         maxLines: 1,
         style: const TextStyle(overflow: TextOverflow.ellipsis),
       ),
@@ -25,7 +25,7 @@ class EquipmentItem extends StatelessWidget {
         width: 20,
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: Icon(Rpg.potion, size: 25, color: Colors.black),
+          child: Icon(Rpg.shield, size: 25, color: Colors.black),
         ),
       ),
     );

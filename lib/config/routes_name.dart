@@ -18,6 +18,7 @@ enum RoutesName {
   equipments(name: 'equipments', path: '/equipments'),
   equipmentsSearch(name: 'equipments-search', path: 'search'),
   equipmentsDetails(name: 'equipments-details', path: 'details'),
+  equipmentsForm(name: 'equipments-form', path: 'form'),
 
   tables(name: 'tables', path: '/tables'),
   tablesCreate(name: 'tables-create', path: 'create'),

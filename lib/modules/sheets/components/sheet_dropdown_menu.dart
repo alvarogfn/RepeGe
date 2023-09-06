@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 
-class SheetDropdownMenu<T> extends StatefulWidget {
+class SheetDropdownMenu<T> extends StatelessWidget {
   const SheetDropdownMenu({
     required this.onSelected,
     required this.items,
     required this.labelText,
     required this.initialSelection,
     required this.builder,
+    this.margin = const EdgeInsets.symmetric(vertical: 7.5),
     super.key,
   });
 
   final List<T> items;
+  final EdgeInsets margin;
   final String labelText;
   final Function(T?)? onSelected;
   final T? initialSelection;
   final DropdownMenuEntry<T> Function(T) builder;
 
   @override
-  State<SheetDropdownMenu<T>> createState() => _SheetDropdownMenuState<T>();
-}
-
-class _SheetDropdownMenuState<T> extends State<SheetDropdownMenu<T>> {
-  @override
   Widget build(BuildContext context) {
-    return DropdownMenu<T>(
-      enableSearch: false,
-      onSelected: widget.onSelected,
-      label: Text(widget.labelText),
-      initialSelection: widget.initialSelection,
-      dropdownMenuEntries:
-          widget.items.map<DropdownMenuEntry<T>>(widget.builder).toList(),
+    return Container(
+      margin: margin,
+      child: LayoutBuilder(builder: (context, constraints) {
+        return DropdownMenu<T>(
+          width: constraints.maxWidth,
+          enableSearch: false,
+          onSelected: onSelected,
+          label: Text(labelText),
+          initialSelection: initialSelection,
+          dropdownMenuEntries: items.map(builder).toList(),
+        );
+      }),
     );
   }
 }
