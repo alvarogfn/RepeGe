@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/config/routes_name.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/modules/authentication/services/authentication_service.dart';
+import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/password_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
@@ -21,7 +20,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final _authenticationService = AuthenticationService();
+  final _authService = AuthService();
 
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
@@ -36,7 +35,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: _authenticationService.stream(),
+        stream: _authService.stream(),
         builder: ((context, snapshot) {
           if (isSnapshotLoading(snapshot) || _loading) {
             return const Dialog.fullscreen(
@@ -128,9 +127,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: 20),
                     Center(
-                      child: TextButton(
+                    child: TextButton(
                         onPressed: () {
-                          context.pushNamed(RoutesName.signin.name);
+                          context.pop();
                         },
                         child: const Text('Já possui uma conta? Fazer login.'),
                       ),
@@ -158,28 +157,13 @@ class _SignupScreenState extends State<SignupScreen> {
     try {
       setState(() => _loading = true);
 
-      await _authenticationService.signup(
+      await _authService.signup(
         username: usernameController.text,
         email: emailController.text,
         password: passwordController.text,
       );
 
-      await _authenticationService.sendEmailVerification();
-      await _authenticationService.logout();
-
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Confirmação de E-mail.'),
-              content: Text(
-                'Uma confirmação de email foi enviada para ${emailController.text}.Você precisa confirmar antes de poder se entrar.',
-              ),
-            );
-          },
-        );
-      }
+      await _authService.sendEmailVerification();
     } on FirebaseAuthException catch (error) {
       showDialog(
         context: context,

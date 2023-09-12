@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
-import 'package:repege/modules/authentication/services/authentication_service.dart';
-import 'package:repege/modules/home/components/icon_text_button.dart';
-import 'package:repege/modules/home/components/navigation_list_item.dart';
-import 'package:repege/modules/home/components/user_leading.dart';
+import 'package:repege/modules/user/components/icon_text_button.dart';
+import 'package:repege/modules/user/components/navigation_list_item.dart';
+import 'package:repege/modules/user/components/user_leading.dart';
 import 'package:repege/screens/loading_page.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -23,7 +20,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       () => showDialog(
         context: context,
         builder: (context) {
-          AuthenticationService().logout();
+          AuthService().logout();
           return const Dialog.fullscreen(child: LoadingPage());
         },
       ),

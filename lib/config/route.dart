@@ -7,7 +7,6 @@ import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/authentication/screens/signin_screen.dart';
 import 'package:repege/modules/authentication/screens/signup_screen.dart';
 import 'package:repege/modules/authentication/models/auth_state.dart';
-import 'package:repege/modules/home/screens/home_page.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/sheets/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/sheets/modules/equipments/screens/equipment_form_screen.dart';
@@ -21,12 +20,12 @@ import 'package:repege/modules/spell/screens/spell_search_screen.dart';
 import 'package:repege/modules/tables/screens/table_create_screen.dart';
 import 'package:repege/modules/tables/screens/table_home_screen.dart';
 import 'package:repege/modules/user/modules/profile/screens/profile_screen.dart';
+import 'package:repege/modules/user/screens/home_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
 
 class CustomRouter {
-  final GlobalKey<NavigatorState> _rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'root');
+  final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
@@ -39,7 +38,7 @@ class CustomRouter {
       GoRoute(
         path: RoutesName.home.path,
         name: RoutesName.home.name,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => HomeScreen(),
         routes: const [],
       ),
       GoRoute(

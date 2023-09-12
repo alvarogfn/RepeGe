@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/components/loading.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/sheets/components/character_avatar_picker.dart';
 import 'package:repege/modules/sheets/components/sheet_form_create_field.dart';
 import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
+import 'package:repege/modules/user/services/user_service.dart';
 
 class SheetsCreateScreen extends StatefulWidget {
   const SheetsCreateScreen({super.key});
@@ -35,9 +35,11 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
     );
 
     try {
-      final user = context.read<AuthService>().user!;
+      final userService = context.read<UserService>();
+      final user = await userService.user.get();
+
       final character = characterForm.save();
-      final sheet = await Sheet.createSheet(user, character: character);
+      final sheet = await Sheet.createSheet(user.data()!, character: character);
 
       if (context.mounted) context.pop();
 
@@ -78,8 +80,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                       alignment: Alignment.centerLeft,
                       child: const Text(
                         'Características',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900, fontSize: 20),
+                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                       ),
                     ),
                   ),

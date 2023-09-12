@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/modules/authentication/services/authentication_service.dart';
+import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/utils/validations/email_validation.dart';
 import 'package:repege/utils/validations/password_validation.dart';
 import 'package:repege/utils/validations/required_validation.dart';
@@ -20,7 +20,7 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreenState extends State<SigninScreen> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _form = {};
-  final _authenticationService = AuthenticationService();
+  final _authService = AuthService();
   bool _loading = false;
 
   void _handleSubmit() async {
@@ -33,7 +33,7 @@ class _SigninScreenState extends State<SigninScreen> {
     try {
       setState(() => _loading = true);
 
-      await _authenticationService.signin(
+      await _authService.signin(
         email: _form['email']!,
         password: _form['password']!,
       );
@@ -68,7 +68,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: _authenticationService.stream(),
+        stream: _authService.stream(),
         builder: ((context, snapshot) {
           if (isSnapshotLoading(snapshot) || _loading) {
             return const Dialog.fullscreen(
