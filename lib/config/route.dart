@@ -1,10 +1,11 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/authentication/screens/signin_screen.dart';
 import 'package:repege/modules/authentication/screens/signup_screen.dart';
-import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/authentication/models/auth_state.dart';
 import 'package:repege/modules/home/screens/home_page.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
@@ -27,11 +28,12 @@ class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'root');
 
-  Listenable? refreshListenable;
-
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
     initialLocation: '/',
+    refreshListenable: GoRouterRefreshListenable(
+      FirebaseAuth.instance.authStateChanges(),
+    ),
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
@@ -131,29 +133,49 @@ class CustomRouter {
       )
     ],
     redirect: (context, state) async {
-      final authState = context.read<AuthService>().state;
       final bool toUnauth = RoutesName.values
           .where((element) => element.state == AuthState.unauth)
           .map((e) => e.path)
           .contains(state.matchedLocation);
 
-      if (authState == AuthState.unauth && toUnauth) {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null && toUnauth) {
         return null;
       }
 
-      if (authState == AuthState.unauth && !toUnauth) {
+      if (user == null && !toUnauth) {
         return RoutesName.signin.path;
       }
 
-      if (authState == AuthState.auth && toUnauth) {
+      if (user != null && toUnauth) {
         return RoutesName.home.path;
       }
 
-      if (authState == AuthState.auth && !toUnauth) {
+      if (user != null && !toUnauth) {
         return null;
       }
 
       return null;
     },
   );
+}
+
+class GoRouterRefreshListenable extends ChangeNotifier {
+  GoRouterRefreshListenable(Stream stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+      (_) {
+        notifyListeners();
+      },
+    );
+  }
+
+  late final StreamSubscription _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 }

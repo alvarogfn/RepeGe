@@ -12,12 +12,9 @@ class Layout extends StatelessWidget {
       child: Center(
         child: Container(
           margin: const EdgeInsets.all(10),
-          child: Card(
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: child,
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: child,
           ),
         ),
       ),

@@ -140,12 +140,3 @@ class SpellDetailsScreen extends StatelessWidget {
     return 'Efeito/Dano da Magia: **${spell.effectType}.**';
   }
 }
-
-class _Layout extends StatelessWidget {
-  const _Layout();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}

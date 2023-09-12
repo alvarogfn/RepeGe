@@ -1,19 +1,15 @@
-import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/helpers/dismiss_keyboard.dart';
-import 'package:repege/modules/authentication/components/email_form_field.dart';
-import 'package:repege/modules/authentication/components/authentication_error_card.dart';
-import 'package:repege/modules/authentication/components/layout.dart';
-import 'package:repege/modules/authentication/components/loading_button.dart';
-import 'package:repege/modules/authentication/components/password_form_field.dart';
-import 'package:repege/modules/authentication/components/signin_button.dart';
-import 'package:repege/modules/authentication/components/username_form_field.dart';
-import 'package:repege/modules/authentication/dialogs/send_email_confirmation.dart';
-import 'package:repege/modules/authentication/models/signup_form_model.dart';
-import 'package:repege/modules/authentication/services/auth_service.dart';
-import 'package:repege/components/headline.dart';
+import 'package:repege/components/full_screen_scroll.dart';
+import 'package:repege/config/routes_name.dart';
+import 'package:repege/helpers/is_snapshot_loading.dart';
+import 'package:repege/modules/authentication/services/authentication_service.dart';
+import 'package:repege/utils/validations/email_validation.dart';
+import 'package:repege/utils/validations/password_validation.dart';
+import 'package:repege/utils/validations/required_validation.dart';
+import 'package:repege/utils/validations/username_validation.dart';
+import 'package:repege/utils/validations/validations.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -24,86 +20,188 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  final SignupFormModel _form = SignupFormModel();
 
-  Future<bool> _future = Future.value(false);
+  final _authenticationService = AuthenticationService();
 
-  Future<bool> _handleSubmit(BuildContext context) async {
-    final isValid = _formKey.currentState?.validate();
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final repasswordController = TextEditingController();
 
-    if (isValid == null || isValid == false) return false;
-
-    try {
-      final authService = context.read<AuthService>();
-
-      dismissKeyboard(context);
-
-      await authService.signup(
-        username: _form.usernameText,
-        email: _form.emailText,
-        password: _form.passwordText,
-      );
-
-      if (context.mounted) {
-        await sendEmailConfirmation(context, email: _form.emailText);
-      }
-
-      if (context.mounted) context.pop<String>(_form.emailText);
-
-      return true;
-    } on Exception catch (e) {
-      return Future.error(e);
-    }
-  }
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      body: Layout(
-        child: FutureBuilder(
-          future: _future,
-          builder: (context, snap) {
-            return Form(
+      body: StreamBuilder(
+        stream: _authenticationService.stream(),
+        builder: ((context, snapshot) {
+          if (isSnapshotLoading(snapshot) || _loading) {
+            return const Dialog.fullscreen(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          return FullScreenScroll(
+            child: Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  const Headline(
-                    'RepeGe',
-                    fontSize: 65,
-                    fontWeight: FontWeight.w900,
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                  ),
-                  const Headline(
-                    'Registro',
-                    fontSize: 25,
-                    fontWeight: FontWeight.w900,
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                  ),
-                  const SigninButton(),
-                  UsernameFormField(controller: _form.username),
-                  EmailFormField(controller: _form.email),
-                  PasswordFormField(label: 'Senha', controller: _form.password),
-                  PasswordFormField(
-                    label: 'Repita sua senha',
-                    controller: _form.repassword,
-                    helperText: 'As senhas devem coincidir.',
-                    validation: (_) => _form.passwordsValidity,
-                    action: TextInputAction.next,
-                  ),
-                  LoadingButton(
-                    'Cadastre-se',
-                    onPressed: () => setState(() {
-                      _future = _handleSubmit(context);
-                    }),
-                    snapshot: snap,
-                  ),
-                  AuthenticationErrorCard(snapshot: snap),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 100, 15, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'RepeGe',
+                      style: textTheme.displayLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Login',
+                      style: textTheme.displayMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 60),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Nome de usuário'),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.name,
+                      controller: usernameController,
+                      maxLength: 10,
+                      validator: (username) => Validator.validateWith(username, [
+                        RequiredValidation(),
+                        UsernameValidation(),
+                      ]),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Email'),
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                      validator: (email) => Validator.validateWith(email, [
+                        RequiredValidation(),
+                        EmailValidation(),
+                      ]),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Senha'),
+                      textInputAction: TextInputAction.done,
+                      obscureText: true,
+                      keyboardType: TextInputType.visiblePassword,
+                      controller: passwordController,
+                      validator: (repassword) {
+                        final validation = Validator.validateWith(repassword, [
+                          RequiredValidation(),
+                          PasswordValidation(),
+                        ]);
+                        if (validation != null) return validation;
+                        if (passwordController.text != repasswordController.text) return 'As senhas não combinam.';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Repita sua senha'),
+                      textInputAction: TextInputAction.done,
+                      obscureText: true,
+                      keyboardType: TextInputType.visiblePassword,
+                      controller: repasswordController,
+                      validator: (repassword) {
+                        final validation = Validator.validateWith(repassword, [
+                          RequiredValidation(),
+                          PasswordValidation(),
+                        ]);
+                        if (validation != null) return validation;
+                        if (passwordController.text != repasswordController.text) return 'As senhas não combinam.';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      onPressed: isSnapshotLoading(snapshot) ? null : _handleSubmit,
+                      child: const Text('Criar Conta'),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          context.pushNamed(RoutesName.signin.name);
+                        },
+                        child: const Text('Já possui uma conta? Fazer login.'),
+                      ),
+                    ),
+                    if (snapshot.hasError) Text(snapshot.error.toString())
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  void _handleSubmit() async {
+    final currentState = _formKey.currentState;
+    if (currentState == null) return;
+
+    final isValid = currentState.validate();
+    if (!isValid) return;
+
+    currentState.save();
+
+    try {
+      setState(() => _loading = true);
+
+      await _authenticationService.signup(
+        username: usernameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      await _authenticationService.sendEmailVerification();
+      await _authenticationService.logout();
+
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Confirmação de E-mail.'),
+              content: Text(
+                'Uma confirmação de email foi enviada para ${emailController.text}.Você precisa confirmar antes de poder se entrar.',
               ),
             );
           },
-        ),
-      ),
-    );
+        );
+      }
+    } on FirebaseAuthException catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(error.code),
+            content: error.message != null ? Text(error.message!) : null,
+          );
+        },
+      );
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Não foi possível criar a sua conta.'),
+            content: Text(error.toString()),
+          );
+        },
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 }

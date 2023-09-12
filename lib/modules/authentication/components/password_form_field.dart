@@ -31,7 +31,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
 
   Color get primaryColor => Theme.of(context).colorScheme.primary;
 
-  Icon get eye_icon {
+  Icon get eyeIcon {
     if (_isObscure) {
       return Icon(Octicons.eye, size: 19, color: primaryColor);
     }
@@ -60,7 +60,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
             onTap: toggle,
             child: Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: eye_icon,
+              child: eyeIcon,
             ),
           ),
         ),

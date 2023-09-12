@@ -30,15 +30,15 @@ final lightTheme = ThemeData(
     indicator: BoxDecoration(),
   ),
   textTheme: const TextTheme(
-    titleLarge: TextStyle(
-      fontSize: 23,
-      fontWeight: FontWeight.w700,
+    displayLarge: TextStyle(
+      fontSize: 40,
+      fontWeight: FontWeight.w900,
+      color: Colors.black,
     ),
-    labelLarge: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-      height: 1.3,
-      wordSpacing: 0.25,
+    displayMedium: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      color: Colors.black,
     ),
   ),
 );
