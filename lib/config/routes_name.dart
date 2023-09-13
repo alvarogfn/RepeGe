@@ -1,4 +1,4 @@
-import 'package:repege/modules/authentication/models/auth_state.dart';
+import 'package:repege/modules/auth/models/auth_state.dart';
 
 enum RoutesName {
   signin(state: AuthState.unauth, name: 'signin', path: '/signin'),

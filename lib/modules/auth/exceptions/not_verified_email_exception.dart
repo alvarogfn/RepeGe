@@ -1,0 +1,1 @@
+class NotVerifiedEmailException implements Exception {}

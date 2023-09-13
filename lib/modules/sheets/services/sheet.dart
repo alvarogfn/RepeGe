@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/modules/auth/models/user.dart';
 import 'package:repege/modules/sheets/models/appearance.dart';
 import 'package:repege/modules/sheets/models/attributes.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
@@ -7,7 +8,6 @@ import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/models/spells.dart';
 import 'package:repege/modules/sheets/models/status.dart';
 import 'package:repege/modules/sheets/modules/equipments/services/equipments.dart';
-import 'package:repege/modules/user/services/user.dart';
 
 class Sheet {
   final String id;
@@ -49,8 +49,7 @@ class Sheet {
       character: Character.fromMap(data['character']),
       status: Status.fromMap(data['status']),
       attributes: Attributes.fromMap(data['attributes']),
-      createdAt: (data['createdAt'] as Timestamp?) ??
-          Timestamp.fromDate(DateTime.now()),
+      createdAt: (data['createdAt'] as Timestamp?) ?? Timestamp.fromDate(DateTime.now()),
     );
   }
 
@@ -73,8 +72,7 @@ class Sheet {
               doc.data()!,
               id: doc.id,
             ),
-        toFirestore: (sheet, _) =>
-            sheet.toMap()..addAll({'createdAt': FieldValue.serverTimestamp()}));
+        toFirestore: (sheet, _) => sheet.toMap()..addAll({'createdAt': FieldValue.serverTimestamp()}));
   }
 
   static Future<Sheet> createSheet(

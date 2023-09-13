@@ -1,0 +1,1 @@
+class UsernameExistsException implements Exception {}

@@ -1,13 +1,16 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/modules/authentication/screens/signin_screen.dart';
-import 'package:repege/modules/authentication/screens/signup_screen.dart';
-import 'package:repege/modules/authentication/models/auth_state.dart';
+
+import 'package:repege/modules/auth/screens/signin_screen.dart';
+import 'package:repege/modules/auth/screens/signup_screen.dart';
+import 'package:repege/modules/auth/services/auth_service.dart';
+
+import 'package:repege/modules/auth/models/auth_state.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/sheets/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/sheets/modules/equipments/screens/equipment_form_screen.dart';
@@ -26,21 +29,20 @@ import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
 
 class CustomRouter {
-  final GlobalKey<NavigatorState> _rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'root');
+  final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+
+  Listenable? refreshListenable;
 
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
     initialLocation: '/',
-    refreshListenable: GoRouterRefreshListenable(
-      FirebaseAuth.instance.authStateChanges(),
-    ),
+    refreshListenable: refreshListenable,
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
         path: RoutesName.home.path,
         name: RoutesName.home.name,
-        builder: (context, state) => HomeScreen(),
+        builder: (context, state) => const HomeScreen(),
         routes: const [],
       ),
       GoRoute(
@@ -139,7 +141,7 @@ class CustomRouter {
           .map((e) => e.path)
           .contains(state.matchedLocation);
 
-      final user = FirebaseAuth.instance.currentUser;
+      final user = context.read<AuthService>().user;
 
       if (user == null && toUnauth) {
         return null;

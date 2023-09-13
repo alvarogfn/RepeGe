@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
-import 'package:repege/models/user.dart';
+import 'package:repege/modules/auth/exceptions/username_exists_exception.dart';
+import 'package:repege/modules/auth/models/user.dart';
 
-class AuthenticationService with ChangeNotifier {
+class AuthService with ChangeNotifier {
   final firebase.FirebaseAuth _firebaseAuth = firebase.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -14,13 +15,19 @@ class AuthenticationService with ChangeNotifier {
   firebase.User? _credential;
   User? _user;
 
-  AuthenticationService() {
-    _subscription = _firebaseAuth.authStateChanges().asyncMap((snapshot) {
+  AuthService() {
+    _subscription = _firebaseAuth.authStateChanges().asyncMap((snapshot) async {
       _credential = snapshot;
+
       if (snapshot == null) throw Exception();
-      return User.collection.doc(snapshot.uid).get();
+
+      final user = await User.collection.doc(snapshot.uid).get();
+
+      if (!user.exists) await snapshot.delete();
+
+      return user;
     }).listen((user) {
-      _user = user.data()!;
+      _user = user.data();
       notifyListeners();
     }, onError: (_) {
       _user = null;
@@ -61,7 +68,7 @@ class AuthenticationService with ChangeNotifier {
     required String username,
   }) async {
     final usernameExists = await checkIfUsernameExists(username);
-    if (usernameExists) throw Exception();
+    if (usernameExists) throw UsernameExistsException();
 
     final batch = _firestore.batch();
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/components/loading.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/modules/authentication/services/auth_service.dart';
+import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/modules/user/components/icon_text_button.dart';
 import 'package:repege/modules/user/components/navigation_list_item.dart';
-import 'package:repege/modules/user/services/user_service.dart';
 
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});
@@ -19,43 +19,34 @@ class CustomDrawer extends StatelessWidget {
         children: [
           AppBar(
             automaticallyImplyLeading: false,
-            title: StreamBuilder(
-              stream: UserService().stream(),
-              builder: (context, snapshot) {
-                if (isSnapshotLoading(snapshot)) {
-                  return const Text('Carregando..');
-                }
-                if (snapshot.hasError) {
-                  print(snapshot.error);
-                }
-                if (!snapshot.hasData) return const SizedBox();
+            title: Consumer<AuthService>(builder: (context, authService, child) {
+              final user = authService.user;
 
-                final user = snapshot.data!;
+              if (user == null) return const Loading();
 
-                return Row(
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(100),
-                      onTap: () => context.pushNamed(RoutesName.profile.name),
-                      child: CircleAvatar(backgroundImage: user.avatar),
+              return Row(
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(100),
+                    onTap: () => context.pushNamed(RoutesName.profile.name),
+                    child: CircleAvatar(backgroundImage: user.avatar),
+                  ),
+                  const SizedBox(width: 15),
+                  Text(
+                    user.username,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
                     ),
-                    const SizedBox(width: 15),
-                    Text(
-                      user.username,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+              );
+            }),
             actions: [
               PopupMenuButton(
                 itemBuilder: (context) => [
                   PopupMenuItem(
-                    onTap: () => authService.logout(),
+                    onTap: () => context.read<AuthService>().signOut(),
                     child: const IconTextButton(
                       icon: Icons.logout,
                       text: 'Sair',
