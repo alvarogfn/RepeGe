@@ -1,21 +1,25 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:repege/modules/authentication/services/auth_service.dart';
 import 'package:repege/modules/user/services/user.dart';
 
 class UserService {
-  late final DocumentReference<User> user;
-  late final bool hasEmailVerified;
+  UserService._privateConstructor();
 
-  UserService(firebase.User user) {
-    this.user = collection().doc(user.uid);
-    hasEmailVerified = user.emailVerified;
+  static final UserService _instance = UserService._privateConstructor();
+
+  factory UserService() {
+    return _instance;
   }
 
-  Stream<User> stream() {
-    return user.snapshots().map((snapshot) {
-      return snapshot.data()!;
+  final authService = AuthService();
+
+  Stream<User?> stream() {
+    final uid = authService.getCurrentUser().uid;
+
+    return collection().doc(uid).snapshots().map((snapshot) {
+      return snapshot.data();
     });
   }
 
@@ -26,19 +30,19 @@ class UserService {
         SnapshotOptions? options,
       ) {
         final user = snapshot.data()!;
-
-        return User(
+        final a = User(
           avatarURL: user['avatarURL'],
           email: user['email'],
           uid: user['uid'],
-          // TODO: encontrar um jeito melhor de fazer isso;
-          ref: collection().doc(snapshot.id),
+          ref: snapshot.reference,
           displayName: user['displayName'],
           emailVerified: user['emailVerified'],
           phoneNumber: user['phoneNumber'],
           username: user['username'],
           createdAt: user['createdAt'] ?? Timestamp.fromDate(DateTime.now()),
         );
+
+        return a;
       },
       toFirestore: (User user, SetOptions? options) {
         return {

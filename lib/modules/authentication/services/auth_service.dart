@@ -4,6 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
+  AuthService._privateConstructor();
+
+  static final AuthService _instance = AuthService._privateConstructor();
+
+  factory AuthService() {
+    return _instance;
+  }
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -21,7 +29,10 @@ class AuthService {
 
   static Future<bool> checkIfUsernameExists(String username) async {
     try {
-      final usernameDoc = await FirebaseFirestore.instance.collection('usernames').doc(username).get();
+      final usernameDoc = await FirebaseFirestore.instance
+          .collection('usernames')
+          .doc(username)
+          .get();
 
       return usernameDoc.exists;
     } catch (e) {

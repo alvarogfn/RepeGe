@@ -1,4 +1,4 @@
-import 'package:repege/utils/validations/validations.dart';
+import 'package:repege/form/validations/validations.dart';
 
 class UsernameValidation extends Validation {
   UsernameValidation({super.message = 'Esse nome de usuário não é válido.'});

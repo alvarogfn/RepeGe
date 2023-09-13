@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/custom_drawer.dart';
+import 'package:repege/modules/user/components/custom_drawer.dart';
 import 'package:repege/components/loading.dart';
 import 'package:repege/components/stream_auth_builder.dart';
 import 'package:repege/config/routes_name.dart';
@@ -21,7 +21,7 @@ class TableHomeScreen extends StatelessWidget {
             )
           ],
         ),
-        drawer: const CustomDrawer(),
+        drawer: CustomDrawer(),
         body: StreamBuilder(
           initialData: const ['a', 'b', 'c'],
           builder: (context, snapshot) {

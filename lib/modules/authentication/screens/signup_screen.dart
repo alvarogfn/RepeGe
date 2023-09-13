@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
 import 'package:repege/modules/authentication/services/auth_service.dart';
-import 'package:repege/utils/validations/email_validation.dart';
-import 'package:repege/utils/validations/password_validation.dart';
-import 'package:repege/utils/validations/required_validation.dart';
-import 'package:repege/utils/validations/username_validation.dart';
-import 'package:repege/utils/validations/validations.dart';
+import 'package:repege/form/validations/email_validation.dart';
+import 'package:repege/form/validations/password_validation.dart';
+import 'package:repege/form/validations/required_validation.dart';
+import 'package:repege/form/validations/username_validation.dart';
+import 'package:repege/form/validations/validations.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);

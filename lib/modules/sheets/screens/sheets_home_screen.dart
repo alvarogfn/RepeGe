@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/custom_drawer.dart';
+import 'package:repege/modules/user/components/custom_drawer.dart';
 import 'package:repege/components/stream_auth_builder.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
@@ -23,7 +23,7 @@ class SheetsHomeScreen extends StatelessWidget {
             )
           ],
         ),
-        drawer: const CustomDrawer(),
+        drawer: CustomDrawer(),
         body: StreamBuilder(
           stream: Sheet.stream(),
           initialData: const [],

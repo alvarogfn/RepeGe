@@ -36,10 +36,10 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
 
     try {
       final userService = context.read<UserService>();
-      final user = await userService.user.get();
+      // final user = await userService..get();
 
       final character = characterForm.save();
-      final sheet = await Sheet.createSheet(user.data()!, character: character);
+      // final sheet = await Sheet.createSheet(user.data()!, character: character);
 
       if (context.mounted) context.pop();
 
@@ -47,7 +47,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
         context.pushReplacementNamed(
           RoutesName.sheet.name,
           pathParameters: {
-            'id': sheet.id,
+            // 'id': sheet.id,
           },
         );
       }
@@ -80,7 +80,8 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                       alignment: Alignment.centerLeft,
                       child: const Text(
                         'Características',
-                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900, fontSize: 20),
                       ),
                     ),
                   ),

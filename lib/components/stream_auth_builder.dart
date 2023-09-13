@@ -22,15 +22,6 @@ class StreamAuthBuilder extends StatelessWidget {
           );
         }
 
-        final user = snapshot.data!;
-
-        if (!user.emailVerified) {
-          return Dialog.fullscreen(
-            child: Center(child: Text('Email não verificado')),
-          );
-        }
-        ;
-
         return child;
       },
     );

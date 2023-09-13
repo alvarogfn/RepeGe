@@ -1,4 +1,4 @@
-import 'package:repege/utils/validations/validations.dart';
+import 'package:repege/form/validations/validations.dart';
 
 class EqualValidation extends Validation {
   final String value;

@@ -5,20 +5,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class User {
-  final _storage = FirebaseStorage.instance;
-
-  late final _bucketRef = _storage.ref('users/$uid/');
-
-  final DocumentReference<User> ref;
-
+  final DocumentReference ref;
   final String username;
   final String uid;
   final String email;
   final String? avatarURL;
   final Timestamp createdAt;
   final bool emailVerified;
-  final String displayName;
-  final String phoneNumber;
+  final String? displayName;
+  final String? phoneNumber;
+
+  late final _bucketRef = FirebaseStorage.instance.ref('users/$uid/');
 
   User({
     required this.username,

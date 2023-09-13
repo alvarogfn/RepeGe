@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/config/routes_name.dart';
@@ -25,7 +26,8 @@ import 'package:repege/screens/loading_page.dart';
 import 'package:repege/config/environment_variables.dart';
 
 class CustomRouter {
-  final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+  final GlobalKey<NavigatorState> _rootNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'root');
 
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
@@ -39,7 +41,7 @@ class CustomRouter {
         path: RoutesName.home.path,
         name: RoutesName.home.name,
         builder: (context, state) => HomeScreen(),
-        routes: const [],
+        routes: [],
       ),
       GoRoute(
         path: RoutesName.signin.path,
