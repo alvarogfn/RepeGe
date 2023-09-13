@@ -127,7 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: 20),
                     Center(
-                    child: TextButton(
+                      child: TextButton(
                         onPressed: () {
                           context.pop();
                         },
