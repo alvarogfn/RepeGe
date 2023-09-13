@@ -92,7 +92,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Login',
+                      'Criar Conta',
                       style: textTheme.displayMedium,
                       textAlign: TextAlign.center,
                     ),

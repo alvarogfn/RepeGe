@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         body: Scaffold(
           body: TextButton(
             onPressed: () {},
-            child: Text('hehe'),
+            child: const Text('hehe'),
           ),
         ),
       ),

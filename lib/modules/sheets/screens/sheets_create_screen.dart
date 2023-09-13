@@ -7,7 +7,6 @@ import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/sheets/components/character_avatar_picker.dart';
 import 'package:repege/modules/sheets/components/sheet_form_create_field.dart';
 import 'package:repege/modules/sheets/models/character.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/user/services/user_service.dart';
 
 class SheetsCreateScreen extends StatefulWidget {

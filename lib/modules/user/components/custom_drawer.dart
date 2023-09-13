@@ -23,12 +23,12 @@ class CustomDrawer extends StatelessWidget {
               stream: UserService().stream(),
               builder: (context, snapshot) {
                 if (isSnapshotLoading(snapshot)) {
-                  return Text('Carregando..');
+                  return const Text('Carregando..');
                 }
                 if (snapshot.hasError) {
                   print(snapshot.error);
                 }
-                if (!snapshot.hasData) return SizedBox();
+                if (!snapshot.hasData) return const SizedBox();
 
                 final user = snapshot.data!;
 

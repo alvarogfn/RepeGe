@@ -41,7 +41,7 @@ class CustomRouter {
         path: RoutesName.home.path,
         name: RoutesName.home.name,
         builder: (context, state) => HomeScreen(),
-        routes: [],
+        routes: const [],
       ),
       GoRoute(
         path: RoutesName.signin.path,
