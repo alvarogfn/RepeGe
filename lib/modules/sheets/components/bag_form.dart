@@ -16,7 +16,7 @@ class BagForm extends StatelessWidget {
   });
 
   final Bag bag;
-  final DocumentReference<Sheet> ref;
+  final DocumentReference ref;
 
   @override
   Widget build(BuildContext context) {

@@ -20,7 +20,7 @@ class SheetCastingScreen extends StatelessWidget {
   final Sheet sheet;
 
   Casting get casting => sheet.casting;
-  DocumentReference<Sheet> get ref => sheet.ref;
+  DocumentReference get ref => sheet.ref;
 
   @override
   Widget build(BuildContext context) {

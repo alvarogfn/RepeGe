@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Spells {
   final String sheetID;
-  late final DocumentReference<Sheet> sheetRef;
+  late final DocumentReference sheetRef;
 
   Spells({
     required this.sheetID,
@@ -19,8 +18,7 @@ class Spells {
             doc.data()!,
             id: doc.id,
           ),
-          toFirestore: (sheet, _) => sheet.toMap()
-            ..addAll({'createdAt': FieldValue.serverTimestamp()}),
+          toFirestore: (sheet, _) => sheet.toMap()..addAll({'createdAt': FieldValue.serverTimestamp()}),
         );
   }
 
@@ -73,8 +71,6 @@ class Spells {
     final response = await http.get(api);
     final List<dynamic> json = jsonDecode(response.body);
 
-    return json
-        .map((item) => Spell.fromMap(item, id: item['id'].toString()))
-        .toList();
+    return json.map((item) => Spell.fromMap(item, id: item['id'].toString())).toList();
   }
 }

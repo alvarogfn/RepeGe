@@ -4,11 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/components/loading.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/modules/sheets/components/character_avatar_picker.dart';
 import 'package:repege/modules/sheets/components/sheet_form_create_field.dart';
 import 'package:repege/modules/sheets/models/character.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
+import 'package:repege/modules/sheets/services/sheet_service.dart';
 
 class SheetsCreateScreen extends StatefulWidget {
   const SheetsCreateScreen({super.key});
@@ -35,11 +34,9 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
     );
 
     try {
-      final authService = context.read<AuthService>();
-      final user = authService.user;
-
+      final sheetService = context.read<SheetService>();
       final character = characterForm.save();
-      final sheet = await Sheet.createSheet(user!, character: character);
+      final sheet = await sheetService.post(character: character);
 
       if (context.mounted) context.pop();
 

@@ -17,7 +17,7 @@ class SheetCharacterScreen extends StatelessWidget {
 
   Character get character => sheet.character;
   Appearance get appearance => sheet.appearance;
-  DocumentReference<Sheet> get ref => sheet.ref ;
+  DocumentReference get ref => sheet.ref;
 
   @override
   Widget build(BuildContext context) {

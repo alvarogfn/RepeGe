@@ -26,7 +26,7 @@ class CharacterListItem extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) {
-                sheet.delete().then((_) => context.pop());
+                sheet.ref.delete().then((_) => context.pop());
                 return const Loading(color: Colors.white);
               },
             );
@@ -63,7 +63,7 @@ class CharacterListItem extends StatelessWidget {
             onTap: () {
               context.pushNamed(
                 RoutesName.sheet.name,
-                pathParameters: {'id': sheet.id},
+                extra: sheet,
               );
             },
             child: Row(
@@ -81,8 +81,7 @@ class CharacterListItem extends StatelessWidget {
                     topRight: Radius.circular(5),
                     bottomRight: Radius.circular(5),
                   ),
-                  child:
-                      Image(image: sheet.character.avatar, fit: BoxFit.cover),
+                  child: Image(image: sheet.character.avatar, fit: BoxFit.cover),
                 ),
               ],
             ),

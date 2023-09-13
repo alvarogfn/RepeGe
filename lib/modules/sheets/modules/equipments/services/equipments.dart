@@ -6,16 +6,14 @@ import 'package:repege/modules/sheets/modules/equipments/models/armor.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
 import 'package:repege/modules/sheets/modules/equipments/models/weapon.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
 
 class Equipments {
-  late final DocumentReference<Sheet> sheetReference;
+  late final DocumentReference sheetReference;
 
-  late final CollectionReference<Equipment> ref =
-      sheetReference.collection('equipments').withConverter(
-            fromFirestore: _fromFirestore,
-            toFirestore: _toFirestore,
-          );
+  late final CollectionReference<Equipment> ref = sheetReference.collection('equipments').withConverter(
+        fromFirestore: _fromFirestore,
+        toFirestore: _toFirestore,
+      );
 
   Equipments({
     required this.sheetReference,
@@ -84,8 +82,7 @@ class Equipments {
     Equipment equipment,
     SetOptions? options,
   ) {
-    return equipment.toMap()
-      ..putIfAbsent('createdAt', () => FieldValue.serverTimestamp());
+    return equipment.toMap()..putIfAbsent('createdAt', () => FieldValue.serverTimestamp());
   }
 
   Future<void> deleteEquipment(Equipment equipment) async {

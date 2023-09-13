@@ -13,7 +13,7 @@ class SheetEquipmentScreen extends StatelessWidget {
 
   final Sheet sheet;
 
-  DocumentReference<Sheet> get ref => sheet.ref;
+  DocumentReference get ref => sheet.ref;
   Bag get bag => sheet.bag;
   Equipments get equipments => sheet.equipments;
 

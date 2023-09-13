@@ -18,6 +18,7 @@ import 'package:repege/modules/sheets/modules/equipments/screens/equipment_searc
 import 'package:repege/modules/sheets/screens/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
+import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 import 'package:repege/modules/spell/screens/spell_details_screen.dart';
 import 'package:repege/modules/spell/screens/spell_search_screen.dart';
@@ -78,9 +79,7 @@ class CustomRouter {
           GoRoute(
             path: RoutesName.sheet.path,
             name: RoutesName.sheet.name,
-            builder: (context, state) => SheetScreen(
-              sheetId: state.pathParameters['id'] as String,
-            ),
+            builder: (context, state) => SheetScreen(state.extra as Sheet),
           )
         ],
       ),
