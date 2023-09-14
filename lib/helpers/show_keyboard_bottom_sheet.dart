@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Future<T?> showKeyboardBottomSheet<T>(
   BuildContext context, {
   bool isDismissible = true,
-  padding = const EdgeInsets.all(10),
+  EdgeInsets padding = const EdgeInsets.all(10),
   required Widget Function(BuildContext) builder,
 }) async {
   const border = RoundedRectangleBorder(
@@ -20,12 +20,10 @@ Future<T?> showKeyboardBottomSheet<T>(
     shape: border,
     builder: (context) {
       final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-      return SingleChildScrollView(
-        child: Container(
-          padding: padding,
-          margin: EdgeInsets.only(bottom: keyboardHeight),
-          child: Builder(builder: builder),
-        ),
+      return Container(
+        padding: padding,
+        margin: EdgeInsets.only(bottom: keyboardHeight),
+        child: Builder(builder: builder),
       );
     },
   );

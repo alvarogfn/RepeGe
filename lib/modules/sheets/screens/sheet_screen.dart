@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/modules/character/screens/character_screen.dart';
 import 'package:repege/modules/sheets/screens/sheet_equipment_screen.dart';
-import 'package:repege/modules/sheets/screens/sheet_status_screen.dart';
 import 'package:repege/modules/sheets/screens/sheet_casting_screen.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/sheets/services/sheet_service.dart';
+import 'package:repege/modules/status/screens/status_screen.dart';
 import 'package:repege/screens/loading_page.dart';
 
 class SheetScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _SheetScreenState extends State<SheetScreen> {
                   body: TabBarView(
                     children: [
                       CharacterScreen(sheet),
-                      SheetStatusScreen(sheet: sheet),
+                      StatusScreen(sheet),
                       SheetEquipmentScreen(sheet: sheet),
                       SheetCastingScreen(sheet: sheet),
                     ],

@@ -2,13 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/helpers/parse_int.dart';
 
 class DeathSaves {
-  final int sucesses;
-  final int failures;
+  late int sucesses;
+  late int failures;
 
-  const DeathSaves({
-    this.sucesses = 0,
-    this.failures = 0,
-  });
+  DeathSaves({
+    int? sucesses,
+    int? failures,
+  }) {
+    this.sucesses = sucesses ?? 0;
+    this.failures = failures ?? 0;
+  }
 
   static DeathSaves fromMap(Map<String, dynamic> data) {
     return DeathSaves(
@@ -26,39 +29,48 @@ class DeathSaves {
 }
 
 class Status {
-  final int armorClass;
-  final int currentHp;
-  final String hitDice;
-  final int iniative;
-  final int maxHp;
-  final int speed;
-  final int temporaryHp;
+  late int armorClass;
+  late int currentHp;
+  late String hitDice;
+  late int iniative;
+  late int maxHp;
+  late int speed;
+  late int temporaryHp;
 
-  final DeathSaves deathSaves;
+  late DeathSaves deathSaves;
 
   Status({
-    this.armorClass = 0,
-    this.currentHp = 0,
-    this.hitDice = '',
-    this.iniative = 0,
-    this.maxHp = 0,
-    this.speed = 0,
-    this.temporaryHp = 0,
-    this.deathSaves = const DeathSaves(),
-  });
+    int? armorClass,
+    int? currentHp,
+    String? hitDice,
+    int? iniative,
+    int? maxHp,
+    int? speed,
+    int? temporaryHp,
+    DeathSaves? deathSaves,
+  }) {
+    this.armorClass = armorClass ?? 0;
+    this.currentHp = currentHp ?? 0;
+    this.hitDice = hitDice ?? '';
+    this.iniative = iniative ?? 0;
+    this.maxHp = maxHp ?? 0;
+    this.speed = speed ?? 0;
+    this.temporaryHp = temporaryHp ?? 0;
+    this.deathSaves = deathSaves ?? DeathSaves();
+  }
 
   static Status fromMap(Map<String, dynamic> data) {
     return Status(
-      armorClass: parseInt(data['armorClass']),
-      currentHp: parseInt(data['currentHp']),
-      hitDice: data['hitDice'].toString(),
-      iniative: parseInt(data['iniative']),
-      maxHp: parseInt(data['maxHp']),
-      speed: parseInt(data['speed']),
-      temporaryHp: parseInt(data['temporaryHp']),
+      armorClass: data['armorClass'],
+      currentHp: data['currentHp'],
+      hitDice: data['hitDice'],
+      iniative: data['iniative'],
+      maxHp: data['maxHp'],
+      speed: data['speed'],
+      temporaryHp: data['temporaryHp'],
       deathSaves: DeathSaves(
-        sucesses: parseInt(data['deathSavesSucess']),
-        failures: parseInt(data['deathSavesFailures']),
+        sucesses: data['deathSavesSucess'],
+        failures: data['deathSavesFailures'],
       ),
     );
   }
