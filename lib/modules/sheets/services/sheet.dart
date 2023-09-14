@@ -6,7 +6,7 @@ import 'package:repege/modules/sheets/models/casting.dart';
 import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/models/spells.dart';
 import 'package:repege/modules/sheets/models/status.dart';
-import 'package:repege/modules/sheets/modules/equipments/services/equipments.dart';
+import 'package:repege/modules/equipments/services/equipments.dart';
 
 class Sheet {
   final String id;

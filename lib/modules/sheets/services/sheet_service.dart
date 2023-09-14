@@ -72,7 +72,7 @@ class SheetService extends ChangeNotifier {
 
             return Sheet.fromMap(sheetMap);
           },
-          toFirestore: (sheet, _) => sheet.toMap().putIfAbsent('timestamp', () => FieldValue.serverTimestamp()),
+          toFirestore: (sheet, _) => sheet.toMap()..putIfAbsent('createdAt', () => FieldValue.serverTimestamp()),
         );
   }
 }

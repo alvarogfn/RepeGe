@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/modules/sheets/components/character_avatar_picker.dart';
 import 'package:repege/modules/sheets/components/sheet_form_field.dart';
 import 'package:repege/modules/sheets/models/appearance.dart';
 import 'package:repege/modules/sheets/models/character.dart';
@@ -29,7 +28,6 @@ class SheetCharacterScreen extends StatelessWidget {
       body: FullScreenScroll(
         child: Column(
           children: [
-            const CharacterAvatarPicker(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Column(

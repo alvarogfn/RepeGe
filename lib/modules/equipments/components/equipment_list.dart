@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/modules/sheets/modules/equipments/components/equipment_tile.dart';
-import 'package:repege/modules/sheets/modules/equipments/services/equipments.dart';
+import 'package:repege/modules/equipments/components/equipment_tile.dart';
+import 'package:repege/modules/equipments/services/equipments.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class EquipmentList extends StatelessWidget {

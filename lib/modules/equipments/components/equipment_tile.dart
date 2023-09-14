@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/delete_or_edit_dismissible.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/modules/sheets/modules/equipments/components/equipment_armor.dart';
-import 'package:repege/modules/sheets/modules/equipments/components/equipment_item.dart';
-import 'package:repege/modules/sheets/modules/equipments/components/equipment_weapon.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/armor.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/weapon.dart';
+import 'package:repege/modules/equipments/components/equipment_armor.dart';
+import 'package:repege/modules/equipments/components/equipment_item.dart';
+import 'package:repege/modules/equipments/components/equipment_weapon.dart';
+import 'package:repege/modules/equipments/models/armor.dart';
+import 'package:repege/modules/equipments/models/equipment.dart';
+import 'package:repege/modules/equipments/models/equipment_types.dart';
+import 'package:repege/modules/equipments/models/weapon.dart';
 
 class EquipmentTile extends StatelessWidget {
   const EquipmentTile(this.equipment, {super.key});

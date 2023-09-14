@@ -1,86 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:repege/helpers/parse_string.dart';
-
-class CharacterForm {
-  late final TextEditingController alignment;
-  late final TextEditingController background;
-  late final TextEditingController characterClass;
-  late final TextEditingController characterName;
-  late final TextEditingController characterRace;
-
-  CharacterForm({
-    String alignment = '',
-    String background = '',
-    String characterClass = '',
-    String characterName = '',
-    String characterRace = '',
-  }) {
-    this.alignment = TextEditingController(text: alignment);
-    this.background = TextEditingController(text: background);
-    this.characterClass = TextEditingController(text: characterClass);
-    this.characterName = TextEditingController(text: characterName);
-    this.characterRace = TextEditingController(text: characterRace);
-  }
-
-  Character save() {
-    return Character(
-      alignment: alignment.text,
-      background: background.text,
-      characterClass: characterClass.text,
-      characterName: characterName.text,
-      characterRace: characterRace.text,
-    );
-  }
-
-  bool get isValid {
-    return alignment.text.isNotEmpty &&
-        background.text.isNotEmpty &&
-        characterClass.text.isNotEmpty &&
-        characterRace.text.isNotEmpty &&
-        characterName.text.isNotEmpty;
-  }
-}
 
 class Character {
-  final String alignment;
-  final String? avatarURL;
-  final String background;
-  final String characterClass;
-  final String characterName;
-  final String characterRace;
-  final String notes;
-  final String ownerUID;
-  final String saveDice;
-  final List<String> languages;
+  late String alignment;
+  late String? avatarURL;
+  late String background;
+  late String characterClass;
+  late String characterName;
+  late String characterRace;
+  late int characterLevel;
+  late String characteristics;
+  late String skills;
+  late String ownerUID;
+  late String languages;
 
   Character({
-    this.alignment = '',
+    String? alignment,
     this.avatarURL,
-    this.background = '',
-    this.characterClass = '',
-    this.characterName = '',
-    this.characterRace = '',
-    this.notes = '',
-    this.ownerUID = '',
-    this.saveDice = '',
-    this.languages = const [],
-  });
+    int? characterLevel,
+    String? background,
+    String? characterClass,
+    String? characterName,
+    String? characterRace,
+    String? skills,
+    String? characteristics,
+    String? ownerUID,
+    String? languages,
+  }) {
+    this.alignment = alignment ?? '';
+    this.characterLevel = characterLevel ?? 0;
+    this.background = background ?? '';
+    this.characterClass = characterClass ?? '';
+    this.characterName = characterName ?? '';
+    this.characterRace = characterRace ?? '';
+    this.skills = skills ?? '';
+    this.characteristics = characteristics ?? '';
+    this.ownerUID = ownerUID ?? '';
+    this.languages = languages ?? '';
+  }
 
   static Character fromMap(Map<String, dynamic> data) {
     return Character(
-      alignment: parseString(data['alignment']),
-      avatarURL: parseString(data['avatarURL']),
-      background: parseString(data['background']),
-      characterClass: parseString(data['characterClass']),
-      characterName: parseString(data['characterName']),
-      characterRace: parseString(data['characterRace']),
-      notes: parseString(data['notes']),
-      ownerUID: parseString(data['ownerUID']),
-      saveDice: parseString(data['saveDice']),
-      languages: List.from(
-        data['languages'] ?? [],
-      ).map((e) => e.toString()).toList(),
+      alignment: data['alignment'],
+      avatarURL: data['avatarURL'],
+      background: data['background'],
+      characterClass: data['characterClass'],
+      characterName: data['characterName'],
+      characterLevel: data['characterLevel'],
+      characterRace: data['characterRace'],
+      characteristics: data['characteristics'],
+      skills: data['skills'],
+      ownerUID: data['ownerUID'],
+      languages: data['languages'],
     );
   }
 
@@ -92,9 +63,10 @@ class Character {
       'characterClass': characterClass,
       'characterName': characterName,
       'characterRace': characterRace,
-      'notes': notes,
+      'characteristics': characteristics,
+      'characterLevel': characterLevel,
+      'skills': skills,
       'ownerUID': ownerUID,
-      'saveDice': saveDice,
       'languages': languages,
     };
   }
@@ -107,9 +79,7 @@ class Character {
   }
 
   static Stream<List<Character>> stream() {
-    return collection()
-        .snapshots()
-        .map((event) => event.docs.map((e) => e.data()).toList());
+    return collection().snapshots().map((event) => event.docs.map((e) => e.data()).toList());
   }
 
   ImageProvider<Object> get avatar {

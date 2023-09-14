@@ -40,5 +40,10 @@ final lightTheme = ThemeData(
       fontWeight: FontWeight.w700,
       color: Colors.black,
     ),
+    titleLarge: TextStyle(
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
+      color: Colors.black54,
+    ),
   ),
 );

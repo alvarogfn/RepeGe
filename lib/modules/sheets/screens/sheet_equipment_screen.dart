@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/sheets/components/bag_form.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
-import 'package:repege/modules/sheets/modules/equipments/components/equipment_list.dart';
-import 'package:repege/modules/sheets/modules/equipments/services/equipments.dart';
+import 'package:repege/modules/equipments/components/equipment_list.dart';
+import 'package:repege/modules/equipments/services/equipments.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class SheetEquipmentScreen extends StatelessWidget {

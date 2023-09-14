@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'package:repege/config/route.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
+import 'package:repege/modules/sheets/services/sheet_service.dart';
 import 'package:repege/themes/dark_theme.dart';
 import 'package:repege/themes/light_theme.dart';
 
@@ -43,6 +44,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+        ChangeNotifierProxyProvider<AuthService, SheetService>(
+          create: (context) => SheetService(context.read<AuthService>()),
+          update: (context, authService, sheetService) => SheetService(authService),
+        )
       ],
       builder: (context, child) {
         router.refreshListenable = context.read<AuthService>();
@@ -53,7 +58,7 @@ class MyApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: ThemeMode.light,
-          debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
           locale: const Locale.fromSubtags(
             languageCode: 'pt',
             countryCode: 'BR',

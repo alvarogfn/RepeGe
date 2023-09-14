@@ -1,6 +1,6 @@
 import 'package:repege/helpers/parse_string.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
+import 'package:repege/modules/equipments/models/equipment.dart';
+import 'package:repege/modules/equipments/models/equipment_types.dart';
 
 class Weapon extends Equipment {
   late final String kind;

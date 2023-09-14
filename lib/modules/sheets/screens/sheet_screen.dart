@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
+import 'package:repege/modules/character/screens/character_screen.dart';
 import 'package:repege/modules/sheets/screens/sheet_equipment_screen.dart';
-import 'package:repege/modules/sheets/screens/sheet_caracter_screen.dart';
 import 'package:repege/modules/sheets/screens/sheet_status_screen.dart';
 import 'package:repege/modules/sheets/screens/sheet_casting_screen.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
@@ -21,54 +20,50 @@ class SheetScreen extends StatefulWidget {
 class _SheetScreenState extends State<SheetScreen> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProxyProvider<AuthService, SheetService>(
-      create: (context) => SheetService(context.read<AuthService>()),
-      update: (context, auth, sheet) => SheetService(auth),
-      child: Scaffold(
-        body: DefaultTabController(
-          length: 4,
-          child: Consumer<SheetService>(
-            builder: (context, sheetService, _) {
-              return StreamBuilder(
-                stream: sheetService.streamOf(widget.sheet),
-                builder: (context, snap) {
-                  if (snap.connectionState == ConnectionState.waiting) {
-                    return const LoadingPage();
-                  }
+    return Scaffold(
+      body: DefaultTabController(
+        length: 4,
+        child: Consumer<SheetService>(
+          builder: (context, sheetService, _) {
+            return StreamBuilder(
+              stream: sheetService.streamOf(widget.sheet),
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const LoadingPage();
+                }
 
-                  if (snap.hasError) {
-                    return const Text('Essa ficha não existe :(');
-                  }
+                if (snap.hasError) {
+                  return const Text('Essa ficha não existe :(');
+                }
 
-                  final sheet = snap.data!;
+                final sheet = snap.data!;
 
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: Text(sheet.character.characterName),
-                      bottom: const TabBar(
-                        labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
-                        isScrollable: true,
-                        tabs: [
-                          Tab(icon: Icon(Rpg.player)),
-                          Tab(icon: Icon(Rpg.health)),
-                          Tab(icon: Icon(Rpg.axe)),
-                          Tab(icon: Icon(Rpg.book)),
-                        ],
-                      ),
-                    ),
-                    body: TabBarView(
-                      children: [
-                        SheetCharacterScreen(sheet: sheet),
-                        SheetStatusScreen(sheet: sheet),
-                        SheetEquipmentScreen(sheet: sheet),
-                        SheetCastingScreen(sheet: sheet),
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text(sheet.character.characterName),
+                    bottom: const TabBar(
+                      labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
+                      isScrollable: true,
+                      tabs: [
+                        Tab(icon: Icon(Rpg.player)),
+                        Tab(icon: Icon(Rpg.health)),
+                        Tab(icon: Icon(Rpg.axe)),
+                        Tab(icon: Icon(Rpg.book)),
                       ],
                     ),
-                  );
-                },
-              );
-            },
-          ),
+                  ),
+                  body: TabBarView(
+                    children: [
+                      CharacterScreen(sheet),
+                      SheetStatusScreen(sheet: sheet),
+                      SheetEquipmentScreen(sheet: sheet),
+                      SheetCastingScreen(sheet: sheet),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );

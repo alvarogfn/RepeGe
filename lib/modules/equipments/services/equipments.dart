@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/helpers/parse_bool.dart';
 import 'package:repege/helpers/parse_int.dart';
 import 'package:repege/helpers/parse_string.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/armor.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/equipment_types.dart';
-import 'package:repege/modules/sheets/modules/equipments/models/weapon.dart';
+import 'package:repege/modules/equipments/models/armor.dart';
+import 'package:repege/modules/equipments/models/equipment.dart';
+import 'package:repege/modules/equipments/models/equipment_types.dart';
+import 'package:repege/modules/equipments/models/weapon.dart';
 
 class Equipments {
   late final DocumentReference sheetReference;
