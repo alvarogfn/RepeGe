@@ -2,78 +2,83 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/editable_text_form_field.dart';
 import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/modules/character/services/character_service.dart';
+import 'package:repege/modules/sheet/sheet_service.dart';
 import 'package:repege/modules/sheets/models/character.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
-import 'package:repege/modules/sheets/services/sheet_service.dart';
 
-class CharacterScreen extends StatelessWidget {
-  const CharacterScreen(
-    Sheet this.sheet, {
+class CharacterScreen extends StatefulWidget {
+  const CharacterScreen({
     super.key,
   });
 
-  final Sheet sheet;
-  Character get character => sheet.character;
+  @override
+  State<CharacterScreen> createState() => _CharacterScreenState();
+}
+
+class _CharacterScreenState extends State<CharacterScreen> {
+  Character _character = Character();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final sheet = context.read<SheetService>().sheet;
+    _character = sheet.character;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CharacterService(sheetService: context.read<SheetService>(), sheet: sheet),
-      builder: (context, child) {
-        final characterService = context.read<CharacterService>();
-
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Caracteristicas'),
-            automaticallyImplyLeading: false,
-          ),
-          body: FullScreenScroll(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Caracteristicas'),
+        automaticallyImplyLeading: false,
+      ),
+      body: FullScreenScroll(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Consumer<SheetService>(
+            builder: (context, service, child) {
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   EditableTextFormField(
                     label: 'Nome',
-                    initialValue: character.characterName,
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.characterName = value,
+                    initialValue: _character.characterName,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.characterName = value,
                     border: InputBorder.none,
                   ),
                   EditableTextFormField(
                     label: 'Classe',
-                    initialValue: character.characterClass,
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.characterClass = value,
+                    initialValue: _character.characterClass,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.characterClass = value,
                     border: InputBorder.none,
                   ),
                   EditableTextFormField(
                     label: 'Raça',
-                    initialValue: character.characterRace,
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.characterRace = value,
+                    initialValue: _character.characterRace,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.characterRace = value,
                     border: InputBorder.none,
                   ),
                   EditableTextFormField(
                     label: 'Alinhamento',
-                    initialValue: character.alignment,
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.alignment = value,
+                    initialValue: _character.alignment,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.alignment = value,
                     border: InputBorder.none,
                   ),
                   EditableTextFormField(
                     label: 'Antepassado',
-                    initialValue: character.background,
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.background = value,
+                    initialValue: _character.background,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.background = value,
                     border: InputBorder.none,
                   ),
                   EditableTextFormField(
                     label: 'Línguas',
-                    initialValue: character.languages,
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.languages = value,
+                    initialValue: _character.languages,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.languages = value,
                     border: InputBorder.none,
                   ),
                   const SizedBox(height: 10),
@@ -85,26 +90,26 @@ class CharacterScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   EditableTextFormField(
                     label: 'Caracteristicas e talentos',
-                    initialValue: character.characteristics,
+                    initialValue: _character.characteristics,
                     maxLines: 5,
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.characteristics = value,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.characteristics = value,
                   ),
                   EditableTextFormField(
                     label: 'Habilidades e perícias',
-                    initialValue: character.skills,
+                    initialValue: _character.skills,
                     maxLines: 5,
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    onSaved: (value) => characterService.update(context, character),
-                    onChanged: (value) => character.skills = value,
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.skills = value,
                   ),
                 ],
-              ),
-            ),
+              );
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

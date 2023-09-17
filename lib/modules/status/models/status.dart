@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/helpers/parse_int.dart';
+import 'package:repege/models/firebase_model.dart';
 
 class DeathSaves {
   late int sucesses;
@@ -28,7 +29,7 @@ class DeathSaves {
   }
 }
 
-class Status {
+class Status implements FirebaseSheetModel {
   late int armorClass;
   late int currentHp;
   late String hitDice;
@@ -75,6 +76,7 @@ class Status {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'armorClass': armorClass,
@@ -97,4 +99,7 @@ class Status {
           toFirestore: (character, _) => character.toMap(),
         );
   }
+
+  @override
+  String get propertyKey => 'Status';
 }

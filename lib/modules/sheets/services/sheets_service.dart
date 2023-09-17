@@ -4,17 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/modules/sheets/models/appearance.dart';
-import 'package:repege/modules/sheets/models/attributes.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
 import 'package:repege/modules/sheets/models/casting.dart';
 import 'package:repege/modules/sheets/models/character.dart';
-import 'package:repege/modules/sheets/models/status.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
+import 'package:repege/modules/status/models/attributes.dart';
+import 'package:repege/modules/status/models/status.dart';
 
-class SheetService extends ChangeNotifier {
+class SheetsService extends ChangeNotifier {
   final AuthService _authService;
 
-  SheetService(this._authService);
+  SheetsService(this._authService);
 
   Stream<Sheet> streamOf(Sheet sheet) {
     return collection.doc(sheet.id).snapshots().map((event) => event.data()!);

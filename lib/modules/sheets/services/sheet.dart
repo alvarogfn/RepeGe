@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/modules/sheets/models/appearance.dart';
-import 'package:repege/modules/sheets/models/attributes.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
 import 'package:repege/modules/sheets/models/casting.dart';
 import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/models/spells.dart';
-import 'package:repege/modules/sheets/models/status.dart';
 import 'package:repege/modules/equipments/services/equipments.dart';
+import 'package:repege/modules/status/models/attributes.dart';
+import 'package:repege/modules/status/models/status.dart';
 
 class Sheet {
   final String id;

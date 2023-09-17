@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:repege/models/firebase_model.dart';
 
-class Character {
+class Character implements FirebaseSheetModel {
   late String alignment;
   late String? avatarURL;
   late String background;
@@ -39,7 +40,23 @@ class Character {
     this.languages = languages ?? '';
   }
 
-  static Character fromMap(Map<String, dynamic> data) {
+  factory Character.fromCharacter(Character character) {
+    return Character(
+      alignment: character.alignment,
+      avatarURL: character.avatarURL,
+      background: character.background,
+      characterClass: character.characterClass,
+      characterLevel: character.characterLevel,
+      characterName: character.characterName,
+      characterRace: character.characterRace,
+      characteristics: character.characteristics,
+      languages: character.languages,
+      ownerUID: character.ownerUID,
+      skills: character.skills,
+    );
+  }
+
+  factory Character.fromMap(Map<String, dynamic> data) {
     return Character(
       alignment: data['alignment'],
       avatarURL: data['avatarURL'],
@@ -55,6 +72,7 @@ class Character {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'alignment': alignment,
@@ -88,4 +106,7 @@ class Character {
     }
     return const AssetImage('assets/images/default_avatar.jpg');
   }
+
+  @override
+  String get propertyKey => 'character';
 }

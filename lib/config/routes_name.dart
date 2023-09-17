@@ -8,7 +8,7 @@ enum RoutesName {
   profile(name: 'profile', path: '/profile'),
 
   sheets(name: 'sheets', path: '/sheets'),
-  sheet(name: 'sheet', path: 'sheet'),
+  sheet(name: 'sheet', path: ':id'),
   sheetCreate(name: 'sheet-create', path: 'create'),
 
   spells(name: 'spells', path: '/spells'),

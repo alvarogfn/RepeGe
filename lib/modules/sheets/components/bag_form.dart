@@ -6,7 +6,6 @@ import 'package:repege/helpers/show_keyboard_bottom_sheet.dart';
 import 'package:repege/modules/sheets/components/label.dart';
 import 'package:repege/modules/sheets/components/sheet_form_field.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
-import 'package:repege/modules/sheets/services/sheet.dart';
 
 class BagForm extends StatelessWidget {
   const BagForm({

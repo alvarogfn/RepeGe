@@ -61,10 +61,9 @@ class CharacterListItem extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              context.pushNamed(
-                RoutesName.sheet.name,
-                extra: sheet,
-              );
+              context.pushNamed(RoutesName.sheet.name, pathParameters: {
+                'id': sheet.id,
+              });
             },
             child: Row(
               children: [

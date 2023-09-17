@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/components/empty.dart';
 import 'package:repege/components/loading.dart';
-import 'package:repege/modules/sheets/services/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 import 'package:repege/modules/user/components/custom_drawer.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
@@ -24,7 +25,7 @@ class SheetsHomeScreen extends StatelessWidget {
         ],
       ),
       drawer: CustomDrawer(),
-      body: Consumer<SheetService>(
+      body: Consumer<SheetsService>(
         builder: (context, sheetService, _) {
           return StreamBuilder(
             stream: sheetService.streamAll(),
@@ -43,8 +44,8 @@ class SheetsHomeScreen extends StatelessWidget {
               final sheets = snapshot.data!;
 
               if (sheets.isEmpty) {
-                return const Text(
-                  'Não há nenhum personagem. Que tal adicionar algum?',
+                return const Empty(
+                  text: Text('oi'),
                 );
               }
 

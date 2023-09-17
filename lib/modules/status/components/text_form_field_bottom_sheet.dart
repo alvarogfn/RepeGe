@@ -7,6 +7,7 @@ class TextFormFieldBottomSheet extends StatefulWidget {
     required this.label,
     required this.value,
     this.onFieldSubmitted,
+    this.onChanged,
     this.fieldLabel,
     super.key,
   });
@@ -15,6 +16,7 @@ class TextFormFieldBottomSheet extends StatefulWidget {
   final String value;
   final String? fieldLabel;
   final void Function(String value)? onFieldSubmitted;
+  final void Function(String value)? onChanged;
 
   @override
   State<TextFormFieldBottomSheet> createState() => _TextFormFieldBottomSheetState();
@@ -51,6 +53,7 @@ class _TextFormFieldBottomSheetState extends State<TextFormFieldBottomSheet> {
               decoration: InputDecoration(
                 labelText: widget.fieldLabel ?? widget.label,
               ),
+              onChanged: widget.onChanged,
               onFieldSubmitted: (value) {
                 if (widget.onFieldSubmitted != null) widget.onFieldSubmitted!(value);
                 context.pop();

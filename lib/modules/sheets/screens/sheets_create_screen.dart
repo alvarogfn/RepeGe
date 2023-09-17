@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/sheets/models/character.dart';
-import 'package:repege/modules/sheets/services/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheets_service.dart';
 import 'package:repege/screens/loading_page.dart';
 
 class SheetsCreateScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
         characteristics: characteristicsController.text,
       );
 
-      final sheetService = context.read<SheetService>();
+      final sheetService = context.read<SheetsService>();
 
       final sheet = await sheetService.post(character: character);
 

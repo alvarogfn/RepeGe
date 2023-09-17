@@ -11,33 +11,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<void> _signOutDialog(AuthService authService) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'É necessário verificar o email.',
+          ),
+          content: Text('Você precisa confirmar o email ${authService.user!.email}'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                authService.credential!.sendEmailVerification();
+              },
+              child: const Text('Re-enviar confirmação'),
+            )
+          ],
+        );
+      },
+    );
+
+    await authService.signOut();
+  }
+
   @override
   void initState() {
     super.initState();
     final authService = context.read<AuthService>();
     if (authService.credential?.emailVerified == false) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text(
-                'É necessário verificar o email.',
-              ),
-              content: Text('Você precisa confirmar o email ${authService.user!.email}'),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    authService.credential!.sendEmailVerification();
-                  },
-                  child: const Text('Re-enviar confirmação'),
-                )
-              ],
-            );
-          },
-        ).then(
-          (value) => authService.signOut(),
-        );
+        _signOutDialog(authService);
       });
     }
   }

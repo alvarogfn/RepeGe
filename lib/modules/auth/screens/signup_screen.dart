@@ -64,7 +64,9 @@ class _SignupScreenState extends State<SignupScreen> {
     } catch (error) {
       _showErrorModal(error);
     } finally {
-      setState(() => _loading = false);
+      if (context.mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
