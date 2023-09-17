@@ -60,7 +60,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
       final sheet = await sheetService.post(character: character);
 
       if (context.mounted) {
-        context.pushReplacementNamed(RoutesName.sheet.name, extra: sheet);
+        context.pushReplacementNamed(RoutesName.sheet.name, pathParameters: {'id': sheet.id});
       }
     } catch (e) {
       rethrow;

@@ -60,6 +60,8 @@ class SkillFloatingList extends StatelessWidget {
 
     attributeMapCopy.remove('value');
 
+    if (attributeMapCopy.isEmpty) return const SizedBox();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

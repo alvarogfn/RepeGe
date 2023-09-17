@@ -8,21 +8,23 @@ import 'package:repege/modules/sheets/services/sheet.dart';
 class SheetService with ChangeNotifier {
   late DocumentReference<Sheet> _sheetReference;
   late StreamSubscription? _subscription;
-  Sheet? _sheet;
+  late Sheet _sheet;
 
-  factory SheetService.fromId(String id) {
-    return SheetService(_collection.doc(id));
-  }
-
-  SheetService(DocumentReference<Sheet> sheet) {
-    _sheetReference = sheet;
+  SheetService(Sheet sheet) {
+    _sheetReference = _collection.doc(sheet.id);
+    _sheet = sheet;
     _subscription = _stream().listen((sheet) {
       _sheet = sheet;
       notifyListeners();
     });
   }
 
-  Sheet get sheet => _sheet!;
+  Sheet get sheet => _sheet;
+
+  Future<Sheet> get() async {
+    final snapshot = await _sheetReference.get();
+    return snapshot.data()!;
+  }
 
   Future<void> update(FirebaseSheetModel object) {
     return _sheetReference.update({object.propertyKey: object.toMap()});

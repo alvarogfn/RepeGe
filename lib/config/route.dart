@@ -17,7 +17,7 @@ import 'package:repege/modules/equipments/screens/equipment_form_screen.dart';
 import 'package:repege/modules/equipments/screens/equipment_search_screen.dart';
 import 'package:repege/modules/sheet/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
-import 'package:repege/modules/sheets/screens/sheets_home_screen.dart';
+import 'package:repege/modules/sheets/screens/sheets_screen.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 import 'package:repege/modules/spell/screens/spell_details_screen.dart';
 import 'package:repege/modules/spell/screens/spell_search_screen.dart';
@@ -66,7 +66,7 @@ class CustomRouter {
         path: RoutesName.profile.path,
       ),
       GoRoute(
-        builder: (context, state) => const SheetsHomeScreen(),
+        builder: (context, state) => const SheetsScreen(),
         name: RoutesName.sheets.name,
         path: RoutesName.sheets.path,
         routes: [

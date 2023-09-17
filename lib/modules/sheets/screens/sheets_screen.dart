@@ -9,8 +9,8 @@ import 'package:repege/config/routes_name.dart';
 import 'package:repege/helpers/is_snapshot_loading.dart';
 import 'package:repege/modules/sheets/components/character_list_item.dart';
 
-class SheetsHomeScreen extends StatelessWidget {
-  const SheetsHomeScreen({super.key});
+class SheetsScreen extends StatelessWidget {
+  const SheetsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +44,7 @@ class SheetsHomeScreen extends StatelessWidget {
               final sheets = snapshot.data!;
 
               if (sheets.isEmpty) {
-                return const Empty(
-                  text: Text('oi'),
-                );
+                return const Empty('Nenhum personagem criado.');
               }
 
               return ListView.builder(
