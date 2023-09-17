@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import 'package:repege/config/route.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
-import 'package:repege/modules/sheets/services/sheets_service.dart';
 import 'package:repege/themes/dark_theme.dart';
 import 'package:repege/themes/light_theme.dart';
 
@@ -37,28 +36,39 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final CustomRouter router = CustomRouter();
+  final CustomRouter _router = CustomRouter();
+
+  Stream<User?> _getCurrentSignedUser() {
+    return FirebaseAuth.instance.authStateChanges();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
-        ChangeNotifierProxyProvider<AuthService, SheetsService>(
-          create: (context) => SheetsService(context.read<AuthService>()),
-          update: (context, authService, sheetService) => SheetsService(authService),
-        )
+        StreamProvider(
+          create: (_) => _getCurrentSignedUser(),
+          initialData: null,
+        ),
+        ChangeNotifierProxyProvider<User, AuthService>(
+          create: (context) => AuthService(context.read<User>()),
+          update: (context, user, authService) {
+            if (authService == null) return AuthService(context.read<User>());
+            authService.user = user;
+            return authService;
+          },
+        ),
       ],
       builder: (context, child) {
-        router.refreshListenable = context.read<AuthService>();
+        _router.refreshListenable = context.read<AuthService>();
 
         return MaterialApp.router(
-          routerConfig: router.routes,
+          routerConfig: _router.routes,
           title: 'RepeGe',
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: ThemeMode.light,
-        debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false,
           locale: const Locale.fromSubtags(
             languageCode: 'pt',
             countryCode: 'BR',

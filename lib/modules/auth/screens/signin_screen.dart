@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/config/routes_name.dart';
+import 'package:repege/helpers/is_snapshot_loading.dart';
 import 'package:repege/modules/auth/components/app_logo.dart';
 import 'package:repege/modules/auth/components/obscure_text_field.dart';
 import 'package:repege/modules/auth/exceptions/not_verified_email_exception.dart';
@@ -23,8 +24,7 @@ class SigninScreen extends StatefulWidget {
 
 class _SigninScreenState extends State<SigninScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _loading = false;
-
+  Future _future = Future(() => null);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -54,69 +54,72 @@ class _SigninScreenState extends State<SigninScreen> {
     if (!isValid) return;
 
     try {
-      setState(() => _loading = true);
       await _signin();
     } catch (error) {
       _showErrorModal(error);
-    } finally {
-      setState(() => _loading = false);
-    }
+    } finally {}
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) return const LoadingPage();
-
     return Scaffold(
-      body: FullScreenScroll(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 100, 15, 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppLogo(subtitle: 'Entrar na sua conta'),
-                const SizedBox(height: 60),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  textInputAction: TextInputAction.next,
-                  controller: emailController,
-                  validator: (email) => Validator.validateWith(email, [
-                    RequiredValidation(),
-                    EmailValidation(),
-                  ]),
-                ),
-                const SizedBox(height: 20),
-                ObscureTextField(
-                  label: 'Senha',
-                  textInputAction: TextInputAction.done,
-                  controller: passwordController,
-                  validator: (password) => Validator.validateWith(password, [
-                    RequiredValidation(),
-                    PasswordValidation(),
-                  ]),
-                ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: _loading ? null : _handleSubmit,
-                  child: const Text('Login'),
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      context.pushNamed(RoutesName.signup.name);
-                    },
-                    child: const Text('Criar Conta'),
+      body: FutureBuilder(
+          future: _future,
+          builder: (context, snapshot) {
+            final isLoading = isSnapshotLoading(snapshot);
+
+            if (isLoading) return const LoadingPage();
+
+            return FullScreenScroll(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 100, 15, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const AppLogo(subtitle: 'Entrar na sua conta'),
+                      const SizedBox(height: 60),
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        textInputAction: TextInputAction.next,
+                        controller: emailController,
+                        validator: (email) => Validator.validateWith(email, [
+                          RequiredValidation(),
+                          EmailValidation(),
+                        ]),
+                      ),
+                      const SizedBox(height: 20),
+                      ObscureTextField(
+                        label: 'Senha',
+                        textInputAction: TextInputAction.done,
+                        controller: passwordController,
+                        validator: (password) => Validator.validateWith(password, [
+                          RequiredValidation(),
+                          PasswordValidation(),
+                        ]),
+                      ),
+                      const SizedBox(height: 40),
+                      ElevatedButton(
+                        onPressed: isLoading ? () {} : () => setState(() => _future = _handleSubmit()),
+                        child: const Text('Login'),
+                      ),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            context.pushNamed(RoutesName.signup.name);
+                          },
+                          child: const Text('Criar Conta'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
+              ),
+            );
+          }),
     );
   }
 
