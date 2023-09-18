@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -31,12 +32,10 @@ import 'package:repege/config/environment_variables.dart';
 class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
-  Listenable? refreshListenable;
-
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
     initialLocation: '/',
-    refreshListenable: refreshListenable,
+    refreshListenable: GoRouterRefreshListenable(FirebaseAuth.instance.authStateChanges()),
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(

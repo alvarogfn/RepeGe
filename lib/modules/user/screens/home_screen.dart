@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                authService.credential!.sendEmailVerification();
+                authService.user!.sendEmailVerification();
               },
               child: const Text('Re-enviar confirmação'),
             )
@@ -39,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final authService = context.read<AuthService>();
-    if (authService.credential?.emailVerified == false) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    if (authService.user!.emailVerified == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         _signOutDialog(authService);
       });
     }
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Início')),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: Scaffold(
         body: TextButton(
           onPressed: () {},

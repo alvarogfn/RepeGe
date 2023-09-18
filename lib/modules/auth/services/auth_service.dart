@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:repege/modules/auth/exceptions/username_exists_exception.dart';
+import 'package:repege/modules/auth/models/user.dart' as local;
 
 class AuthService with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -11,7 +12,7 @@ class AuthService with ChangeNotifier {
 
   late StreamSubscription _subscription;
 
-  User user;
+  User? user;
 
   AuthService(this.user);
 
@@ -78,6 +79,12 @@ class AuthService with ChangeNotifier {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<local.User?> getCurrentFirestoreUser() async {
+    if (user == null) return null;
+    final firestoreUser = await local.User.collection.doc(user!.uid).get();
+    return firestoreUser.data()!;
   }
 
   @override

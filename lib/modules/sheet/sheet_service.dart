@@ -6,42 +6,23 @@ import 'package:repege/models/firebase_model.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class SheetService with ChangeNotifier {
-  late DocumentReference<Sheet> _sheetReference;
-  late StreamSubscription? _subscription;
-  late Sheet _sheet;
+  late DocumentReference<Sheet> sheetReference;
 
-  SheetService(Sheet sheet) {
-    _sheetReference = _collection.doc(sheet.id);
-    _sheet = sheet;
-    _subscription = _stream().listen((sheet) {
-      _sheet = sheet;
-      notifyListeners();
-    });
+  SheetService(String sheetId) {
+    sheetReference = _collection.doc(sheetId);
   }
 
-  Sheet get sheet => _sheet;
-
-  Future<Sheet> get() async {
-    final snapshot = await _sheetReference.get();
-    return snapshot.data()!;
-  }
 
   Future<void> update(FirebaseSheetModel object) {
-    return _sheetReference.update({object.propertyKey: object.toMap()});
+    return sheetReference.update({object.propertyKey: object.toMap()});
   }
 
   Future<void> bulkUpdate(Map<String, dynamic> data) {
-    return _sheetReference.update(data);
+    return sheetReference.update(data);
   }
 
-  Stream<Sheet> _stream() {
-    return _sheetReference.snapshots().map((snapshot) => snapshot.data()!);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
+  Stream<Sheet> stream() {
+    return sheetReference.snapshots().map((snapshot) => snapshot.data()!);
   }
 
   static CollectionReference<Sheet> get _collection {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/modules/sheets/models/appearance.dart';
 import 'package:repege/modules/sheets/models/bag.dart';
 import 'package:repege/modules/sheets/models/casting.dart';
@@ -12,16 +12,16 @@ import 'package:repege/modules/status/models/attributes.dart';
 import 'package:repege/modules/status/models/status.dart';
 
 class SheetsService extends ChangeNotifier {
-  final AuthService _authService;
+  User user;
 
-  SheetsService(this._authService);
+  SheetsService(this.user);
 
-  Stream<Sheet> streamOf(Sheet sheet) {
-    return collection.doc(sheet.id).snapshots().map((event) => event.data()!);
+  Stream<Sheet> streamOf(String sheetId) {
+    return collection.doc(sheetId).snapshots().map((event) => event.data()!);
   }
 
   Stream<List<Sheet>> streamAll() {
-    final snapshots = collection.where('ownerUID', isEqualTo: _authService.user?.uid).snapshots();
+    final snapshots = collection.where('ownerUID', isEqualTo: user.uid).snapshots();
 
     return snapshots.map((snapshots) {
       return snapshots.docs.map((doc) {
@@ -43,7 +43,7 @@ class SheetsService extends ChangeNotifier {
 
     final sheet = Sheet(
       id: ref.id,
-      ownerUID: _authService.user!.uid,
+      ownerUID: user.uid,
       appearance: appearance ?? Appearance(),
       attributes: attributes ?? Attributes(),
       bag: bag ?? Bag(),

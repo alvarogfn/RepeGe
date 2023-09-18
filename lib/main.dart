@@ -50,31 +50,27 @@ class MyApp extends StatelessWidget {
           create: (_) => _getCurrentSignedUser(),
           initialData: null,
         ),
-        ChangeNotifierProxyProvider<User, AuthService>(
-          create: (context) => AuthService(context.read<User>()),
+        ChangeNotifierProxyProvider<User?, AuthService>(
+          create: (context) => AuthService(context.read<User?>()),
           update: (context, user, authService) {
-            if (authService == null) return AuthService(context.read<User>());
+            if (authService == null) return AuthService(context.read<User?>());
             authService.user = user;
             return authService;
           },
         ),
       ],
-      builder: (context, child) {
-        _router.refreshListenable = context.read<AuthService>();
-
-        return MaterialApp.router(
-          routerConfig: _router.routes,
-          title: 'RepeGe',
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: ThemeMode.light,
-          debugShowCheckedModeBanner: false,
-          locale: const Locale.fromSubtags(
-            languageCode: 'pt',
-            countryCode: 'BR',
-          ),
-        );
-      },
+      child: MaterialApp.router(
+        routerConfig: _router.routes,
+        title: 'RepeGe',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        locale: const Locale.fromSubtags(
+          languageCode: 'pt',
+          countryCode: 'BR',
+        ),
+      ),
     );
   }
 }

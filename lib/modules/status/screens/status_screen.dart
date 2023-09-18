@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
+import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/status/components/attributes_card.dart';
 import 'package:repege/modules/status/components/life_tracker.dart';
 import 'package:repege/modules/status/models/status.dart';
@@ -19,7 +20,7 @@ class _StatusScreenState extends State<StatusScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final sheet = context.read<SheetService>().sheet;
+    final sheet = context.read<Sheet>();
     status = sheet.status;
   }
 

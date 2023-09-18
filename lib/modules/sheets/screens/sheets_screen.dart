@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/empty.dart';
-import 'package:repege/components/loading.dart';
+import 'package:repege/modules/auth/services/auth_service.dart';
+import 'package:repege/modules/sheets/components/character_list_item.dart';
+import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/sheets/services/sheets_service.dart';
 import 'package:repege/modules/user/components/custom_drawer.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/modules/sheets/components/character_list_item.dart';
 
 class SheetsScreen extends StatelessWidget {
   const SheetsScreen({super.key});
@@ -24,24 +24,25 @@ class SheetsScreen extends StatelessWidget {
           )
         ],
       ),
-      drawer: CustomDrawer(),
-      body: Consumer<SheetsService>(
-        builder: (context, sheetService, _) {
-          return StreamBuilder(
-            stream: sheetService.streamAll(),
+      drawer: const CustomDrawer(),
+      body: ChangeNotifierProxyProvider<AuthService, SheetsService>(
+        create: (context) => SheetsService(
+          context.read<AuthService>().user!,
+        ),
+        update: (context, authService, sheetService) {
+          final user = context.read<AuthService>().user!;
+
+          if (sheetService == null) return SheetsService(user);
+          sheetService.user = user;
+
+          return sheetService;
+        },
+        builder: (context, child) {
+          return StreamProvider<List<Sheet>>(
             initialData: const [],
-            builder: (context, snapshot) {
-              if (isSnapshotLoading(snapshot)) {
-                return const Center(
-                  child: Loading(),
-                );
-              }
-
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              }
-
-              final sheets = snapshot.data!;
+            create: (_) => context.read<SheetsService>().streamAll(),
+            builder: (context, child) {
+              final sheets = context.watch<List<Sheet>>();
 
               if (sheets.isEmpty) {
                 return const Empty('Nenhum personagem criado.');
