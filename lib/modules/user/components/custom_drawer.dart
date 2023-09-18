@@ -1,16 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/components/loading.dart';
 import 'package:repege/config/routes_name.dart';
+import 'package:repege/modules/auth/models/user.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/modules/user/components/icon_text_button.dart';
 import 'package:repege/modules/user/components/navigation_list_item.dart';
 
 class CustomDrawer extends StatelessWidget {
-  CustomDrawer({super.key});
+  const CustomDrawer({super.key});
 
-  final authService = AuthService();
+  Future<User> _getCurrentUserFirebaseDoc(BuildContext context) {
+    final String uid = context.read<firebase.User>().uid;
+    return User.collection.doc(uid).get().then((value) => value.data()!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,29 +23,31 @@ class CustomDrawer extends StatelessWidget {
         children: [
           AppBar(
             automaticallyImplyLeading: false,
-            title: Consumer<AuthService>(builder: (context, authService, child) {
-              final user = authService.user;
+            title: FutureProvider(
+              initialData: null,
+              create: (context) => _getCurrentUserFirebaseDoc(context),
+              builder: (context, child) {
+                final user = context.watch<User>();
 
-              if (user == null) return const Loading();
-
-              return Row(
-                children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(100),
-                    onTap: () => context.pushNamed(RoutesName.profile.name),
-                    child: CircleAvatar(backgroundImage: user.avatar),
-                  ),
-                  const SizedBox(width: 15),
-                  Text(
-                    user.username,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
+                return Row(
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(100),
+                      onTap: () => context.pushNamed(RoutesName.profile.name),
+                      child: CircleAvatar(backgroundImage: user.avatar),
                     ),
-                  ),
-                ],
-              );
-            }),
+                    const SizedBox(width: 15),
+                    Text(
+                      user.username,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
             actions: [
               PopupMenuButton(
                 itemBuilder: (context) => [
