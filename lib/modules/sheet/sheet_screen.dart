@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/modules/character/screens/character_screen.dart';
+import 'package:repege/modules/character/character_screen.dart';
+import 'package:repege/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
+import 'package:repege/modules/sheets/screens/sheet_casting_screen.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/status/screens/status_screen.dart';
 import 'package:repege/screens/loading_page.dart';
@@ -30,7 +32,7 @@ class _SheetScreenState extends State<SheetScreen> {
             if (sheet == null) return const LoadingPage();
 
             return DefaultTabController(
-              length: 2,
+              length: 4,
               child: Consumer<Sheet?>(
                 builder: (context, sheet, child) {
                   if (sheet == null) return const LoadingPage();
@@ -39,10 +41,12 @@ class _SheetScreenState extends State<SheetScreen> {
                       title: Text(sheet.character.characterName),
                       bottom: child as TabBar,
                     ),
-                    body: const TabBarView(
+                    body: TabBarView(
                       children: [
                         CharacterScreen(),
                         StatusScreen(),
+                        EquipmentScreen(),
+                        SheetCastingScreen(sheet: sheet)
                       ],
                     ),
                   );
@@ -53,8 +57,8 @@ class _SheetScreenState extends State<SheetScreen> {
                   tabs: [
                     Tab(icon: Icon(Rpg.player)),
                     Tab(icon: Icon(Rpg.health)),
-                    // Tab(icon: Icon(Rpg.axe)),
-                    // Tab(icon: Icon(Rpg.book)),
+                    Tab(icon: Icon(Rpg.axe)),
+                    Tab(icon: Icon(Rpg.book)),
                   ],
                 ),
               ),

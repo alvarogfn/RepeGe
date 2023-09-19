@@ -10,7 +10,7 @@ import 'package:repege/modules/auth/screens/signup_screen.dart';
 import 'package:repege/modules/auth/models/auth_state.dart';
 import 'package:repege/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/equipments/screens/equipment_screen.dart';
-import 'package:repege/modules/equipments/screens/equipment_form_screen.dart';
+import 'package:repege/modules/equipments/screens/equipment_create_screen.dart';
 import 'package:repege/modules/equipments/screens/equipment_search_screen.dart';
 import 'package:repege/modules/sheet/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
@@ -108,7 +108,7 @@ class CustomRouter {
             name: RoutesName.equipmentsSearch.name,
           ),
           GoRoute(
-            builder: (context, state) => EquipmentFormScreen(
+            builder: (context, state) => EquipmentCreateScreen(
               state.extra as Equipment?,
             ),
             path: RoutesName.equipmentsForm.path,

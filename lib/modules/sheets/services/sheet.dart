@@ -4,7 +4,6 @@ import 'package:repege/modules/sheets/models/bag.dart';
 import 'package:repege/modules/sheets/models/casting.dart';
 import 'package:repege/modules/sheets/models/character.dart';
 import 'package:repege/modules/sheets/models/spells.dart';
-import 'package:repege/modules/equipments/services/equipments.dart';
 import 'package:repege/modules/status/models/attributes.dart';
 import 'package:repege/modules/status/models/status.dart';
 
@@ -21,7 +20,6 @@ class Sheet {
 
   final DocumentReference ref;
   late final Spells spells = Spells(sheetID: id, sheetRef: ref);
-  late final Equipments equipments = Equipments(sheetReference: ref);
 
   Sheet({
     required this.id,

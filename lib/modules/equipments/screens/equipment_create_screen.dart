@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
+import 'package:repege/modules/equipments/services/equipments_service.dart';
 import 'package:repege/modules/sheets/components/sheet_dropdown_menu.dart';
 import 'package:repege/modules/equipments/components/equipment_form_field.dart';
 import 'package:repege/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/equipments/models/equipment_types.dart';
 
-class EquipmentFormScreen extends StatefulWidget {
-  const EquipmentFormScreen(this.equipment, {super.key});
+class EquipmentCreateScreen extends StatefulWidget {
+  const EquipmentCreateScreen(this.equipment, {super.key});
 
   final Equipment? equipment;
 
   @override
-  State<EquipmentFormScreen> createState() => _EquipmentFormScreenState();
+  State<EquipmentCreateScreen> createState() => _EquipmentCreateScreenState();
 }
 
-class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
+class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
   final _formKey = GlobalKey<FormState>();
   EquipmentTypes type = EquipmentTypes.item;
   Map<String, dynamic> data = {};
@@ -28,7 +30,12 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
     if (!isValid) return;
 
     data['type'] = type;
-    context.pop(data);
+
+    final equipmentService = context.read<EquipmentsService>();
+
+    await equipmentService.add(data);
+
+    if (context.mounted) context.pop();
   }
 
   @override

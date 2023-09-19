@@ -4,7 +4,7 @@ import 'package:repege/modules/equipments/models/equipment_types.dart';
 
 class Equipment {
   final EquipmentTypes type;
-  final DocumentReference<Equipment> ref;
+  final DocumentReference ref;
   final String id;
   final String name;
   final String description;

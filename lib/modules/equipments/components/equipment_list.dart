@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:repege/helpers/is_snapshot_loading.dart';
+import 'package:provider/provider.dart';
+import 'package:repege/components/loading.dart';
 import 'package:repege/modules/equipments/components/equipment_tile.dart';
-import 'package:repege/modules/equipments/services/equipments.dart';
+import 'package:repege/modules/equipments/models/equipment.dart';
+import 'package:repege/modules/equipments/services/equipments_service.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class EquipmentList extends StatelessWidget {
   const EquipmentList({
     required this.sheet,
-    required this.equipments,
     super.key,
   });
 
   final Sheet sheet;
-  final Equipments equipments;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      initialData: const [],
-      stream: equipments.stream(),
-      builder: (context, snapshot) {
-        if (isSnapshotLoading(snapshot)) {
-          return const Text('carregando...');
-        }
+    return StreamProvider(
+      create: (context) => context.read<EquipmentsService>().stream(),
+      initialData: null,
+      builder: (context, child) {
+        final equipments = context.watch<List<Equipment>?>();
 
-        if (snapshot.hasError) {
-          return Text(snapshot.error!.toString());
-        }
-
-        final equipments = snapshot.data!;
+        if (equipments == null) return const Center(child: Loading());
 
         return ListView.builder(
           itemCount: equipments.length,

@@ -1,31 +1,37 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/helpers/parse_int.dart';
+import 'package:repege/models/firebase_model.dart';
 
-class Bag {
-  final int copper;
-  final int electrum;
-  final int gold;
-  final int platinum;
-  final int silver;
+class Bag extends FirebaseSheetModel {
+  late int copper;
+  late int electrum;
+  late int gold;
+  late int platinum;
+  late int silver;
 
   Bag({
-    this.copper = 0,
-    this.electrum = 0,
-    this.gold = 0,
-    this.platinum = 0,
-    this.silver = 0,
-  });
+    int? copper,
+    int? electrum,
+    int? gold,
+    int? platinum,
+    int? silver,
+  }) {
+    this.copper = copper ?? 0;
+    this.electrum = electrum ?? 0;
+    this.gold = gold ?? 0;
+    this.platinum = platinum ?? 0;
+    this.silver = silver ?? 0;
+  }
 
   static Bag fromMap(Map<String, Object?> data) {
     return Bag(
-      copper: parseInt(data['copper']),
-      electrum: parseInt(data['electrum']),
-      gold: parseInt(data['gold']),
-      platinum: parseInt(data['platinum']),
-      silver: parseInt(data['silver']),
+      copper: data['copper'] as int,
+      electrum: data['electrum'] as int,
+      gold: data['gold'] as int,
+      platinum: data['platinum'] as int,
+      silver: data['silver'] as int,
     );
   }
 
+  @override
   Map<String, Object?> toMap() {
     return {
       'copper': copper,
@@ -36,10 +42,6 @@ class Bag {
     };
   }
 
-  static CollectionReference<Bag> collection() {
-    return FirebaseFirestore.instance.collection('bag').withConverter<Bag>(
-          fromFirestore: (snapshot, _) => Bag.fromMap(snapshot.data()!),
-          toFirestore: (bag, _) => bag.toMap(),
-        );
-  }
+  @override
+  String get propertyKey => 'bag';
 }

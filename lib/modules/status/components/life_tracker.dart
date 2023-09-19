@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repege/modules/status/components/text_form_field_bottom_sheet.dart';
+import 'package:repege/components/text_form_field_bottom_sheet.dart';
 
 class LifeTracker extends StatefulWidget {
   const LifeTracker({
