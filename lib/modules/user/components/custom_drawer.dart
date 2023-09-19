@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -15,69 +14,68 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        children: [
-          FutureProvider(
-            initialData: null,
-            create: (context) => context.read<AuthService>().getCurrentFirestoreUser(),
-            builder: (context, child) {
-              final user = context.watch<User?>();
-              if (user == null) return const Center(child: Loading());
+      child: FutureProvider(
+          initialData: null,
+          create: (context) => context.read<AuthService>().getCurrentFirestoreUser(),
+          builder: (context, _) {
+            final user = context.watch<User?>();
+            if (user == null) return const Center(child: Loading());
 
-              return AppBar(
-                automaticallyImplyLeading: false,
-                title: Row(
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(100),
-                      onTap: () => context.pushNamed(RoutesName.profile.name),
-                      child: CircleAvatar(backgroundImage: user.avatar),
-                    ),
-                    const SizedBox(width: 15),
-                    Text(
-                      user.username,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+            return Column(
+              children: [
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  title: Row(
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(100),
+                        onTap: () => context.pushNamed(RoutesName.profile.name),
+                        child: CircleAvatar(backgroundImage: user.avatar),
                       ),
-                    ),
-                  ],
-                ),
-                actions: [
-                  PopupMenuButton(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        onTap: () => context.read<AuthService>().signOut(),
-                        child: const IconTextButton(
-                          icon: Icons.logout,
-                          text: 'Sair',
+                      const SizedBox(width: 15),
+                      Text(
+                        user.username,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
-                ],
-              );
-            },
-          ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              children: const [
-                NavigationListItem(
-                  icon: Icons.article,
-                  text: 'Fichas',
-                  route: RoutesName.sheets,
+                  actions: [
+                    PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          onTap: () => context.read<AuthService>().signOut(),
+                          child: const IconTextButton(
+                            icon: Icons.logout,
+                            text: 'Sair',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                NavigationListItem(
-                  icon: Icons.groups,
-                  text: 'Mesas',
-                  route: RoutesName.tables,
-                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    children: const [
+                      NavigationListItem(
+                        icon: Icons.article,
+                        text: 'Fichas',
+                        route: RoutesName.sheets,
+                      ),
+                      NavigationListItem(
+                        icon: Icons.groups,
+                        text: 'Mesas',
+                        route: RoutesName.tables,
+                      ),
+                    ],
+                  ),
+                )
               ],
-            ),
-          )
-        ],
-      ),
+            );
+          }),
     );
   }
 }

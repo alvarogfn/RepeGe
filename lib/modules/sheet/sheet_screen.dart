@@ -25,7 +25,7 @@ class _SheetScreenState extends State<SheetScreen> {
           create: (_) => context.read<SheetService>().stream(),
           initialData: null,
           builder: (context, child) {
-            final sheet = context.read<Sheet?>();
+            final sheet = context.watch<Sheet?>();
 
             if (sheet == null) return const LoadingPage();
 

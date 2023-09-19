@@ -19,11 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
           title: const Text(
             'É necessário verificar o email.',
           ),
-          content: Text('Você precisa confirmar o email ${authService.user!.email}'),
+          content: Text('Você precisa confirmar o email ${authService.user?.email}'),
           actions: [
             ElevatedButton(
               onPressed: () {
-                authService.user!.sendEmailVerification();
+                authService.user?.sendEmailVerification();
               },
               child: const Text('Re-enviar confirmação'),
             )
@@ -39,11 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     final authService = context.read<AuthService>();
-    if (authService.user!.emailVerified == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _signOutDialog(authService);
-      });
-    }
+    if (authService.user == null) return;
+    if (authService.user!.emailVerified) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _signOutDialog(authService);
+    });
   }
 
   @override

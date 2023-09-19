@@ -37,26 +37,24 @@ class SheetsScreen extends StatelessWidget {
 
           return sheetService;
         },
-        builder: (context, child) {
-          return StreamProvider<List<Sheet>>(
-            initialData: const [],
-            create: (_) => context.read<SheetsService>().streamAll(),
-            builder: (context, child) {
-              final sheets = context.watch<List<Sheet>>();
+        child: StreamProvider<List<Sheet>>(
+          initialData: const [],
+          create: (context) => context.read<SheetsService>().streamAll(),
+          builder: (context, child) {
+            final sheets = context.watch<List<Sheet>>();
 
-              if (sheets.isEmpty) {
-                return const Empty('Nenhum personagem criado.');
-              }
+            if (sheets.isEmpty) {
+              return const Empty('Nenhum personagem criado.');
+            }
 
-              return ListView.builder(
-                itemCount: sheets.length,
-                itemBuilder: (context, index) {
-                  return CharacterListItem(sheets[index]);
-                },
-              );
-            },
-          );
-        },
+            return ListView.builder(
+              itemCount: sheets.length,
+              itemBuilder: (context, index) {
+                return CharacterListItem(sheets[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }

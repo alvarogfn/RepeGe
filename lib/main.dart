@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
 
 import 'package:repege/config/route.dart';
+import 'package:repege/config/stream_auth_scope.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/themes/dark_theme.dart';
 import 'package:repege/themes/light_theme.dart';
@@ -30,13 +31,11 @@ Future<void> main() async {
     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   }
 
-  runApp(MyApp());
+  runApp(StreamAuthScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final CustomRouter _router = CustomRouter();
+  const MyApp({super.key});
 
   Stream<User?> _getCurrentSignedUser() {
     return FirebaseAuth.instance.authStateChanges();
@@ -58,19 +57,26 @@ class MyApp extends StatelessWidget {
             return authService;
           },
         ),
+        Provider<CustomRouter>(
+          create: (context) => CustomRouter(),
+        )
       ],
-      child: MaterialApp.router(
-        routerConfig: _router.routes,
-        title: 'RepeGe',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
-        debugShowCheckedModeBanner: false,
-        locale: const Locale.fromSubtags(
-          languageCode: 'pt',
-          countryCode: 'BR',
-        ),
-      ),
+      builder: (context, _) {
+        final routes = context.read<CustomRouter>().routes;
+
+        return MaterialApp.router(
+          routerConfig: routes,
+          title: 'RepeGe',
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.light,
+          debugShowCheckedModeBanner: false,
+          locale: const Locale.fromSubtags(
+            languageCode: 'pt',
+            countryCode: 'BR',
+          ),
+        );
+      },
     );
   }
 }

@@ -1,15 +1,11 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/config/routes_name.dart';
+import 'package:repege/config/stream_auth_scope.dart';
 
 import 'package:repege/modules/auth/screens/signin_screen.dart';
 import 'package:repege/modules/auth/screens/signup_screen.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
 
 import 'package:repege/modules/auth/models/auth_state.dart';
 import 'package:repege/modules/equipments/models/equipment.dart';
@@ -32,10 +28,11 @@ import 'package:repege/config/environment_variables.dart';
 class CustomRouter {
   final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
+  CustomRouter();
+
   late final routes = GoRouter(
     debugLogDiagnostics: !EnvironmentVariables.production,
     initialLocation: '/',
-    refreshListenable: GoRouterRefreshListenable(FirebaseAuth.instance.authStateChanges()),
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
@@ -101,7 +98,7 @@ class CustomRouter {
         ],
       ),
       GoRoute(
-        builder: (context, state) => EquipmentScreen(state.extra as Equipment),
+        builder: (context, state) => const EquipmentScreen(),
         name: RoutesName.equipments.name,
         path: RoutesName.equipments.path,
         routes: [
@@ -138,7 +135,7 @@ class CustomRouter {
           .map((e) => e.path)
           .contains(state.matchedLocation);
 
-      final user = context.read<AuthService>().user;
+      final user = StreamAuthScope.of(context).currentUser;
 
       if (user == null && toUnauth) {
         return null;
@@ -159,23 +156,4 @@ class CustomRouter {
       return null;
     },
   );
-}
-
-class GoRouterRefreshListenable extends ChangeNotifier {
-  GoRouterRefreshListenable(Stream stream) {
-    notifyListeners();
-    _subscription = stream.asBroadcastStream().listen(
-      (_) {
-        notifyListeners();
-      },
-    );
-  }
-
-  late final StreamSubscription _subscription;
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
 }
