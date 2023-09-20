@@ -43,9 +43,9 @@ class _SheetScreenState extends State<SheetScreen> {
                     ),
                     body: TabBarView(
                       children: [
-                        CharacterScreen(),
-                        StatusScreen(),
-                        EquipmentScreen(),
+                        const CharacterScreen(),
+                        const StatusScreen(),
+                        const EquipmentScreen(),
                         SheetCastingScreen(sheet: sheet)
                       ],
                     ),

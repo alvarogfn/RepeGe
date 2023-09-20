@@ -28,7 +28,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
   final repasswordController = TextEditingController();
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   bool _validateForm() {
     final currentState = _formKey.currentState;

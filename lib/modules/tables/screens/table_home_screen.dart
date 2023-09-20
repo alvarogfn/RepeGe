@@ -19,7 +19,7 @@ class TableHomeScreen extends StatelessWidget {
           )
         ],
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: StreamBuilder(
         initialData: const ['a', 'b', 'c'],
         builder: (context, snapshot) {

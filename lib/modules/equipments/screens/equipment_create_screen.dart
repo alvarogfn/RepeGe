@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/modules/equipments/services/equipments_service.dart';
 import 'package:repege/modules/sheets/components/sheet_dropdown_menu.dart';
 import 'package:repege/modules/equipments/components/equipment_form_field.dart';
 import 'package:repege/modules/equipments/models/equipment.dart';
@@ -22,31 +20,9 @@ class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
   EquipmentTypes type = EquipmentTypes.item;
   Map<String, dynamic> data = {};
 
-  Future<void> save(BuildContext context) async {
-    final currentState = _formKey.currentState;
-    if (currentState == null) return;
-
-    final isValid = currentState.validate();
-    if (!isValid) return;
-
-    data['type'] = type;
-
-    final equipmentService = context.read<EquipmentsService>();
-
-    await equipmentService.add(data);
-
-    if (context.mounted) context.pop();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.equipment != null) {
-      setState(() {
-        data = widget.equipment!.toMap();
-        type = widget.equipment!.type;
-      });
-    }
+  void _handleSubmit() {
+    data.putIfAbsent('type', () => type);
+    context.pop(data);
   }
 
   @override
@@ -56,7 +32,7 @@ class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
         title: const Text('Crie um equipamento'),
         actions: [
           IconButton(
-            onPressed: () => save(context),
+            onPressed: _handleSubmit,
             icon: const Icon(Icons.save),
           )
         ],

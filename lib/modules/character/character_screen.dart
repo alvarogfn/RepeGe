@@ -21,7 +21,7 @@ class _CharacterScreenState extends State<CharacterScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final sheet = context.read<Sheet>();
+    final sheet = context.watch<Sheet>();
     _character = sheet.character;
   }
 

@@ -3,14 +3,14 @@ import 'package:repege/helpers/parse_string.dart';
 import 'package:repege/modules/equipments/models/equipment_types.dart';
 
 class Equipment {
-  final EquipmentTypes type;
-  final DocumentReference ref;
-  final String id;
-  final String name;
-  final String description;
-  final String price;
-  final String weight;
-  final Timestamp? createdAt;
+  EquipmentTypes type;
+  DocumentReference ref;
+  String id;
+  String name;
+  String description;
+  String price;
+  String weight;
+  Timestamp? createdAt;
 
   Equipment({
     required this.id,

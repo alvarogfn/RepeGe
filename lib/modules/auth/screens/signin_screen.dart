@@ -26,7 +26,7 @@ class _SigninScreenState extends State<SigninScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   bool _validateForm() {
     final currentState = _formKey.currentState;

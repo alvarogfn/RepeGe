@@ -4,6 +4,8 @@ import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/status/components/attributes_card.dart';
+import 'package:repege/modules/status/components/combat_card.dart';
+import 'package:repege/modules/status/components/death_saves_card.dart';
 import 'package:repege/modules/status/components/life_tracker.dart';
 import 'package:repege/modules/status/models/status.dart';
 
@@ -20,7 +22,7 @@ class _StatusScreenState extends State<StatusScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final sheet = context.read<Sheet>();
+    final sheet = context.watch<Sheet>();
     status = sheet.status;
   }
 
@@ -55,7 +57,9 @@ class _StatusScreenState extends State<StatusScreen> {
                 );
               },
             ),
-            const AttributesCard()
+            const CombatCard(),
+            const DeathSavesCard(),
+            const AttributesCard(),
           ],
         ),
       ),
