@@ -13,11 +13,11 @@ class SpellListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      confirmDismiss: (direction) async {
+      confirmDismiss: (direction) {
         if (direction == DismissDirection.startToEnd) {
           return deleteSpell(context);
         }
-        return editSpell(context);
+        return context.pushNamed(RoutesName.spell.name, pathParameters: {'id': spell.id}, extra: spell);
       },
       background: Container(
         padding: const EdgeInsets.only(left: 20),
@@ -35,12 +35,11 @@ class SpellListItem extends StatelessWidget {
       child: ListTile(
         title: Text(spell.name.toCapitalize()),
         trailing: Text(spell.levelText),
-        isThreeLine: true,
         subtitleTextStyle: const TextStyle(fontSize: 12),
         subtitle: Text(spell.description, maxLines: 2),
         onTap: () => context.pushNamed(
-          RoutesName.spellDetails.name,
-          extra: spell,
+          RoutesName.spell.name,
+          pathParameters: {'id': spell.id},
         ),
       ),
     );
@@ -86,7 +85,7 @@ class SpellListItem extends StatelessWidget {
       },
     );
     if (choice == true) {
-      await spell.delete();
+      await spell.ref!.delete();
       return true;
     }
     return false;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/config/routes_name.dart';
-import 'package:repege/modules/sheets/models/character.dart';
+import 'package:repege/modules/character/character.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/components/loading.dart';
 

@@ -43,7 +43,7 @@ class EquipmentsService with ChangeNotifier {
   }
 
   CollectionReference<Equipment> get collection {
-    return FirebaseFirestore.instance.collection('equipments').withConverter<Equipment>(
+    return sheet.ref.collection('equipments').withConverter<Equipment>(
       fromFirestore: (snapshot, options) {
         final data = snapshot.data()!;
         final name = parseString(data['name']);

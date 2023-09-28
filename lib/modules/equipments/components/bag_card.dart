@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/components/text_form_field_bottom_sheet.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
-import 'package:repege/modules/sheets/models/bag.dart';
+import 'package:repege/modules/equipments/models/bag.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class BagCard extends StatefulWidget {

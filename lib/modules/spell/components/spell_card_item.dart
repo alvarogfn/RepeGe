@@ -25,9 +25,7 @@ class SpellCardItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.justify,
             ),
-            trailing: spell.level == 0
-                ? const Text('Truque')
-                : Text('${spell.level}º nível'),
+            trailing: spell.level == 0 ? const Text('Truque') : Text('${spell.level}º nível'),
             isThreeLine: true,
           ),
           Padding(
@@ -45,7 +43,7 @@ class SpellCardItem extends StatelessWidget {
                   ),
                   onPressed: () {
                     context.pushNamed(
-                      RoutesName.spellDetails.name,
+                      RoutesName.spell.name,
                       extra: spell,
                     );
                   },

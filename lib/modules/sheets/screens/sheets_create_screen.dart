@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
-import 'package:repege/modules/sheets/models/character.dart';
+import 'package:repege/modules/character/character.dart';
 import 'package:repege/modules/sheets/services/sheets_service.dart';
 
 class SheetsCreateScreen extends StatefulWidget {

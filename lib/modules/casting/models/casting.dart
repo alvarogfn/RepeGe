@@ -1,36 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/helpers/parse_int.dart';
 import 'package:repege/helpers/parse_string.dart';
+import 'package:repege/models/firebase_model.dart';
 
-class Casts {
-  final int level;
-  final int maxCasts;
-  final int currentCasts;
-
-  Casts({
-    required this.level,
-    required this.maxCasts,
-    required this.currentCasts,
-  });
-
-  String get label {
-    return 'Slots de nível $level disponíveis';
-  }
-}
-
-class Casting {
-  final int attackBonus;
-  final String castingClass;
-  final int castingHability;
-  final int magicResistance;
-  final List<Casts> casts;
+class Casting implements FirebaseSheetModel {
+  int attackBonus;
+  String castingClass;
+  int castingHability;
+  int magicResistance;
 
   Casting({
     this.attackBonus = 0,
     this.castingClass = '',
     this.castingHability = 0,
     this.magicResistance = 0,
-    this.casts = const [],
   });
 
   static Casting fromMap(Map<String, dynamic> data) {
@@ -42,6 +25,7 @@ class Casting {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'attackBonus': attackBonus,
@@ -57,4 +41,7 @@ class Casting {
           toFirestore: (casting, _) => casting.toMap(),
         );
   }
+
+  @override
+  String get propertyKey => 'casting';
 }

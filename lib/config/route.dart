@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/config/stream_auth_scope.dart';
@@ -8,6 +7,8 @@ import 'package:repege/modules/auth/screens/signin_screen.dart';
 import 'package:repege/modules/auth/screens/signup_screen.dart';
 
 import 'package:repege/modules/auth/models/auth_state.dart';
+import 'package:repege/modules/campaign/screens/campaign_create_screen.dart';
+import 'package:repege/modules/campaign/screens/campaign_screen.dart';
 import 'package:repege/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/equipments/screens/equipment_create_screen.dart';
@@ -15,11 +16,10 @@ import 'package:repege/modules/equipments/screens/equipment_search_screen.dart';
 import 'package:repege/modules/sheet/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_screen.dart';
-import 'package:repege/modules/spell/models/spell.dart';
 import 'package:repege/modules/spell/screens/spell_details_screen.dart';
+import 'package:repege/modules/spell/screens/spell_form_screen.dart';
 import 'package:repege/modules/spell/screens/spell_search_screen.dart';
-import 'package:repege/modules/tables/screens/table_create_screen.dart';
-import 'package:repege/modules/tables/screens/table_home_screen.dart';
+import 'package:repege/modules/campaigns/screens/campaigns_screen.dart';
 import 'package:repege/modules/profile/screens/profile_screen.dart';
 import 'package:repege/modules/user/screens/home_screen.dart';
 import 'package:repege/screens/loading_page.dart';
@@ -79,23 +79,19 @@ class CustomRouter {
         ],
       ),
       GoRoute(
+        builder: (context, state) => SpellDetailsScreen(),
+        name: RoutesName.spell.name,
+        path: RoutesName.spell.path,
+      ),
+      GoRoute(
         builder: (context, state) => const SpellSearchScreen(),
-        name: RoutesName.spells.name,
-        path: RoutesName.spells.path,
-        routes: [
-          GoRoute(
-            builder: (context, state) => const SpellSearchScreen(),
-            path: RoutesName.spellsSearch.path,
-            name: RoutesName.spellsSearch.name,
-          ),
-          GoRoute(
-            builder: (context, state) => SpellDetailsScreen(
-              spell: state.extra as Spell,
-            ),
-            path: RoutesName.spellDetails.path,
-            name: RoutesName.spellDetails.name,
-          ),
-        ],
+        path: RoutesName.spellsSearch.path,
+        name: RoutesName.spellsSearch.name,
+      ),
+      GoRoute(
+        builder: (context, state) => const SpellFormScreen(),
+        path: RoutesName.spellsForm.path,
+        name: RoutesName.spellsForm.name,
       ),
       GoRoute(
         builder: (context, state) => const EquipmentScreen(),
@@ -117,14 +113,19 @@ class CustomRouter {
         ],
       ),
       GoRoute(
-        path: RoutesName.tables.path,
-        name: RoutesName.tables.name,
-        builder: (context, state) => const TableHomeScreen(),
+        path: RoutesName.campaigns.path,
+        name: RoutesName.campaigns.name,
+        builder: (context, state) => const CampaingsScreen(),
         routes: [
           GoRoute(
-            path: RoutesName.tablesCreate.path,
-            name: RoutesName.tablesCreate.name,
-            builder: (context, state) => const TableCreateScreen(),
+            path: RoutesName.campaign.path,
+            name: RoutesName.campaign.name,
+            builder: (context, state) => const CampaignScreen(),
+          ),
+          GoRoute(
+            path: RoutesName.campaignsCreate.path,
+            name: RoutesName.campaignsCreate.name,
+            builder: (context, state) => const CampaignCreateScreen(),
           ),
         ],
       )

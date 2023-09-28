@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:repege/components/editable_text_form_field.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
-import 'package:repege/modules/sheets/models/character.dart';
+import 'package:repege/modules/character/character.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 
 class CharacterScreen extends StatefulWidget {

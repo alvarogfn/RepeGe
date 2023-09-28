@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/icons/rpg_icons.dart';
+import 'package:repege/modules/casting/screens/casting_screen.dart';
 import 'package:repege/modules/character/character_screen.dart';
 import 'package:repege/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
-import 'package:repege/modules/sheets/screens/sheet_casting_screen.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/status/screens/status_screen.dart';
 import 'package:repege/screens/loading_page.dart';
@@ -41,12 +41,12 @@ class _SheetScreenState extends State<SheetScreen> {
                       title: Text(sheet.character.characterName),
                       bottom: child as TabBar,
                     ),
-                    body: TabBarView(
+                    body: const TabBarView(
                       children: [
-                        const CharacterScreen(),
-                        const StatusScreen(),
-                        const EquipmentScreen(),
-                        SheetCastingScreen(sheet: sheet)
+                        CharacterScreen(),
+                        StatusScreen(),
+                        EquipmentScreen(),
+                        CastingScreen(),
                       ],
                     ),
                   );

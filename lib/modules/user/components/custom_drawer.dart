@@ -68,7 +68,7 @@ class CustomDrawer extends StatelessWidget {
                       NavigationListItem(
                         icon: Icons.groups,
                         text: 'Mesas',
-                        route: RoutesName.tables,
+                        route: RoutesName.campaigns,
                       ),
                     ],
                   ),

@@ -11,17 +11,19 @@ enum RoutesName {
   sheet(name: 'sheet', path: ':id'),
   sheetCreate(name: 'sheet-create', path: 'create'),
 
-  spells(name: 'spells', path: '/spells'),
-  spellsSearch(name: 'spells-search', path: 'search'),
-  spellDetails(name: 'spell-details', path: 'details'),
+  spell(name: 'spell', path: '/spell/:id'),
+  spellsSearch(name: 'spells-search', path: '/spells/search'),
+  spellsForm(name: 'spells-form', path: '/spells/form'),
 
   equipments(name: 'equipments', path: '/equipments'),
   equipmentsSearch(name: 'equipments-search', path: 'search'),
   equipmentsDetails(name: 'equipments-details', path: 'details'),
   equipmentsForm(name: 'equipments-form', path: 'form'),
 
-  tables(name: 'tables', path: '/tables'),
-  tablesCreate(name: 'tables-create', path: 'create'),
+  campaigns(name: 'campaigns', path: '/campaigns'),
+  campaignsCreate(name: 'campaigns-create', path: 'create'),
+  campaign(name: 'campaign', path: ':id'),
+
   loading(name: 'loading', path: '/loading');
 
   const RoutesName({

@@ -1,63 +1,72 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Spell {
-  final DocumentReference<Spell>? ref;
-  final Timestamp createdAt;
-  final String id;
-  final bool isPrepared;
-  final int level;
-  final String type;
-  final String materials;
-  final List<String> catalyts;
-  final String castingTime;
-  final String effectType;
-  final String duration;
-  final String range;
-  final String name;
-  final String description;
+  late DocumentReference? ref;
+  late Timestamp? createdAt;
+  late String id;
+  late bool isPrepared;
+  late int level;
+  late String type;
+  late String materials;
+  late List<String> catalyts;
+  late String castingTime;
+  late String effectType;
+  late String duration;
+  late String range;
+  late String name;
+  late String description;
 
   Spell({
-    required this.id,
-    required this.createdAt,
-    this.isPrepared = false,
     this.ref,
-    this.range = '',
-    this.materials = '',
-    this.level = 0,
-    this.type = '',
-    this.catalyts = const [],
-    this.castingTime = '',
-    this.effectType = '',
-    this.duration = '',
-    this.name = '',
-    this.description = '',
-  });
+    this.createdAt,
+    String? id,
+    bool? isPrepared,
+    int? level,
+    String? type,
+    String? materials,
+    List<String>? catalyts,
+    String? castingTime,
+    String? effectType,
+    String? duration,
+    String? range,
+    String? name,
+    String? description,
+  }) {
+    this.id = id ?? '';
+    this.isPrepared = isPrepared ?? false;
+    this.level = level ?? 0;
+    this.type = type ?? '';
+    this.materials = materials ?? '';
+    this.catalyts = catalyts ?? [];
+    this.castingTime = castingTime ?? '';
+    this.effectType = effectType ?? '';
+    this.duration = duration ?? '';
+    this.range = range ?? '';
+    this.name = name ?? '';
+    this.description = description ?? '';
+  }
 
   String get levelText {
     if (level == 0) return 'Truque';
     return '$levelº Nível';
   }
 
-  static Spell fromMap(
-    Map<String, dynamic> data, {
-    required String id,
-    DocumentReference<Spell>? ref,
-  }) {
+  static Spell fromMap(Map<String, dynamic> data) {
     return Spell(
-      id: id,
-      ref: ref,
-      range: data['range'] ?? '',
-      createdAt: data['createdAt'] ?? Timestamp.fromDate(DateTime.now()),
-      materials: data['materials'] ?? '',
-      level: data['level'] ?? 0,
-      type: data['type'] ?? '',
-      catalyts: List<String>.from(data['components'] ?? []).toList(),
-      castingTime: data['castingTime'] ?? '',
-      effectType: data['effectType'] ?? '',
-      duration: data['duration'] ?? '',
-      name: data['name'] ?? '',
-      description: data['description'] ?? '',
-      isPrepared: data['isPrepared'] ?? false,
+      id: data['id'],
+      ref: data['ref'],
+      range: data['range'],
+      createdAt: data['createdAt'],
+      materials: data['materials'],
+      level: data['level'],
+      type: data['type'],
+      catalyts: List<String>.from(data['catalyts'] ?? []).toList(),
+      castingTime: data['castingTime'],
+      effectType: data['effectType'],
+      duration: data['duration'],
+      name: data['name'],
+      description: data['description'],
+      isPrepared: data['isPrepared'],
     );
   }
 
@@ -74,10 +83,7 @@ class Spell {
       'duration': duration,
       'createdAt': createdAt,
       'isPrepared': isPrepared,
+      'ref': ref,
     };
-  }
-
-  Future<void> delete() {
-    return ref!.delete();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:repege/components/loading.dart';
-import 'package:repege/modules/sheets/models/spells.dart';
+import 'package:repege/modules/casting/services/spells_service.dart';
 import 'package:repege/modules/spell/components/spell_card_item.dart';
 import 'package:repege/modules/spell/components/spell_search_field.dart';
 import 'package:repege/modules/spell/models/spell.dart';
@@ -25,7 +25,7 @@ class _SpellSearchScreenState extends State<SpellSearchScreen> {
         children: [
           SpellSearchField(
             onFieldSubmitted: (value) => setState(() {
-              _spells = Spells.fromDnDBook(value);
+              _spells = SpellsService.fromDnDBook(value);
             }),
           ),
           Expanded(

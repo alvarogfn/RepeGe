@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:repege/components/card_title.dart';
 import 'package:repege/components/full_screen_scroll.dart';
 import 'package:repege/components/paragraph.dart';
 import 'package:repege/icons/rpg_icons.dart';
 import 'package:repege/helpers/extensions.dart';
 import 'package:repege/models/utils.dart';
-import 'package:repege/components/card_tile.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 
 class SpellDetailsScreen extends StatelessWidget {
-  const SpellDetailsScreen({required this.spell, super.key});
+  SpellDetailsScreen({super.key});
 
-  final Spell spell;
+  final Spell spell = Spell.fromMap({});
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +21,17 @@ class SpellDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CardTile(
-              content: Paragraph(spell.description),
+            CardTitle(
+              child: Paragraph(spell.description),
             ),
-            CardTile(
-              title: const Text('Materiais'),
-              content: Paragraph(materials),
+            CardTitle(
+              title: 'Materiais',
+              child: Paragraph(materials),
             ),
-            CardTile(
-              title: const Text('Detalhes'),
-              leading: const Icon(Icons.info_outline),
-              content: Column(
+            CardTitle(
+              title: 'Detalhes',
+              icon: const Icon(Icons.info_outline),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(children: [
@@ -62,8 +62,7 @@ class SpellDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   Row(children: [
                     const Icon(Rpg.stopwatch),
-                    Paragraph(
-                        margin: const EdgeInsets.only(left: 10), duration),
+                    Paragraph(margin: const EdgeInsets.only(left: 10), duration),
                   ]),
                   const SizedBox(height: 10),
                   Row(children: [

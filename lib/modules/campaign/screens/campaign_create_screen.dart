@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TableCreateScreen extends StatelessWidget {
-  const TableCreateScreen({super.key});
+class CampaignCreateScreen extends StatefulWidget {
+  const CampaignCreateScreen({super.key});
 
+  @override
+  State<CampaignCreateScreen> createState() => _CampaignCreateScreenState();
+}
+
+class _CampaignCreateScreenState extends State<CampaignCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +38,7 @@ class TableCreateScreen extends StatelessWidget {
                 maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
-                  hintText:
-                      'Sobre o que é a sua história, descreva brevemente o mundo.',
+                  hintText: 'Sobre o que é a sua história, descreva brevemente o mundo.',
                   alignLabelWithHint: true,
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
