@@ -68,7 +68,7 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
         actions: [
           IconButton(
             onPressed: _handleSubmit,
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
           )
         ],
       ),
@@ -80,31 +80,31 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Nome'),
+                  decoration: const InputDecoration(labelText: 'Nome'),
                   initialValue: data['name'],
                   onSaved: (value) => data['name'] = value,
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Descrição'),
+                  decoration: const InputDecoration(labelText: 'Descrição'),
                   initialValue: data['description'],
                   onSaved: (value) => data['description'] = value,
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   maxLines: 5,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Materiais'),
+                  decoration: const InputDecoration(labelText: 'Materiais'),
                   initialValue: data['materials'],
                   onSaved: (value) => data['materials'] = value,
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   maxLines: 2,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 LayoutBuilder(builder: (context, constraints) {
                   return DropdownMenu<String>(
                     width: constraints.maxWidth,
@@ -114,23 +114,23 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
                     dropdownMenuEntries: levels.map((level) => DropdownMenuEntry(label: level, value: level)).toList(),
                   );
                 }),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Tempo de Conjuração'),
+                  decoration: const InputDecoration(labelText: 'Tempo de Conjuração'),
                   initialValue: data['castingTime'],
                   onSaved: (value) => data['castingTime'] = value,
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Alcance'),
+                  decoration: const InputDecoration(labelText: 'Alcance'),
                   initialValue: data['range'],
                   onSaved: (value) => data['range'] = value,
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 LayoutBuilder(builder: (context, constraints) {
                   return DropdownMenu<String>(
                     width: constraints.maxWidth,
@@ -140,7 +140,7 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
                     dropdownMenuEntries: types.map((type) => DropdownMenuEntry(label: type, value: type)).toList(),
                   );
                 }),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),

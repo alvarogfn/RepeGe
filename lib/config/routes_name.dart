@@ -21,8 +21,11 @@ enum RoutesName {
   equipmentsForm(name: 'equipments-form', path: 'form'),
 
   campaigns(name: 'campaigns', path: '/campaigns'),
-  campaignsCreate(name: 'campaigns-create', path: 'create'),
-  campaign(name: 'campaign', path: ':id'),
+  campaignsCreate(name: 'campaign-create', path: 'create'),
+  campaign(name: 'campaign', path: '/campaign/:id'),
+
+  invitations(name: 'invitations', path: '/invitations'),
+  invitationsSheetChoose(name: 'invitations-sheet-choose', path: 'sheet-choose'),
 
   loading(name: 'loading', path: '/loading');
 

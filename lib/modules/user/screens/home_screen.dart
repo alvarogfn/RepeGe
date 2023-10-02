@@ -52,10 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Início')),
       drawer: const CustomDrawer(),
-      body: Scaffold(
-        body: TextButton(
-          onPressed: () {},
-          child: const Text('hehe'),
+      body: const Scaffold(
+        body: Center(
+          child: Text('O que vamos jogar hoje?'),
         ),
       ),
     );

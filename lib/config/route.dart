@@ -13,6 +13,8 @@ import 'package:repege/modules/equipments/models/equipment.dart';
 import 'package:repege/modules/equipments/screens/equipment_screen.dart';
 import 'package:repege/modules/equipments/screens/equipment_create_screen.dart';
 import 'package:repege/modules/equipments/screens/equipment_search_screen.dart';
+import 'package:repege/modules/invitations/invitation_sheet_choose_screen.dart';
+import 'package:repege/modules/invitations/invitations_screen.dart';
 import 'package:repege/modules/sheet/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_screen.dart';
@@ -118,15 +120,27 @@ class CustomRouter {
         builder: (context, state) => const CampaingsScreen(),
         routes: [
           GoRoute(
-            path: RoutesName.campaign.path,
-            name: RoutesName.campaign.name,
-            builder: (context, state) => const CampaignScreen(),
-          ),
-          GoRoute(
             path: RoutesName.campaignsCreate.path,
             name: RoutesName.campaignsCreate.name,
             builder: (context, state) => const CampaignCreateScreen(),
           ),
+        ],
+      ),
+      GoRoute(
+        path: RoutesName.campaign.path,
+        name: RoutesName.campaign.name,
+        builder: (context, state) => const CampaignScreen(),
+      ),
+      GoRoute(
+        path: RoutesName.invitations.path,
+        name: RoutesName.invitations.name,
+        builder: (context, state) => const InvitationsScreen(),
+        routes: [
+          GoRoute(
+            path: RoutesName.invitationsSheetChoose.path,
+            name: RoutesName.invitationsSheetChoose.name,
+            builder: (context, state) => const InvitationSheetChooseScreen(),
+          )
         ],
       )
     ],

@@ -25,13 +25,11 @@ class CampaingsScreen extends StatelessWidget {
       drawer: const CustomDrawer(),
       body: ChangeNotifierProxyProvider<AuthService, CampaignsService>(
         create: (context) => CampaignsService(
-          context.read<AuthService>().user!,
+          context.read<AuthService>(),
         ),
         update: (context, authService, sheetService) {
-          final user = context.read<AuthService>().user!;
-
-          if (sheetService == null) return CampaignsService(user);
-          sheetService.user = user;
+          if (sheetService == null) return CampaignsService(authService);
+          sheetService.authService = authService;
 
           return sheetService;
         },

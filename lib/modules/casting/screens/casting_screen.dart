@@ -117,7 +117,7 @@ class _CastingScreenState extends State<CastingScreen> {
                   initialData: const [],
                   create: (context) => context.read<SpellsService>().stream(),
                   builder: (context, _) {
-                    final spells = context.read<List<Spell>>();
+                    final spells = context.watch<List<Spell>>();
 
                     if (spells.isEmpty) return const Text('Vazio');
 

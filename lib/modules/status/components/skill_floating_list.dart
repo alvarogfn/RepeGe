@@ -19,23 +19,30 @@ class SkillFloatingList extends StatelessWidget {
             generateSkillList(attributes.strength, title: 'Força', translationMap: {
               'atletism': 'Atletismo',
             }),
-            generateSkillList(attributes.constitution, title: 'Constituição', translationMap: {
-              'atletism': 'Atletismo',
-            }),
+            generateSkillList(attributes.constitution, title: 'Constituição', translationMap: {}),
             generateSkillList(attributes.dextery, title: 'Destreza', translationMap: {
-              'atletism': 'Atletismo',
-            }),
-            generateSkillList(attributes.dextery, title: 'Destreza', translationMap: {
-              'atletism': 'Atletismo',
+              'sleightOfHand': 'Prestidigitação',
+              'stealth': 'Furtividade',
+              'acrobatics': 'Acrobacia',
             }),
             generateSkillList(attributes.intelligence, title: 'Inteligência', translationMap: {
-              'atletism': 'Atletismo',
+              'arcana': 'Arcanismo',
+              'history': 'História',
+              'investigation': 'Investigação',
+              'nature': 'Natureza',
+              'religion': 'Religião'
             }),
             generateSkillList(attributes.wisdom, title: 'Sabedoria', translationMap: {
-              'atletism': 'Atletismo',
+              'insight': 'Intuição',
+              'medicine': 'Medicina',
+              'perception': 'Percepção',
+              'survival': 'Sobrevivência'
             }),
             generateSkillList(attributes.charisma, title: 'Carisma', translationMap: {
-              'atletism': 'Atletismo',
+              'performance': 'Performance',
+              'persuasion': 'Persuasão',
+              'intimidation': 'Intimidação',
+              'deception': 'Enganação',
             }),
           ],
         ),

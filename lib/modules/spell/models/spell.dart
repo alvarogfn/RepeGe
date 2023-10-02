@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/helpers/parse_int.dart';
 
 class Spell {
   late DocumentReference? ref;
@@ -58,7 +59,7 @@ class Spell {
       range: data['range'],
       createdAt: data['createdAt'],
       materials: data['materials'],
-      level: data['level'],
+      level: parseInt(data['level']),
       type: data['type'],
       catalyts: List<String>.from(data['catalyts'] ?? []).toList(),
       castingTime: data['castingTime'],
