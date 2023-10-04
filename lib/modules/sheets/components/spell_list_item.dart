@@ -37,10 +37,15 @@ class SpellListItem extends StatelessWidget {
         trailing: Text(spell.levelText),
         subtitleTextStyle: const TextStyle(fontSize: 12),
         subtitle: Text(spell.description, maxLines: 2),
-        onTap: () => context.pushNamed(
-          RoutesName.spell.name,
-          pathParameters: {'id': spell.id},
-        ),
+        onTap: () {
+          print(spell.toMap());
+
+          context.pushNamed(
+            RoutesName.spell.name,
+            pathParameters: {'id': spell.id},
+            extra: spell,
+          );
+        },
       ),
     );
   }

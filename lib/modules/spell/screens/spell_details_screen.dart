@@ -8,10 +8,9 @@ import 'package:repege/models/utils.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 
 class SpellDetailsScreen extends StatelessWidget {
-  SpellDetailsScreen({super.key});
+  const SpellDetailsScreen(this.spell, {super.key});
 
-  final Spell spell = Spell.fromMap({});
-
+  final Spell spell;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

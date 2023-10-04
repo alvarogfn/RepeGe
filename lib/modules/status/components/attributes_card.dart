@@ -4,7 +4,7 @@ import 'package:repege/helpers/show_keyboard_bottom_sheet.dart';
 import 'package:repege/modules/sheet/sheet_service.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/status/components/skill_floating_list.dart';
-import 'package:repege/components/text_form_field_bottom_sheet.dart';
+import 'package:repege/modules/status/components/title_form_field_bottom_sheet.dart';
 import 'package:repege/modules/status/models/attributes.dart';
 
 class AttributesCard extends StatefulWidget {
@@ -64,42 +64,48 @@ class _AttributesCardState extends State<AttributesCard> {
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       mainAxisSpacing: 20,
-                      mainAxisExtent: 40,
+                      mainAxisExtent: 36,
                     ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      TextFormFieldBottomSheet(
+                      TitleFormFieldBottomSheet(
+                        title: attributes.strength.modifier.toString(),
                         label: 'Força',
                         value: attributes.strength.value.toString(),
                         onChanged: (value) => attributes.strength.value = int.tryParse(value) ?? 0,
                         onFieldSubmitted: (_) => service.update(attributes),
                       ),
-                      TextFormFieldBottomSheet(
+                      TitleFormFieldBottomSheet(
+                        title: attributes.constitution.modifier.toString(),
                         label: 'Constituição',
                         value: attributes.constitution.value.toString(),
                         onChanged: (value) => attributes.constitution.value = int.tryParse(value) ?? 0,
                         onFieldSubmitted: (_) => service.update(attributes),
                       ),
-                      TextFormFieldBottomSheet(
+                      TitleFormFieldBottomSheet(
+                        title: attributes.dextery.modifier.toString(),
                         label: 'Destreza',
                         value: attributes.dextery.value.toString(),
                         onChanged: (value) => attributes.dextery.value = int.tryParse(value) ?? 0,
                         onFieldSubmitted: (_) => service.update(attributes),
                       ),
-                      TextFormFieldBottomSheet(
+                      TitleFormFieldBottomSheet(
+                        title: attributes.intelligence.modifier.toString(),
                         label: 'Inteligência',
                         value: attributes.intelligence.value.toString(),
                         onChanged: (value) => attributes.intelligence.value = int.tryParse(value) ?? 0,
                         onFieldSubmitted: (_) => service.update(attributes),
                       ),
-                      TextFormFieldBottomSheet(
+                      TitleFormFieldBottomSheet(
+                        title: attributes.wisdom.modifier.toString(),
                         label: 'Sabedoria',
                         value: attributes.wisdom.value.toString(),
                         onChanged: (value) => attributes.wisdom.value = int.tryParse(value) ?? 0,
                         onFieldSubmitted: (_) => service.update(attributes),
                       ),
-                      TextFormFieldBottomSheet(
+                      TitleFormFieldBottomSheet(
+                        title: attributes.charisma.modifier.toString(),
                         label: 'Carisma',
                         value: attributes.charisma.value.toString(),
                         onChanged: (value) => attributes.charisma.value = int.tryParse(value) ?? 0,

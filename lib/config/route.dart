@@ -18,6 +18,7 @@ import 'package:repege/modules/invitations/invitations_screen.dart';
 import 'package:repege/modules/sheet/sheet_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/modules/sheets/screens/sheets_screen.dart';
+import 'package:repege/modules/spell/models/spell.dart';
 import 'package:repege/modules/spell/screens/spell_details_screen.dart';
 import 'package:repege/modules/spell/screens/spell_form_screen.dart';
 import 'package:repege/modules/spell/screens/spell_search_screen.dart';
@@ -81,7 +82,7 @@ class CustomRouter {
         ],
       ),
       GoRoute(
-        builder: (context, state) => SpellDetailsScreen(),
+        builder: (context, state) => SpellDetailsScreen(state.extra as Spell),
         name: RoutesName.spell.name,
         path: RoutesName.spell.path,
       ),

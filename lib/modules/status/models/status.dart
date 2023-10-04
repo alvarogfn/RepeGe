@@ -101,5 +101,5 @@ class Status implements FirebaseSheetModel {
   }
 
   @override
-  String get propertyKey => 'Status';
+  String get propertyKey => 'status';
 }

@@ -73,6 +73,7 @@ class Spell {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'materials': materials,
       'description': description,

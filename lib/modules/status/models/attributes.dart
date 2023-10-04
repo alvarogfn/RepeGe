@@ -9,6 +9,8 @@ abstract class Attribute implements FirebaseSheetModel {
 
   @override
   Map<String, dynamic> toMap();
+
+  int get modifier => (value - 10) ~/ 2;
 }
 
 class Strength extends Attribute {
