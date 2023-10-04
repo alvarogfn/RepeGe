@@ -16,7 +16,8 @@ class CampaignsService extends ChangeNotifier {
     final firebaseUser = await authService.getCurrentFirestoreUser();
 
     final campaign = Campaign(
-      players: [],
+      sheets: [],
+      participants: [authService.user!.uid],
       description: data['description'],
       name: data['name'],
       ownerRef: firebaseUser!.ref,
@@ -35,7 +36,7 @@ class CampaignsService extends ChangeNotifier {
   }
 
   Stream<List<Campaign>> streamAll() {
-    final snapshots = collection.where('players', arrayContains: authService.user!.uid).snapshots();
+    final snapshots = collection.snapshots();
 
     return snapshots.map((snapshots) {
       return snapshots.docs.map((doc) {

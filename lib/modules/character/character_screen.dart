@@ -55,6 +55,14 @@ class _CharacterScreenState extends State<CharacterScreen> {
                     border: InputBorder.none,
                   ),
                   EditableTextFormField(
+                    label: 'Nível',
+                    initialValue: _character.characterLevel.toString(),
+                    onSaved: (value) => service.update(_character),
+                    onChanged: (value) => _character.characterLevel = int.parse(value),
+                    border: InputBorder.none,
+                    keyboardType: TextInputType.number
+                  ),
+                  EditableTextFormField(
                     label: 'Raça',
                     initialValue: _character.characterRace,
                     onSaved: (value) => service.update(_character),

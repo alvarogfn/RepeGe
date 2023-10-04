@@ -65,11 +65,11 @@ class CustomDrawer extends StatelessWidget {
                         text: 'Fichas',
                         route: RoutesName.sheets,
                       ),
-                      // NavigationListItem(
-                      //   icon: Icons.groups,
-                      //   text: 'Campanhas',
-                      //   route: RoutesName.campaigns,
-                      // ),
+                      NavigationListItem(
+                        icon: Icons.groups,
+                        text: 'Campanhas',
+                        route: RoutesName.campaigns,
+                      ),
                       // NavigationListItem(
                       //   icon: Icons.mail,
                       //   text: 'Convites',

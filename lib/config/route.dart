@@ -130,7 +130,7 @@ class CustomRouter {
       GoRoute(
         path: RoutesName.campaign.path,
         name: RoutesName.campaign.name,
-        builder: (context, state) => const CampaignScreen(),
+        builder: (context, state) =>  CampaignScreen(state.pathParameters['id'] as String),
       ),
       GoRoute(
         path: RoutesName.invitations.path,

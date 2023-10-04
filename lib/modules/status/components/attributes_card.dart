@@ -15,15 +15,6 @@ class AttributesCard extends StatefulWidget {
 }
 
 class _AttributesCardState extends State<AttributesCard> {
-  Attributes attributes = Attributes();
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final sheet = context.watch<Sheet>();
-    attributes = sheet.attributes;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -38,15 +29,15 @@ class _AttributesCardState extends State<AttributesCard> {
                   'Atributos',
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-                Consumer<SheetService>(
-                  builder: (context, sheetService, _) => GestureDetector(
+                Consumer<Sheet>(
+                  builder: (context, sheet, _) => GestureDetector(
                     onTap: () => showKeyboardBottomSheet(
                       context,
                       padding: const EdgeInsets.only(top: 10),
                       builder: (context) {
                         return SkillFloatingList(
-                          attributes: attributes,
-                          onChanged: (path, newValue) => sheetService.bulkUpdate({path: newValue}),
+                          attributes: sheet.attributes,
+                          onChanged: (path, newValue) => sheet.ref.update({path: newValue}),
                         );
                       },
                     ),
@@ -56,11 +47,11 @@ class _AttributesCardState extends State<AttributesCard> {
               ],
             ),
             const SizedBox(height: 10),
-            Consumer<SheetService>(
-              builder: (context, service, child) {
-                return SizedBox(
-                  height: 100,
-                  child: GridView(
+            SizedBox(
+              height: 100,
+              child: Consumer<Sheet>(
+                builder: (context, sheet, child) {
+                  return GridView(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       mainAxisSpacing: 20,
@@ -70,51 +61,57 @@ class _AttributesCardState extends State<AttributesCard> {
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       TitleFormFieldBottomSheet(
-                        title: attributes.strength.modifier.toString(),
+                        title: sheet.attributes.strength.modifier.toString(),
                         label: 'Força',
-                        value: attributes.strength.value.toString(),
-                        onChanged: (value) => attributes.strength.value = int.tryParse(value) ?? 0,
-                        onFieldSubmitted: (_) => service.update(attributes),
+                        value: sheet.attributes.strength.value.toString(),
+                        onFieldSubmitted: (value) => sheet.ref.update({
+                          'attributes.strength.value': int.parse(value),
+                        }),
                       ),
                       TitleFormFieldBottomSheet(
-                        title: attributes.constitution.modifier.toString(),
+                        title: sheet.attributes.constitution.modifier.toString(),
                         label: 'Constituição',
-                        value: attributes.constitution.value.toString(),
-                        onChanged: (value) => attributes.constitution.value = int.tryParse(value) ?? 0,
-                        onFieldSubmitted: (_) => service.update(attributes),
+                        value: sheet.attributes.constitution.value.toString(),
+                        onFieldSubmitted: (value) => sheet.ref.update({
+                          'attributes.constitution.value': int.parse(value),
+                        }),
                       ),
                       TitleFormFieldBottomSheet(
-                        title: attributes.dextery.modifier.toString(),
+                        title: sheet.attributes.dextery.modifier.toString(),
                         label: 'Destreza',
-                        value: attributes.dextery.value.toString(),
-                        onChanged: (value) => attributes.dextery.value = int.tryParse(value) ?? 0,
-                        onFieldSubmitted: (_) => service.update(attributes),
+                        value: sheet.attributes.dextery.value.toString(),
+                        onFieldSubmitted: (value) => sheet.ref.update({
+                          'attributes.dextery.value': int.parse(value),
+                        }),
                       ),
                       TitleFormFieldBottomSheet(
-                        title: attributes.intelligence.modifier.toString(),
+                        title: sheet.attributes.intelligence.modifier.toString(),
                         label: 'Inteligência',
-                        value: attributes.intelligence.value.toString(),
-                        onChanged: (value) => attributes.intelligence.value = int.tryParse(value) ?? 0,
-                        onFieldSubmitted: (_) => service.update(attributes),
+                        value: sheet.attributes.intelligence.value.toString(),
+                        onFieldSubmitted: (value) => sheet.ref.update({
+                          'attributes.intelligence.value': int.parse(value),
+                        }),
                       ),
                       TitleFormFieldBottomSheet(
-                        title: attributes.wisdom.modifier.toString(),
+                        title: sheet.attributes.wisdom.modifier.toString(),
                         label: 'Sabedoria',
-                        value: attributes.wisdom.value.toString(),
-                        onChanged: (value) => attributes.wisdom.value = int.tryParse(value) ?? 0,
-                        onFieldSubmitted: (_) => service.update(attributes),
+                        value: sheet.attributes.wisdom.value.toString(),
+                        onFieldSubmitted: (value) => sheet.ref.update({
+                          'attributes.wisdom.value': int.parse(value),
+                        }),
                       ),
                       TitleFormFieldBottomSheet(
-                        title: attributes.charisma.modifier.toString(),
+                        title: sheet.attributes.charisma.modifier.toString(),
                         label: 'Carisma',
-                        value: attributes.charisma.value.toString(),
-                        onChanged: (value) => attributes.charisma.value = int.tryParse(value) ?? 0,
-                        onFieldSubmitted: (_) => service.update(attributes),
+                        value: sheet.attributes.charisma.value.toString(),
+                        onFieldSubmitted: (value) => sheet.ref.update({
+                          'attributes.charisma.value': int.parse(value),
+                        }),
                       ),
                     ],
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             )
           ],
         ),

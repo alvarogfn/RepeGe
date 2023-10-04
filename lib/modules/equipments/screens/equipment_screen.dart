@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/components/empty.dart';
 import 'package:repege/config/routes_name.dart';
 import 'package:repege/modules/equipments/components/bag_card.dart';
 import 'package:repege/modules/equipments/components/equipment_tile.dart';
@@ -76,6 +77,10 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                           initialData: const [],
                           builder: (context, child) {
                             final equipments = context.watch<List<Equipment>>();
+
+                            if (equipments.isEmpty) {
+                              return const Empty('Vazio');
+                            }
 
                             return ListView.builder(
                               itemCount: equipments.length,

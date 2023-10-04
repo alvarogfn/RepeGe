@@ -17,8 +17,8 @@ class Strength extends Attribute {
   late bool atletism;
 
   Strength({int? value, bool? atletism}) {
-    super.value = 0;
-    this.atletism = false;
+    super.value = value ?? 0;
+    this.atletism = atletism ?? false;
   }
 
   factory Strength.fromMap(Map<String, dynamic> data) {

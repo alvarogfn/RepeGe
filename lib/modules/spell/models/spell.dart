@@ -75,6 +75,7 @@ class Spell {
     return {
       'id': id,
       'name': name,
+      'range': range,
       'materials': materials,
       'description': description,
       'castingTime': castingTime,

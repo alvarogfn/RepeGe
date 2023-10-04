@@ -29,6 +29,12 @@ final lightTheme = ThemeData(
     indicatorColor: Colors.transparent,
     indicator: BoxDecoration(),
   ),
+  // navigationBarTheme: NavigationBarThemeData(
+  //   backgroundColor: Colors.black,
+  //   iconTheme: MaterialStateProperty.all(
+  //     IconThemeData(color: Colors.white),
+  //   ),
+  // ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 40,

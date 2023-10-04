@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/components/empty.dart';
+import 'package:repege/components/loading.dart';
+import 'package:repege/helpers/is_snapshot_loading.dart';
+import 'package:repege/modules/auth/models/user.dart';
 import 'package:repege/modules/auth/services/auth_service.dart';
 import 'package:repege/modules/campaign/model/campaign.dart';
 import 'package:repege/modules/campaigns/service/campaigns_service.dart';
@@ -39,63 +43,84 @@ class CampaingsScreen extends StatelessWidget {
           builder: (context, _) {
             final campaigns = context.watch<List<Campaign>>();
 
+            if (campaigns.isEmpty) {
+              return const Empty('Você não criou ou entrou em nenhuma campanha.');
+            }
+
             return ListView.builder(
               itemCount: campaigns.length,
               padding: const EdgeInsets.all(5),
               itemBuilder: (context, index) {
                 final campaign = campaigns[index];
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  child: Card(
-                    child: InkWell(
-                      onTap: () => context.pushNamed(RoutesName.campaign.name, pathParameters: {'id': campaign.id}),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ListTile(
-                            trailing: PopupMenuButton(
-                              itemBuilder: (context) {
-                                return [
-                                  const PopupMenuItem(child: Text('Excluir')),
-                                ];
-                              },
-                            ),
-                            leading: const CircleAvatar(
-                              backgroundColor: Colors.black,
-                              backgroundImage: AssetImage(
-                                'assets/images/default_profile_picture.png',
+
+                return StreamBuilder(
+                  initialData: null,
+                  stream: User.collection.doc(campaign.ownerUID).snapshots(),
+                  builder: (context, snapshot) {
+                    if (isSnapshotLoading(snapshot)) return const Loading();
+
+                    final user = snapshot.data!.data()!;
+
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: Card(
+                        child: InkWell(
+                          onTap: () => context.pushNamed(RoutesName.campaign.name, pathParameters: {
+                            'id': campaign.id,
+                          }),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ListTile(
+                                trailing: PopupMenuButton(
+                                  itemBuilder: (context) {
+                                    return [
+                                      PopupMenuItem(
+                                        child: const Text('Excluir'),
+                                        onTap: () {
+                                          campaign.ref.delete();
+                                        },
+                                      ),
+                                    ];
+                                  },
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: user.avatar,
+                                ),
+                                title: Text(
+                                  campaign.name,
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                subtitle: RichText(
+                                  text: TextSpan(
+                                    text: 'Mestrado por ',
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                    children: [
+                                      TextSpan(
+                                        text: user.username,
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            title: const Text(
-                              'Bastardos em Glórios',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            subtitle: const Text('Mestre Fernando'),
-                          ),
-                          Image.asset(
-                            'assets/images/default_avatar.jpg',
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            height: 200,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Magna irure labore tempor do labore minim ad esse proident anim fugiat ad proident. Duis officia elit consectetur proident incididunt aute. Minim pariatur adipisicing dolor duis cupidatat labore id dolore ut sunt esse labore tempor consectetur. Culpa mollit Lorem sunt laboris incididunt Lorem anim. Occaecat occaecat ad irure sint excepteur officia ut ipsum officia qui elit non mollit. Elit voluptate esse nulla eu quis deserunt adipisicing adipisicing occaecat est. Veniam dolore proident commodo anim in sint commodo mollit cillum amet duis in minim excepteur. Minim velit reprehenderit laborum ipsum. Veniam est et est deserunt in minim cillum quis. Officia sit minim ullamco nulla consequat.',
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                                child: Text(
+                                  campaign.description,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.justify,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             );

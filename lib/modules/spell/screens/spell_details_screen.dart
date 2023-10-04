@@ -21,6 +21,7 @@ class SpellDetailsScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CardTitle(
+              title: 'Descrição',
               child: Paragraph(spell.description),
             ),
             CardTitle(
@@ -29,7 +30,6 @@ class SpellDetailsScreen extends StatelessWidget {
             ),
             CardTitle(
               title: 'Detalhes',
-              icon: const Icon(Icons.info_outline),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

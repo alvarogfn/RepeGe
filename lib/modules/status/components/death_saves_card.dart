@@ -10,17 +10,17 @@ class DeathSavesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardTitle(
       title: 'Salvamento',
-      icon: InkWell(
-        onTap: () {
-          context.read<Sheet>().ref.update({
-            'status.deathSaves': {
-              'sucesses': 0,
-              'failures': 0,
-            }
-          });
-        },
-        child: const Icon(Icons.restart_alt),
-      ),
+      // icon: InkWell(
+      //   onTap: () {
+      //     context.read<Sheet>().ref.update({
+      //       'status.deathSaves': {
+      //         'sucesses': 0,
+      //         'failures': 0,
+      //       }
+      //     });
+      //   },
+      //   child: const Icon(Icons.restart_alt),
+      // ),
       marginBetween: 0,
       child: Consumer<Sheet>(
         builder: (context, sheet, _) {
@@ -48,7 +48,7 @@ class DeathSavesCard extends StatelessWidget {
   }
 }
 
-class DeathSavesRow extends StatelessWidget {
+class DeathSavesRow extends StatefulWidget {
   const DeathSavesRow({
     super.key,
     required this.title,
@@ -61,23 +61,39 @@ class DeathSavesRow extends StatelessWidget {
   final int quantity;
 
   @override
+  State<DeathSavesRow> createState() => _DeathSavesRowState();
+}
+
+class _DeathSavesRowState extends State<DeathSavesRow> {
+  double _value = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() => _value = widget.quantity.toDouble());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          title,
+          widget.title,
           style: Theme.of(context).textTheme.labelMedium,
         ),
         const Spacer(),
         Slider(
-          value: quantity.toDouble(),
+          value: _value,
+          onChangeEnd: (value) {
+            widget.onChanged(value.toInt());
+          },
           onChanged: (value) {
-            onChanged(value.toInt());
+            setState(() => _value = value);
           },
           max: 2,
           divisions: 2,
-          label: quantity.toInt().toString(),
+          label: _value.toInt().toString(),
         ),
       ],
     );

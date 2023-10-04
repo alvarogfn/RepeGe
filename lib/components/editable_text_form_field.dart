@@ -10,13 +10,15 @@ class EditableTextFormField extends StatefulWidget {
     this.onChanged,
     this.border,
     this.margin,
-    this.hintText = '.....',
+    this.hintText,
+    this.keyboardType,
   });
   final String? initialValue;
   final String? label;
   final String? hintText;
   final int? maxLines;
   final EdgeInsets? margin;
+  final TextInputType? keyboardType;
   final InputBorder? border;
   final void Function(String value)? onChanged;
   final void Function(String? value)? onSaved;
@@ -52,6 +54,7 @@ class _EditableTextFormFieldState extends State<EditableTextFormField> {
           maxLines: widget.maxLines,
           focusNode: focusNode,
           onSaved: widget.onSaved,
+          keyboardType: widget.keyboardType,
           onFieldSubmitted: (_) => handleSave(),
           onTapOutside: (_) {
             setState(() => _readOnly = true);

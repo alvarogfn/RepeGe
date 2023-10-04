@@ -69,10 +69,7 @@ class Status implements FirebaseSheetModel {
       maxHp: data['maxHp'],
       speed: data['speed'],
       temporaryHp: data['temporaryHp'],
-      deathSaves: DeathSaves(
-        sucesses: data['deathSavesSucess'],
-        failures: data['deathSavesFailures'],
-      ),
+      deathSaves: DeathSaves.fromMap(data['deathSaves']),
     );
   }
 
