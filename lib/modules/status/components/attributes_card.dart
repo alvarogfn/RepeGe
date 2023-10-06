@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/helpers/show_keyboard_bottom_sheet.dart';
-import 'package:repege/modules/sheet/sheet_service.dart';
 import 'package:repege/modules/sheets/services/sheet.dart';
 import 'package:repege/modules/status/components/skill_floating_list.dart';
 import 'package:repege/modules/status/components/title_form_field_bottom_sheet.dart';
-import 'package:repege/modules/status/models/attributes.dart';
-
 class AttributesCard extends StatefulWidget {
   const AttributesCard({super.key});
 
