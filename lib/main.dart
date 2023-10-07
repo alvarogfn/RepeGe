@@ -6,20 +6,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:repege/config/route.dart';
-import 'package:repege/config/stream_auth_scope.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
-import 'package:repege/themes/dark_theme.dart';
-import 'package:repege/themes/light_theme.dart';
-
-import 'config/firebase_options.dart';
-
-import 'package:repege/config/environment_variables.dart';
+import 'package:repege/core/config/environment_variables.dart';
+import 'package:repege/core/config/firebase_options.dart';
+import 'package:repege/core/routes/routes.dart';
+import 'package:repege/core/services/injection_container.dart';
+import 'package:repege/core/themes/dark_theme.dart';
+import 'package:repege/core/themes/light_theme.dart';
+import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await init();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -31,52 +31,32 @@ Future<void> main() async {
     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   }
 
-  runApp(StreamAuthScope(child: const MyApp()));
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  Stream<User?> _getCurrentSignedUser() {
-    return FirebaseAuth.instance.authStateChanges();
-  }
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        StreamProvider(
-          create: (_) => _getCurrentSignedUser(),
-          initialData: null,
+        BlocProvider(
+          create: (context) => sl<AuthenticationCubit>(),
         ),
-        ChangeNotifierProxyProvider<User?, AuthService>(
-          create: (context) => AuthService(context.read<User?>()),
-          update: (context, user, authService) {
-            if (authService == null) return AuthService(context.read<User?>());
-            authService.user = user;
-            return authService;
-          },
-        ),
-        Provider<CustomRouter>(
-          create: (context) => CustomRouter(),
-        )
       ],
-      builder: (context, _) {
-        final routes = context.read<CustomRouter>().routes;
-
-        return MaterialApp.router(
-          routerConfig: routes,
-          title: 'RepeGe',
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: ThemeMode.light,
-          debugShowCheckedModeBanner: false,
-          locale: const Locale.fromSubtags(
-            languageCode: 'pt',
-            countryCode: 'BR',
-          ),
-        );
-      },
+      child: MaterialApp.router(
+        routerConfig: routes,
+        title: 'RepeGe',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        locale: const Locale.fromSubtags(
+          languageCode: 'pt',
+          countryCode: 'BR',
+        ),
+      ),
     );
   }
 }
