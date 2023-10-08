@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:repege/src/miscellaneous/presentation/widgets/navigation_list_item.dart';
+import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,29 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Início')),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                children: [
-                  NavigationListItem(
-                    icon: Icons.article,
-                    text: 'Fichas',
-                    onTap: () => context.goNamed(''),
-                  ),
-                  NavigationListItem(
-                    icon: Icons.groups,
-                    text: 'Campanhas',
-                    onTap: () => context.goNamed(''),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+      drawer: const AppDrawer(),
       body: const Scaffold(
         body: Center(
           child: Text('O que vamos jogar hoje?'),

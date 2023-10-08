@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+// import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:repege/core/errors/failure.dart';
 import 'package:repege/src/authentication/domain/entities/user.dart';
 import 'package:repege/src/authentication/domain/usecases/auth_state_changes.dart';
@@ -33,12 +34,16 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         _signout = signout,
         _sendEmailVerification = sendEmailVerification,
         super(const Unauthenticated()) {
-    // subscription = _authStateChanges().listen((event) {
-    //   event.fold(
-    //     (failure) => const Unauthenticated(),
-    //     (user) => user != null ? Authenticated(user: user) : const Unauthenticated(),
-    //   );
-    // });
+    subscription = authStateChanges().listen((event) {
+      event.fold(
+        (failure) => emit(AuthenticationError(message: failure.message)),
+        (user) {
+          if (user == null) return emit(const Unauthenticated());
+          if (!user.emailVerified) return emit(Unverified(user: user));
+          return emit(Authenticated(user: user));
+        },
+      );
+    });
   }
 
   Future<void> signup({
@@ -57,8 +62,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     );
 
     result.fold(
-      (failure) => emit(AuthenticationError(message: (result as Failure).message)),
-      (user) => emit(Authenticated(user: user)),
+      (failure) => emit(AuthenticationError(message: failure.message)),
+      (user) {
+        if (user.emailVerified) return emit(Authenticated(user: user));
+        return emit(Unverified(user: user));
+      },
     );
   }
 
@@ -77,7 +85,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     result.fold(
       (failure) => emit(AuthenticationError(message: failure.message)),
-      (user) => emit(Authenticated(user: user)),
+      (user) {
+        if (user.emailVerified) return emit(Authenticated(user: user));
+        return emit(Unverified(user: user));
+      },
     );
   }
 

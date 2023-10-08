@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:repege/_older/components/paragraph.dart';
+import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/utils/validations/email_validation.dart';
 import 'package:repege/core/utils/validations/password_validation.dart';
 import 'package:repege/core/utils/validations/required_validation.dart';
@@ -61,6 +62,18 @@ class _SignupScreenState extends State<SignupScreen> {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         switch (state) {
+          case Unverified():
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Paragraph(
+                    'Você precisa verificar o email enviado para **${state.user.email}** antes de poder utilizar o aplicativo.',
+                  ),
+                );
+              },
+            ).then((value) => context.go(Routes.signin.name));
+            break;
           case AuthenticationError():
             showDialog(
               context: context,

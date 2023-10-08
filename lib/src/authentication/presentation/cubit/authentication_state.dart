@@ -16,6 +16,15 @@ final class Authenticated extends AuthenticationState {
   List<Object> get props => [user];
 }
 
+final class Unverified extends AuthenticationState {
+  const Unverified({required this.user});
+
+  final User user;
+
+  @override
+  List<Object> get props => [user];
+}
+
 final class AuthenticationLoading extends AuthenticationState {
   const AuthenticationLoading();
 }

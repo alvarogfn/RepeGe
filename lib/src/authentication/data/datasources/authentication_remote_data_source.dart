@@ -7,7 +7,12 @@ class AuthenticationRemoteDataSource {
   final _auth = auth.FirebaseAuth.instance;
 
   late final _userCollection = _firestore.collection('users').withConverter(
-        fromFirestore: (snapshot, options) => UserModel.fromFirebase(snapshot),
+        fromFirestore: (snapshot, options) {
+          final user = UserModel.fromFirebase(snapshot);
+          return user.copyWith(
+            emailVerified: _auth.currentUser?.emailVerified,
+          );
+        },
         toFirestore: (snapshot, options) => snapshot.toMap(),
       );
 
@@ -49,6 +54,7 @@ class AuthenticationRemoteDataSource {
         'createdAt': createdAt != null ? Timestamp.fromDate(createdAt) : FieldValue.serverTimestamp(),
         'ref': userReference,
       });
+
       batch.set(userReference, {
         'username': username,
         'uid': user.uid,
@@ -91,27 +97,15 @@ class AuthenticationRemoteDataSource {
     return userModel.data()!;
   }
 
-  Future editUser({
-    required String id,
-    String? email,
-    DateTime? createdAt,
-    String? avatarURL,
-    String? displayName,
-    String? phoneNumber,
-  }) async {
-    if (email != null) _auth.currentUser?.updateEmail(email);
-    _auth.currentUser?.updateDisplayName(email);
-    _auth.currentUser?.updatePhotoURL(email);
+  Future<void> editUser(UserModel user) async {
+    final credential = _auth.currentUser;
 
-    final userReference = _firestore.collection('users').doc(id);
+    if (credential == null) throw Exception('Você não está autenticado.');
 
-    userReference.update({
-      'email': email,
-      'emailVerified': createdAt,
-      'displayName': avatarURL,
-      'phoneNumber': displayName,
-      'avatarURL': phoneNumber,
-    });
+    await credential.updateEmail(user.email);
+    await credential.updatePhotoURL(user.avatarURL);
+
+    await _userCollection.doc(user.id).set(user);
   }
 
   Future forgotPassword({required String email}) async {

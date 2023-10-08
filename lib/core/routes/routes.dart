@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:repege/_older/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/core/config/environment_variables.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
@@ -11,8 +12,10 @@ import 'package:repege/src/authentication/presentation/views/forgot_password_scr
 import 'package:repege/src/authentication/presentation/views/signin_screen.dart';
 import 'package:repege/src/authentication/presentation/views/signup_screen.dart';
 import 'package:repege/src/miscellaneous/presentation/views/home_screen.dart';
+import 'package:repege/src/sheets/presentation/views/sheets_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _sheetNavigationKey = GlobalKey<NavigatorState>(debugLabel: 'sheet');
 
 final GoRouter routes = GoRouter(
   debugLogDiagnostics: !EnvironmentVariables.production,
@@ -26,11 +29,6 @@ final GoRouter routes = GoRouter(
       builder: (context, state) => const SigninScreen(),
     ),
     GoRoute(
-      path: Routes.loading.path,
-      name: Routes.loading.name,
-      builder: (context, state) => const Scaffold(body: Center(child: CircularProgressIndicator())),
-    ),
-    GoRoute(
       path: Routes.signup.path,
       name: Routes.signup.name,
       builder: (context, state) => const SignupScreen(),
@@ -41,9 +39,41 @@ final GoRouter routes = GoRouter(
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
     GoRoute(
+      path: Routes.loading.path,
+      name: Routes.loading.name,
+      builder: (context, state) => const Scaffold(body: Center(child: CircularProgressIndicator())),
+    ),
+    GoRoute(
       path: Routes.home.path,
       name: Routes.home.name,
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: Routes.sheets.path,
+      name: Routes.sheets.name,
+      builder: (context, state) => const SheetsScreen(),
+      routes: [
+        GoRoute(
+          path: Routes.sheetCreate.path,
+          name: Routes.sheetCreate.name,
+          builder: (context, state) => const SheetsCreateScreen(),
+        )
+      ],
+    ),
+    ShellRoute(
+      navigatorKey: _sheetNavigationKey,
+      builder: (context, state, widget) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: widget,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: Routes.sheet.path,
+          
+        )
+      ],
     ),
   ],
   redirect: (context, state) async {

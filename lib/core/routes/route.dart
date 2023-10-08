@@ -33,7 +33,7 @@
 
 //   CustomRouter();
 
-//   late final routes = GoRouter(
+//   late final routes = GoRouter( 
 //     debugLogDiagnostics: !EnvironmentVariables.production,
 //     initialLocation: '/',
 //     navigatorKey: _rootNavigatorKey,
