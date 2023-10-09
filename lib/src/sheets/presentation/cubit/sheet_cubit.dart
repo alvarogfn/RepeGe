@@ -11,7 +11,6 @@ import 'package:repege/src/sheets/domain/usecase/stream_sheet.dart';
 part 'sheet_state.dart';
 
 class SheetCubit extends Cubit<SheetState> {
-  final DeleteSheet _deleteSheet;
   final EditSheet _editSheet;
   final StreamSheet _streamSheet;
 
@@ -19,8 +18,7 @@ class SheetCubit extends Cubit<SheetState> {
     required DeleteSheet deleteSheet,
     required EditSheet editSheet,
     required StreamSheet streamSheet,
-  })  : _deleteSheet = deleteSheet,
-        _editSheet = editSheet,
+  })  : _editSheet = editSheet,
         _streamSheet = streamSheet,
         super(const SheetLoading());
 
@@ -38,15 +36,6 @@ class SheetCubit extends Cubit<SheetState> {
     );
   }
 
-  Future<void> deleteSheet(DeleteSheetParams params) async {
-    final result = await _deleteSheet(params);
-
-    return result.fold(
-      (failure) => emit(SheetError(failure.message)),
-      (sheet) => emit(SheetDeleted(params.id)),
-    );
-  }
-
   Future<void> editSheet(SheetModel sheet) async {
     final result = await _editSheet(
       EditSheetParams(sheetId: sheet.id, sheetMap: sheet.toMap()),
@@ -54,7 +43,7 @@ class SheetCubit extends Cubit<SheetState> {
 
     return result.fold(
       (failure) => emit(SheetError(failure.message)),
-      (_) => emit(const SheetUpdated()),
+      (_) => null,
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/presentation/cubit/sheet_cubit.dart';
+import 'package:repege/src/sheets/presentation/widgets/attributes_card.dart';
 import 'package:repege/src/sheets/presentation/widgets/life_tracker.dart';
 
 class StatusPage extends StatelessWidget {
@@ -63,7 +64,7 @@ class StatusPage extends StatelessWidget {
                 ),
               ),
               // const DeathSavesCard(),
-              // const AttributesCard(),
+              const AttributesCard(),
             ],
           );
         }),

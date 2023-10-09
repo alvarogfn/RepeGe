@@ -7,20 +7,20 @@ sealed class SheetsState extends Equatable {
   List<Object> get props => [];
 }
 
-final class SheetsLoading extends SheetsState {
-  const SheetsLoading();
+final class SheetsInitialState extends SheetsState {
+  const SheetsInitialState();
+}
+
+final class SheetsCreated extends SheetsState {
+  final SheetModel sheet;
+  const SheetsCreated(this.sheet);
+}
+
+final class SheetsError extends SheetsState {
+  final String message;
+  const SheetsError(this.message);
 }
 
 final class SheetsDeleted extends SheetsState {
   const SheetsDeleted();
-}
-
-final class SheetsList extends SheetsState {
-  final List<Sheet> sheets;
-
-  const SheetsList(this.sheets);
-}
-
-final class SheetsError extends SheetsState {
-  const SheetsError();
 }

@@ -20,15 +20,6 @@ final class SheetLoaded extends SheetState {
   List<Object> get props => [...sheet.props];
 }
 
-final class SheetDeleted extends SheetState {
-  final String id;
-
-  const SheetDeleted(this.id);
-
-  @override
-  List<Object> get props => [id];
-}
-
 final class SheetError extends SheetState {
   final String message;
 

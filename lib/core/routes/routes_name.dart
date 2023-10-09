@@ -6,27 +6,26 @@ enum Routes {
   forgotPassword(state: AuthState.unauth, name: 'forgot-password', path: '/forgot-password'),
 
   home(name: 'home', path: '/'),
-  profile(name: 'profile', path: '/profile'),
 
   sheets(name: 'sheets', path: '/sheets'),
-  sheet(name: 'sheet', path: ':id'),
   sheetCreate(name: 'sheet-create', path: 'create'),
+  sheet(name: 'sheet', path: 'sheet/:id'),
 
-  spell(name: 'spell', path: '/spell/:id'),
-  spellsSearch(name: 'spells-search', path: '/spells/search'),
-  spellsForm(name: 'spells-form', path: '/spells/form'),
+  // spell(name: 'spell', path: '/spell/:id'),
+  // spellsSearch(name: 'spells-search', path: '/spells/search'),
+  // spellsForm(name: 'spells-form', path: '/spells/form'),
 
-  equipments(name: 'equipments', path: '/equipments'),
-  equipmentsSearch(name: 'equipments-search', path: 'search'),
-  equipmentsDetails(name: 'equipments-details', path: 'details'),
-  equipmentsForm(name: 'equipments-form', path: 'form'),
+  // equipments(name: 'equipments', path: '/equipments'),
+  // equipmentsSearch(name: 'equipments-search', path: 'search'),
+  // equipmentsDetails(name: 'equipments-details', path: 'details'),
+  // equipmentsForm(name: 'equipments-form', path: 'form'),
 
-  campaigns(name: 'campaigns', path: '/campaigns'),
-  campaignsCreate(name: 'campaign-create', path: 'create'),
-  campaign(name: 'campaign', path: '/campaign/:id'),
+  // campaigns(name: 'campaigns', path: '/campaigns'),
+  // campaignsCreate(name: 'campaign-create', path: 'create'),
+  // campaign(name: 'campaign', path: '/campaign/:id'),
 
-  invitations(name: 'invitations', path: '/invitations'),
-  invitationsSheetChoose(name: 'invitations-sheet-choose', path: 'sheet-choose'),
+  // invitations(name: 'invitations', path: '/invitations'),
+  // invitationsSheetChoose(name: 'invitations-sheet-choose', path: 'sheet-choose'),
 
   loading(name: 'loading', path: '/loading');
 

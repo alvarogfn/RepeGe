@@ -1,91 +1,65 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/core/utils/typedefs.dart';
 import 'package:repege/src/sheets/data/models/equipment_model.dart';
-import 'package:repege/src/sheets/data/models/sheet_model.dart';
 
 class EquipmentRemoteDataSource {
   final _firestore = FirebaseFirestore.instance;
 
-  late final _sheetsCollection = _firestore.collection('equipments').withConverter(
-        fromFirestore: (snapshot, options) => SheetModel.fromFirebase(snapshot),
+  late final _equipmentsCollection = _firestore.collection('equipments').withConverter(
+        fromFirestore: (snapshot, options) => EquipmentModel.fromFirebase(snapshot),
         toFirestore: (snapshot, options) => snapshot.toMap(),
       );
 
   Future<EquipmentModel> createEquipment({
-    DateTime? createdAt,
-    int? armorClass,
-    int? attackBonus,
-    int? castingHability,
-    int? characterLevel,
-    int? currentHp,
-    int? iniative,
-    int? magicResistance,
-    int? maxHp,
-    int? speed,
-    int? temporaryHp,
-    String? alignment,
-    String? background,
-    String? castingClass,
-    String? characterClass,
-    String? characteristics,
-    String? characterName,
-    String? characterRace,
+    required String sheetId,
     required String createdBy,
-    String? hitDice,
-    String? languages,
-    String? skills,
+    String? name,
+    String? description,
+    String? price,
+    String? weight,
+    DateTime? createdAt,
   }) async {
-    final sheetDoc = _firestore.collection('sheets').doc();
+    final equipmentDoc = _firestore.collection('equipments').doc();
 
-    final sheet = EquipmentModel(
-      createdAt: DateTime.now(),
-      armorClass: 0,
-      attackBonus: 0,
-      castingHability: 0,
-      characterLevel: 1,
-      currentHp: 0,
-      iniative: 0,
-      magicResistance: 0,
-      maxHp: 0,
-      speed: 0,
-      temporaryHp: 0,
-      alignment: '',
-      background: '',
-      castingClass: '',
-      characterClass: '',
-      characteristics: '',
-      characterName: '',
-      characterRace: '',
+    final equipment = EquipmentModel(
+      id: equipmentDoc.id,
+      name: name ?? '',
+      description: description ?? '',
+      price: price ?? '',
+      weight: weight ?? '',
+      createdAt: createdAt ?? DateTime.now(),
       createdBy: createdBy,
-      hitDice: '',
-      id: sheetDoc.id,
-      languages: '',
-      skills: '',
+      sheetId: sheetId,
     );
 
-    final sheetMap = sheet.toMap().update('createdAt', (value) => FieldValue.serverTimestamp());
+    final equipmentMap = equipment.toMap().update('createdAt', (value) => FieldValue.serverTimestamp());
 
-    await sheetDoc.set(sheetMap);
+    await equipmentDoc.set(equipmentMap);
 
-    return sheet;
+    return equipment;
   }
 
-  Stream<List<SheetModel>> streamAllSheets({required String createdBy}) {
-    return _sheetsCollection
+  Stream<List<EquipmentModel>> streamAllEquipments({required String createdBy}) {
+    return _equipmentsCollection
         .where('createdBy', isEqualTo: createdBy)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((snapshot) => snapshot.data()).toList());
   }
 
-  Stream<SheetModel> streamSheet({required String id}) {
-    return _sheetsCollection.doc(id).snapshots().map((snapshot) => snapshot.data()!);
+  Stream<EquipmentModel> streamEquipment({required String id}) {
+    return _equipmentsCollection.doc(id).snapshots().map((snapshot) => snapshot.data()!);
   }
 
-  Future<SheetModel> editSheet(SheetModel sheet) async {
-    await _sheetsCollection.doc(sheet.id).set(sheet);
-    return sheet;
+  Future<void> editEquipment(String equipmentId, DataMap equipmentMap) async {
+    equipmentMap
+      ..remove('createdAt')
+      ..remove('createdBy')
+      ..remove('id');
+
+    await _equipmentsCollection.doc(equipmentId).update(equipmentMap);
   }
 
-  Future<void> deleteSheet(SheetModel sheet) async {
-    await _sheetsCollection.doc(sheet.id).delete();
+  Future<void> deleteEquipment(String equipmentId) async {
+    await _equipmentsCollection.doc(equipmentId).delete();
   }
 }

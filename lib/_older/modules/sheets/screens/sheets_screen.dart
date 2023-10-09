@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:repege/core/routes/routes_name.dart';
+import 'package:repege/core/services/injection_container.dart';
+import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 import 'package:repege/src/sheets/presentation/cubit/sheets_cubit.dart';
 
 class SheetsScreen extends StatelessWidget {
@@ -10,18 +13,18 @@ class SheetsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SheetsCubit(),
+      create: (context) => sl<SheetsCubit>(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Personagens'),
           actions: [
             IconButton(
-              onPressed: () => context.pushNamed(RoutesName.sheetCreate.name),
+              onPressed: () => context.pushNamed(Routes.sheetCreate.name),
               icon: const Icon(Icons.add),
             )
           ],
         ),
-        drawer: const CustomDrawer(),
+        drawer: const AppDrawer(),
         body: ChangeNotifierProxyProvider<AuthService, SheetsService>(
           create: (context) => SheetsService(
             context.read<AuthService>().user!,

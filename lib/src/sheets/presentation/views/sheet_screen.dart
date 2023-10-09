@@ -4,35 +4,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repege/_older/icons/rpg_icons.dart';
 import 'package:repege/core/services/injection_container.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
-import 'package:repege/src/sheets/domain/usecase/stream_all_sheets.dart';
+import 'package:repege/src/sheets/domain/usecase/stream_sheet.dart';
 import 'package:repege/src/sheets/presentation/cubit/sheet_cubit.dart';
-import 'package:repege/src/sheets/presentation/cubit/sheets_cubit.dart';
 import 'package:repege/src/sheets/presentation/widgets/casting_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/character_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/equipment_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/status_page.dart';
 
-class SheetScreen extends StatefulWidget {
+class SheetScreen extends StatelessWidget {
   const SheetScreen(this.sheetId, {super.key});
   final String sheetId;
 
   @override
-  State<SheetScreen> createState() => _SheetScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<SheetCubit>(),
+      child: _SheetScreen(sheetId),
+    );
+  }
 }
 
-class _SheetScreenState extends State<SheetScreen> {
+class _SheetScreen extends StatefulWidget {
+  const _SheetScreen(this.sheetId);
+  final String sheetId;
+
+  @override
+  State<_SheetScreen> createState() => __SheetScreenState();
+}
+
+class __SheetScreenState extends State<_SheetScreen> {
   StreamSubscription? subscription;
 
   @override
   void initState() {
     super.initState();
-    final authState = context.read<AuthenticationCubit>().state;
-    final sheetsCubit = context.read<SheetsCubit>();
+    final sheetsCubit = context.read<SheetCubit>();
 
-    if (authState is Authenticated) {
-      subscription = sheetsCubit.streamAllSheets(StreamAllSheetsParams(createdBy: authState.user.id));
-    }
+    subscription = sheetsCubit.streamSheet(StreamSheetParams(sheetId: widget.sheetId));
   }
 
   @override
@@ -43,16 +51,13 @@ class _SheetScreenState extends State<SheetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SheetCubit>(
-      create: (context) => sl<SheetCubit>(),
-      child: BlocBuilder<SheetCubit, SheetState>(
-        builder: (context, state) {
-          if (state is SheetLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is SheetLoaded) {
+    return BlocBuilder<SheetCubit, SheetState>(
+      builder: (context, state) {
+        switch (state) {
+          case SheetLoading():
+            return const Dialog.fullscreen(child: Center(child: CircularProgressIndicator()));
+          case SheetLoaded():
             final sheet = state.sheet;
-
             return DefaultTabController(
               length: 4,
               child: Scaffold(
@@ -79,11 +84,10 @@ class _SheetScreenState extends State<SheetScreen> {
                 ),
               ),
             );
-          }
-
-          return const SizedBox();
-        },
-      ),
+          default:
+            return const SizedBox();
+        }
+      },
     );
   }
 }

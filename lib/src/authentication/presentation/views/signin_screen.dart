@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:repege/_older/components/paragraph.dart';
-import 'package:repege/_older/modules/auth/components/app_logo.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/utils/validations/email_validation.dart';
 import 'package:repege/core/utils/validations/required_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
+import 'package:repege/core/widgets/paragraph.dart';
 import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/presentation/widgets/app_logo.dart';
 import 'package:repege/src/authentication/presentation/widgets/obscure_text_field.dart';
 
 class SigninScreen extends StatefulWidget {

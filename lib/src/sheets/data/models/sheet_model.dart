@@ -147,6 +147,9 @@ class SheetModel extends Sheet {
 
   factory SheetModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
     final map = snapshot.data()!;
+
+    map.update('createdAt', (_) => Timestamp.now());
+
     return SheetModel(
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       armorClass: map['armorClass'] as int,

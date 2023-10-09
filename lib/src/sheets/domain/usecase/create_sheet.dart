@@ -38,53 +38,53 @@ class CreateSheet extends UsecaseWithParams<ResultFuture<Sheet>, CreateSheetPara
 }
 
 class CreateSheetParams {
-  final DateTime createdAt;
-  final int armorClass;
-  final int attackBonus;
-  final int castingHability;
-  final int characterLevel;
-  final int currentHp;
-  final int iniative;
-  final int magicResistance;
-  final int maxHp;
-  final int speed;
-  final int temporaryHp;
-  final String alignment;
-  final String background;
-  final String castingClass;
-  final String characterClass;
-  final String characteristics;
-  final String characterName;
-  final String characterRace;
-  final String createdBy;
-  final String hitDice;
-  final String id;
-  final String languages;
-  final String skills;
+  DateTime? createdAt;
+  int? armorClass;
+  int? attackBonus;
+  int? castingHability;
+  int? characterLevel;
+  int? currentHp;
+  int? iniative;
+  int? magicResistance;
+  int? maxHp;
+  int? speed;
+  int? temporaryHp;
+  String? alignment;
+  String? background;
+  String? castingClass;
+  String? characterClass;
+  String? characteristics;
+  String? characterName;
+  String? characterRace;
+  String createdBy;
+  String? hitDice;
+  String? id;
+  String? languages;
+  String? skills;
 
   CreateSheetParams({
-    required this.createdAt,
-    required this.armorClass,
-    required this.attackBonus,
-    required this.castingHability,
-    required this.characterLevel,
-    required this.currentHp,
-    required this.iniative,
-    required this.magicResistance,
-    required this.maxHp,
-    required this.speed,
-    required this.temporaryHp,
-    required this.alignment,
-    required this.background,
-    required this.castingClass,
-    required this.characterClass,
-    required this.characteristics,
-    required this.characterName,
-    required this.characterRace,
     required this.createdBy,
-    required this.hitDice,
-    required this.id,
-    required this.languages,
-    required this.skills,
+    this.createdAt,
+    this.armorClass,
+    this.attackBonus,
+    this.castingHability,
+    this.characterLevel,
+    this.currentHp,
+    this.iniative,
+    this.magicResistance,
+    this.maxHp,
+    this.speed,
+    this.temporaryHp,
+    this.alignment,
+    this.background,
+    this.castingClass,
+    this.characterClass,
+    this.characteristics,
+    this.characterName,
+    this.characterRace,
+    this.hitDice,
+    this.id,
+    this.languages,
+    this.skills,
   });
 }

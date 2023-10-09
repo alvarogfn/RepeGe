@@ -24,32 +24,6 @@ class LifeTracker extends StatefulWidget {
 }
 
 class _LifeTrackerState extends State<LifeTracker> {
-  double currentHp = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.currentHp > widget.maxHp) {
-      widget.onChangeCurrentHp(widget.maxHp);
-      return;
-    }
-    setState(() {
-      currentHp = widget.currentHp.toDouble();
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant LifeTracker oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.currentHp > widget.maxHp) {
-      widget.onChangeCurrentHp(widget.maxHp);
-      return;
-    }
-    setState(() {
-      currentHp = widget.currentHp.toDouble();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -71,8 +45,8 @@ class _LifeTrackerState extends State<LifeTracker> {
                       PopupMenuItem(
                         child: const Text('Descanso Longo'),
                         onTap: () {
-                          widget.onChangeCurrentHp(widget.maxHp.toInt());
                           widget.onChangeTemporaryHp(0);
+                          widget.onChangeCurrentHp(widget.maxHp);
                         },
                       )
                     ];
@@ -93,14 +67,20 @@ class _LifeTrackerState extends State<LifeTracker> {
                 const SizedBox(width: 20),
                 TextFormFieldBottomSheet(
                   label: 'Atual',
-                  value: currentHp.toInt().toString(),
+                  value: widget.currentHp.toInt().toString(),
+                  onFieldSubmitted: (value) {
+                    if (int.parse(value) >= widget.maxHp) {
+                      return widget.onChangeCurrentHp(widget.maxHp);
+                    }
+                    widget.onChangeCurrentHp(int.parse(value));
+                  },
                 ),
                 Expanded(
                   child: Slider(
-                    value: currentHp.toDouble(),
+                    value: widget.currentHp.toDouble(),
                     max: widget.maxHp.toDouble(),
-                    onChanged: (newCurrentHp) {
-                      setState(() => currentHp = newCurrentHp);
+                    onChanged: (_) {
+                      // setState(() => currentHp = newCurrentHp);
                     },
                     onChangeEnd: (newCurrentHp) => widget.onChangeCurrentHp(newCurrentHp.toInt()),
                     divisions: widget.maxHp > 0 ? widget.maxHp : 1,

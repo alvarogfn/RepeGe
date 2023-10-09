@@ -38,31 +38,31 @@ class SheetRemoteDataSource {
 
     final sheet = SheetModel(
       createdAt: DateTime.now(),
-      armorClass: 0,
-      attackBonus: 0,
-      castingHability: 0,
-      characterLevel: 1,
-      currentHp: 0,
-      iniative: 0,
-      magicResistance: 0,
-      maxHp: 0,
-      speed: 0,
-      temporaryHp: 0,
-      alignment: '',
-      background: '',
-      castingClass: '',
-      characterClass: '',
-      characteristics: '',
-      characterName: '',
-      characterRace: '',
+      armorClass: armorClass ?? 0,
+      attackBonus: attackBonus ?? 0,
+      castingHability: castingHability ?? 0,
+      characterLevel: characterLevel ?? 1,
+      currentHp: currentHp ?? 0,
+      iniative: iniative ?? 0,
+      magicResistance: magicResistance ?? 0,
+      maxHp: maxHp ?? 0,
+      speed: speed ?? 0,
+      temporaryHp: temporaryHp ?? 0,
+      alignment: alignment ?? '',
+      background: background ?? '',
+      castingClass: castingClass ?? '',
+      characterClass: characterClass ?? '',
+      characteristics: characteristics ?? '',
+      characterName: characterName ?? '',
+      characterRace: characterRace ?? '',
       createdBy: createdBy,
-      hitDice: '',
+      hitDice: hitDice ?? '',
       id: sheetDoc.id,
-      languages: '',
-      skills: '',
+      languages: languages ?? '',
+      skills: skills ?? '',
     );
 
-    final sheetMap = sheet.toMap().update('createdAt', (value) => FieldValue.serverTimestamp());
+    final sheetMap = sheet.toMap()..update('createdAt', (value) => FieldValue.serverTimestamp());
 
     await sheetDoc.set(sheetMap);
 
