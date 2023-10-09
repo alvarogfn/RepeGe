@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:repege/core/errors/failure.dart';
 
-typedef ResultStream<T> = Stream<Either<Failure, T>>;
+typedef ResultStream<T> = Either<Failure, Stream<T>>;
 
 typedef ResultFuture<T> = Future<Either<Failure, T>>;
 

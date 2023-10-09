@@ -4,18 +4,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/_older/modules/sheets/screens/sheets_create_screen.dart';
 import 'package:repege/core/config/environment_variables.dart';
 import 'package:repege/core/routes/routes_name.dart';
+import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/presentation/views/forgot_password_screen.dart';
 import 'package:repege/src/authentication/presentation/views/signin_screen.dart';
 import 'package:repege/src/authentication/presentation/views/signup_screen.dart';
 import 'package:repege/src/miscellaneous/presentation/views/home_screen.dart';
+import 'package:repege/src/sheets/presentation/cubit/sheets_cubit.dart';
 import 'package:repege/src/sheets/presentation/views/sheets_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _sheetNavigationKey = GlobalKey<NavigatorState>(debugLabel: 'sheet');
 
 final GoRouter routes = GoRouter(
   debugLogDiagnostics: !EnvironmentVariables.production,
@@ -48,31 +48,31 @@ final GoRouter routes = GoRouter(
       name: Routes.home.name,
       builder: (context, state) => const HomeScreen(),
     ),
-    GoRoute(
-      path: Routes.sheets.path,
-      name: Routes.sheets.name,
-      builder: (context, state) => const SheetsScreen(),
-      routes: [
-        GoRoute(
-          path: Routes.sheetCreate.path,
-          name: Routes.sheetCreate.name,
-          builder: (context, state) => const SheetsCreateScreen(),
-        )
-      ],
-    ),
     ShellRoute(
-      navigatorKey: _sheetNavigationKey,
-      builder: (context, state, widget) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: widget,
+      builder: (context, state, child) {
+        return BlocProvider(
+          create: (context) => sl<SheetsCubit>(),
+          child: child,
         );
       },
       routes: [
         GoRoute(
+          path: Routes.sheets.path,
+          name: Routes.sheets.name,
+          builder: (context, state) => const SheetsScreen(),
+          routes: [
+            // GoRoute(
+            //   path: Routes.sheetCreate.path,
+            //   name: Routes.sheetCreate.name,
+            //   builder: (context, state) => const SheetsCreateScreen(),
+            // )
+          ],
+        ),
+        GoRoute(
           path: Routes.sheet.path,
-          
-        )
+          name: Routes.sheet.name,
+          // builder: (context, state) => SheetScreen(''),
+        ),
       ],
     ),
   ],

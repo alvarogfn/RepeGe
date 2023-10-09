@@ -14,7 +14,6 @@ part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   final Signup _signup;
-  // ignore: unused_field
   final AuthStateChanges _authStateChanges;
   final Signin _signin;
   final Signout _signout;
@@ -34,16 +33,14 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         _signout = signout,
         _sendEmailVerification = sendEmailVerification,
         super(const Unauthenticated()) {
-    subscription = authStateChanges().listen((event) {
-      event.fold(
-        (failure) => emit(AuthenticationError(message: failure.message)),
-        (user) {
-          if (user == null) return emit(const Unauthenticated());
-          if (!user.emailVerified) return emit(Unverified(user: user));
-          return emit(Authenticated(user: user));
-        },
-      );
-    });
+    _authStateChanges().fold(
+      (left) => emit(AuthenticationError(message: left.message)),
+      (right) => right.listen((user) {
+        if (user == null) return emit(const Unauthenticated());
+        if (!user.emailVerified) return emit(Unverified(user: user));
+        return emit(Authenticated(user: user));
+      }),
+    );
   }
 
   Future<void> signup({

@@ -1,1 +1,0 @@
-enum AuthState { auth, unauth }

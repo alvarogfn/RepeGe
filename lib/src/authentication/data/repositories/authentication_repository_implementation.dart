@@ -50,10 +50,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   @override
   ResultStream<User?> authStateChanges() {
-    return _remoteDataSource
-        .authStateChanges()
-        .handleError((error) => Left(AuthFailure(message: error.toString())))
-        .asyncMap((event) => Right(event));
+    try {
+      return Right(_remoteDataSource.authStateChanges());
+    } catch (e) {
+      return Left(AuthFailure(message: e.toString()));
+    }
   }
 
   @override

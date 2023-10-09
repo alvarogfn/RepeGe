@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/helpers/parse_string.dart';
-import 'package:repege/modules/equipments/models/equipment_types.dart';
 
 class Equipment {
   EquipmentTypes type;

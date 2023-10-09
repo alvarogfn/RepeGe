@@ -9,7 +9,7 @@ class AuthStateChanges extends UsecaseWithoutParams<ResultStream<User?>> {
   final AuthenticationRepository _repository;
 
   @override
-  ResultStream<User?> call() {
+  call() {
     return _repository.authStateChanges();
   }
 }

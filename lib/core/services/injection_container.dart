@@ -8,6 +8,15 @@ import 'package:repege/src/authentication/domain/usecases/signin.dart';
 import 'package:repege/src/authentication/domain/usecases/signout.dart';
 import 'package:repege/src/authentication/domain/usecases/signup.dart';
 import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/sheets/data/datasources/sheet_remote_data_source.dart';
+import 'package:repege/src/sheets/data/repositories/sheet_repository_impl.dart';
+import 'package:repege/src/sheets/domain/repositories/sheet_repository.dart';
+import 'package:repege/src/sheets/domain/usecase/delete_sheet.dart';
+import 'package:repege/src/sheets/domain/usecase/edit_sheet.dart';
+import 'package:repege/src/sheets/domain/usecase/stream_all_sheets.dart';
+import 'package:repege/src/sheets/domain/usecase/stream_sheet.dart';
+import 'package:repege/src/sheets/presentation/cubit/sheet_cubit.dart';
+import 'package:repege/src/sheets/presentation/cubit/sheets_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -27,4 +36,23 @@ Future<void> init() async {
   sl.registerLazySingleton(() => Signout(sl()));
   sl.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(sl()));
   sl.registerLazySingleton(() => AuthenticationRemoteDataSource());
+
+  sl.registerFactory(() => SheetsCubit(
+        streamAllSheets: sl(),
+        editSheet: sl(),
+      ));
+
+  sl.registerFactory(() => SheetCubit(
+        deleteSheet: sl(),
+        editSheet: sl(),
+        streamSheet: sl(),
+      ));
+
+  sl.registerLazySingleton(() => DeleteSheet(sl()));
+  sl.registerLazySingleton(() => EditSheet(sl()));
+  sl.registerLazySingleton(() => StreamSheet(sl()));
+  sl.registerLazySingleton(() => StreamAllSheets(sl()));
+
+  sl.registerLazySingleton<SheetRepository>(() => SheetRepositoryImpl(sl()));
+  sl.registerLazySingleton(() => SheetRemoteDataSource());
 }

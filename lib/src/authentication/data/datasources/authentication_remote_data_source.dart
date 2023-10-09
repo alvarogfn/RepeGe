@@ -52,6 +52,7 @@ class AuthenticationRemoteDataSource {
 
       batch.set(usernameDoc, {
         'createdAt': createdAt != null ? Timestamp.fromDate(createdAt) : FieldValue.serverTimestamp(),
+        'createdBy': user.uid,
         'ref': userReference,
       });
 
@@ -64,7 +65,7 @@ class AuthenticationRemoteDataSource {
         'displayName': user.displayName,
         'phoneNumber': user.phoneNumber,
         'avatarURL': user.photoURL,
-        'createdAt': FieldValue.serverTimestamp(),
+        'createdAt': createdAt != null ? Timestamp.fromDate(createdAt) : FieldValue.serverTimestamp(),
       });
 
       await user.sendEmailVerification();

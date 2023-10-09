@@ -4,13 +4,13 @@ import 'package:repege/src/authentication/domain/repositories/authentication_rep
 import 'package:repege/core/usecases/usecase.dart';
 import 'package:repege/core/utils/typedefs.dart';
 
-class Signup extends UsecaseWithParams<void, SignupParams> {
+class Signup extends UsecaseWithParams<ResultFuture<User>, SignupParams> {
   const Signup(this._repository);
 
   final AuthenticationRepository _repository;
 
   @override
-  ResultFuture<User> call(SignupParams params) {
+  call(params) {
     return _repository.signup(
       password: params.password,
       createdAt: params.createdAt,
