@@ -1,20 +1,20 @@
+import 'package:repege/core/utils/typedefs.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
-import 'package:repege/src/sheets/domain/entities/sheet.dart';
 
 abstract class SheetRepository {
   const SheetRepository();
 
   Future<SheetListState?> addSheet({
-    final String createdBy,
-    int characterLevel,
-    String alignment,
-    String background,
-    String characterClass,
-    String characteristics,
-    String characterName,
-    String characterRace,
+    required String createdBy,
+    int? characterLevel,
+    String? alignment,
+    String? background,
+    String? characterClass,
+    String? characteristics,
+    String? characterName,
+    String? characterRace,
   });
 
   Stream<SheetListState> streamAllSheets(String createdBy);
@@ -23,7 +23,7 @@ abstract class SheetRepository {
 
   Future<SheetListState?> deleteSheet(String sheetId);
 
-  Future<SheetUpdateState?> updateSheet(Sheet sheet);
+  Future<SheetUpdateState?> updateSheet({required String sheetId, required DataMap newData});
 
   // ResultVoid updateAttributes({required String sheetId, required DataMap newData});
 

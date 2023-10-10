@@ -28,8 +28,36 @@ class SheetModel extends Sheet {
     required super.id,
     required super.languages,
     required super.skills,
-    required super.attributes,
   });
+
+  @override
+  List<Object> get props {
+    return [
+      createdAt,
+      armorClass,
+      attackBonus,
+      castingHability,
+      characterLevel,
+      currentHp,
+      iniative,
+      magicResistance,
+      maxHp,
+      speed,
+      temporaryHp,
+      alignment,
+      background,
+      castingClass,
+      characterClass,
+      characteristics,
+      characterName,
+      characterRace,
+      createdBy,
+      hitDice,
+      id,
+      languages,
+      skills,
+    ];
+  }
 
   SheetModel copyWith({
     DateTime? createdAt,
@@ -54,7 +82,7 @@ class SheetModel extends Sheet {
     String? hitDice,
     String? id,
     String? languages,
-    String? skills,
+    String? skills
   }) {
     return SheetModel(
       createdAt: createdAt ?? this.createdAt,
@@ -176,34 +204,5 @@ class SheetModel extends Sheet {
       languages: map['languages'] as String,
       skills: map['skills'] as String,
     );
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      createdAt,
-      armorClass,
-      attackBonus,
-      castingHability,
-      characterLevel,
-      currentHp,
-      iniative,
-      magicResistance,
-      maxHp,
-      speed,
-      temporaryHp,
-      alignment,
-      background,
-      castingClass,
-      characterClass,
-      characteristics,
-      characterName,
-      characterRace,
-      createdBy,
-      hitDice,
-      id,
-      languages,
-      skills,
-    ];
   }
 }

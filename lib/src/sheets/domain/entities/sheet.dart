@@ -1,10 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-
-import 'package:repege/_older/modules/equipments/models/bag.dart';
-import 'package:repege/src/sheets/domain/entities/attributes.dart';
-import 'package:repege/src/sheets/domain/entities/equipment.dart';
-import 'package:repege/src/sheets/domain/entities/spell.dart';
 
 class Sheet extends Equatable {
   final DateTime createdAt;
@@ -30,10 +24,6 @@ class Sheet extends Equatable {
   final String id;
   final String languages;
   final String skills;
-  final Attributes attributes;
-  final List<Spell> spells;
-  final List<Equipment> equipments;
-  final Bag bag;
 
   const Sheet({
     required this.createdAt,
@@ -59,10 +49,6 @@ class Sheet extends Equatable {
     required this.id,
     required this.languages,
     required this.skills,
-    required this.attributes,
-    required this.spells,
-    required this.equipments,
-    required this.bag,
   });
 
   @override
@@ -91,10 +77,6 @@ class Sheet extends Equatable {
       id,
       languages,
       skills,
-      attributes,
-      spells,
-      equipments,
-      bag,
     ];
   }
 }

@@ -20,7 +20,10 @@ class CharacterPage extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Builder(
             builder: (context) {
-              final sheetCubit = context.read<SheetUpdateCubit>();
+              update(SheetModel data) => context.read<SheetUpdateCubit>().updateSheet(
+                    id: sheet.id,
+                    newData: data.toMap(),
+                  );
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -28,7 +31,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Nome',
                     initialValue: sheet.characterName,
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       characterName: value,
                     )),
                     border: InputBorder.none,
@@ -36,7 +39,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Classe',
                     initialValue: sheet.characterClass,
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       characterClass: value,
                     )),
                     border: InputBorder.none,
@@ -44,7 +47,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Nível',
                     initialValue: sheet.characterLevel.toString(),
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       characterLevel: int.parse(value ?? '0'),
                     )),
                     border: InputBorder.none,
@@ -53,7 +56,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Raça',
                     initialValue: sheet.characterRace,
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       characterRace: value,
                     )),
                     border: InputBorder.none,
@@ -61,7 +64,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Alinhamento',
                     initialValue: sheet.alignment,
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       alignment: value,
                     )),
                     border: InputBorder.none,
@@ -69,7 +72,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Antepassado',
                     initialValue: sheet.background,
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       background: value,
                     )),
                     border: InputBorder.none,
@@ -77,7 +80,7 @@ class CharacterPage extends StatelessWidget {
                   EditableTextFormField(
                     label: 'Línguas',
                     initialValue: sheet.languages,
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       languages: value,
                     )),
                     border: InputBorder.none,
@@ -94,7 +97,7 @@ class CharacterPage extends StatelessWidget {
                     initialValue: sheet.characteristics,
                     maxLines: 5,
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       characteristics: value,
                     )),
                   ),
@@ -103,7 +106,7 @@ class CharacterPage extends StatelessWidget {
                     initialValue: sheet.skills,
                     maxLines: 5,
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    onSaved: (value) => sheetCubit.updateSheet(sheet.copyWith(
+                    onSaved: (value) => update(sheet.copyWith(
                       skills: value,
                     )),
                   ),

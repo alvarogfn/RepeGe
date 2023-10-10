@@ -26,15 +26,37 @@ class SheetListAddEvent extends SheetListEvent {
   final String characterRace;
 
   const SheetListAddEvent({
-    required this.createdBy,
-    required this.characterLevel,
-    required this.alignment,
-    required this.background,
-    required this.characterClass,
-    required this.characteristics,
-    required this.characterName,
-    required this.characterRace,
+    this.createdBy = '',
+    this.characterLevel = 1,
+    this.alignment = '',
+    this.background = '',
+    this.characterClass = '',
+    this.characteristics = '',
+    this.characterName = '',
+    this.characterRace = '',
   });
+
+  SheetListAddEvent copyWith({
+    String? createdBy,
+    int? characterLevel,
+    String? alignment,
+    String? background,
+    String? characterClass,
+    String? characteristics,
+    String? characterName,
+    String? characterRace,
+  }) {
+    return SheetListAddEvent(
+      createdBy: createdBy ?? this.createdBy,
+      characterLevel: characterLevel ?? this.characterLevel,
+      alignment: alignment ?? this.alignment,
+      background: background ?? this.background,
+      characterClass: characterClass ?? this.characterClass,
+      characteristics: characteristics ?? this.characteristics,
+      characterName: characterName ?? this.characterName,
+      characterRace: characterRace ?? this.characterRace,
+    );
+  }
 }
 
 class SheetListRemoveEvent extends SheetListEvent {

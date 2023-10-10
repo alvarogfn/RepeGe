@@ -12,7 +12,11 @@ final class SheetUpdateInit extends SheetUpdateState {
 }
 
 final class SheetUpdateSucess extends SheetUpdateState {
-  const SheetUpdateSucess();
+  final key = Random().nextDouble();
+  SheetUpdateSucess();
+
+  @override
+  List<Object> get props => [key];
 }
 
 final class SheetUpdateError extends SheetUpdateState {

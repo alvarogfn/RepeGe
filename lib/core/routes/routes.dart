@@ -85,7 +85,7 @@ final GoRouter routes = GoRouter(
 
     final authState = context.read<AuthenticationCubit>().state;
 
-    final isAuth = authState is Authenticated;
+    final isAuth = authState is Authenticated && authState.user.emailVerified;
 
     if (isAuth == false && toUnauth) return null;
     if (isAuth == false && !toUnauth) return Routes.signin.path;

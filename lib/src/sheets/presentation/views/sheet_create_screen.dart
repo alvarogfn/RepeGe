@@ -5,7 +5,7 @@ import 'package:repege/core/utils/validations/required_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
-import 'package:repege/src/sheets/domain/params/add_sheet_params.dart';
+import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
 
 class SheetsCreateScreen extends StatefulWidget {
   const SheetsCreateScreen({super.key});
@@ -17,7 +17,7 @@ class SheetsCreateScreen extends StatefulWidget {
 class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  AddSheetParams params = const AddSheetParams.empty(createdBy: '');
+  SheetListAddEvent params = const SheetListAddEvent();
 
   bool _validateForm() {
     final currentState = _formKey.currentState;

@@ -63,6 +63,11 @@ class UserModel extends User {
 
   factory UserModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
     final map = snapshot.data()!;
+
+    if (map['createdAt'] == null) {
+      map.update('createdAt', (value) => DateTime.now());
+    }
+
     return UserModel(
       id: map['id'],
       createdAt: (map['createdAt'] as Timestamp).toDate(),

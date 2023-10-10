@@ -22,7 +22,7 @@ class StatusPage extends StatelessWidget {
       ),
       body: FullScreenScroll(
         child: Builder(builder: (context) {
-          final update = context.read<SheetUpdateCubit>().updateSheet;
+          update(SheetModel data) => context.read<SheetUpdateCubit>().updateSheet(id: sheet.id, newData: data.toMap());
 
           return Column(
             children: [

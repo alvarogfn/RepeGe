@@ -11,9 +11,20 @@ import 'package:repege/src/sheets/presentation/widgets/equipment_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/show_text_snackbar.dart';
 import 'package:repege/src/sheets/presentation/widgets/status_page.dart';
 
-class SheetScreen extends StatelessWidget {
+class SheetScreen extends StatefulWidget {
   const SheetScreen(this.sheetId, {super.key});
   final String sheetId;
+
+  @override
+  State<SheetScreen> createState() => _SheetScreenState();
+}
+
+class _SheetScreenState extends State<SheetScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<SheetBloc>().add(SheetInitEvent(widget.sheetId));
+  }
 
   @override
   Widget build(BuildContext context) {
