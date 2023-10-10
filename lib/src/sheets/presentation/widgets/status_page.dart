@@ -4,7 +4,7 @@ import 'package:repege/core/widgets/card_title.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
-import 'package:repege/src/sheets/presentation/cubit/sheet_cubit.dart';
+import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
 import 'package:repege/src/sheets/presentation/widgets/attributes_card.dart';
 import 'package:repege/src/sheets/presentation/widgets/life_tracker.dart';
 
@@ -22,7 +22,7 @@ class StatusPage extends StatelessWidget {
       ),
       body: FullScreenScroll(
         child: Builder(builder: (context) {
-          final update = context.read<SheetCubit>().editSheet;
+          final update = context.read<SheetUpdateCubit>().updateSheet;
 
           return Column(
             children: [

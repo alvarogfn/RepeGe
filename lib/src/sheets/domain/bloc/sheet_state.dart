@@ -1,4 +1,4 @@
-part of 'sheet_cubit.dart';
+part of 'sheet_bloc.dart';
 
 sealed class SheetState extends Equatable {
   const SheetState();
@@ -11,8 +11,8 @@ final class SheetLoading extends SheetState {
   const SheetLoading();
 }
 
-final class SheetLoaded extends SheetState {
-  final SheetModel sheet;
+final class SheetLoaded<T extends Sheet> extends SheetState {
+  final T sheet;
 
   const SheetLoaded(this.sheet);
 
@@ -27,8 +27,4 @@ final class SheetError extends SheetState {
 
   @override
   List<Object> get props => [message];
-}
-
-final class SheetUpdated extends SheetState {
-  const SheetUpdated();
 }

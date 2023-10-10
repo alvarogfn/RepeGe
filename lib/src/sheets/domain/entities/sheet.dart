@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
+
+import 'package:repege/_older/modules/equipments/models/bag.dart';
+import 'package:repege/src/sheets/domain/entities/attributes.dart';
+import 'package:repege/src/sheets/domain/entities/equipment.dart';
+import 'package:repege/src/sheets/domain/entities/spell.dart';
 
 class Sheet extends Equatable {
   final DateTime createdAt;
@@ -27,6 +30,10 @@ class Sheet extends Equatable {
   final String id;
   final String languages;
   final String skills;
+  final Attributes attributes;
+  final List<Spell> spells;
+  final List<Equipment> equipments;
+  final Bag bag;
 
   const Sheet({
     required this.createdAt,
@@ -52,6 +59,10 @@ class Sheet extends Equatable {
     required this.id,
     required this.languages,
     required this.skills,
+    required this.attributes,
+    required this.spells,
+    required this.equipments,
+    required this.bag,
   });
 
   @override
@@ -80,121 +91,10 @@ class Sheet extends Equatable {
       id,
       languages,
       skills,
+      attributes,
+      spells,
+      equipments,
+      bag,
     ];
   }
-
-  Sheet copyWith({
-    DateTime? createdAt,
-    int? armorClass,
-    int? attackBonus,
-    int? castingHability,
-    int? characterLevel,
-    int? currentHp,
-    int? iniative,
-    int? magicResistance,
-    int? maxHp,
-    int? speed,
-    int? temporaryHp,
-    String? alignment,
-    String? background,
-    String? castingClass,
-    String? characterClass,
-    String? characteristics,
-    String? characterName,
-    String? characterRace,
-    String? createdBy,
-    String? hitDice,
-    String? id,
-    String? languages,
-    String? skills,
-  }) {
-    return Sheet(
-      createdAt: createdAt ?? this.createdAt,
-      armorClass: armorClass ?? this.armorClass,
-      attackBonus: attackBonus ?? this.attackBonus,
-      castingHability: castingHability ?? this.castingHability,
-      characterLevel: characterLevel ?? this.characterLevel,
-      currentHp: currentHp ?? this.currentHp,
-      iniative: iniative ?? this.iniative,
-      magicResistance: magicResistance ?? this.magicResistance,
-      maxHp: maxHp ?? this.maxHp,
-      speed: speed ?? this.speed,
-      temporaryHp: temporaryHp ?? this.temporaryHp,
-      alignment: alignment ?? this.alignment,
-      background: background ?? this.background,
-      castingClass: castingClass ?? this.castingClass,
-      characterClass: characterClass ?? this.characterClass,
-      characteristics: characteristics ?? this.characteristics,
-      characterName: characterName ?? this.characterName,
-      characterRace: characterRace ?? this.characterRace,
-      createdBy: createdBy ?? this.createdBy,
-      hitDice: hitDice ?? this.hitDice,
-      id: id ?? this.id,
-      languages: languages ?? this.languages,
-      skills: skills ?? this.skills,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'armorClass': armorClass,
-      'attackBonus': attackBonus,
-      'castingHability': castingHability,
-      'characterLevel': characterLevel,
-      'currentHp': currentHp,
-      'iniative': iniative,
-      'magicResistance': magicResistance,
-      'maxHp': maxHp,
-      'speed': speed,
-      'temporaryHp': temporaryHp,
-      'alignment': alignment,
-      'background': background,
-      'castingClass': castingClass,
-      'characterClass': characterClass,
-      'characteristics': characteristics,
-      'characterName': characterName,
-      'characterRace': characterRace,
-      'createdBy': createdBy,
-      'hitDice': hitDice,
-      'id': id,
-      'languages': languages,
-      'skills': skills,
-    };
-  }
-
-  factory Sheet.fromMap(Map<String, dynamic> map) {
-    return Sheet(
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      armorClass: map['armorClass'] as int,
-      attackBonus: map['attackBonus'] as int,
-      castingHability: map['castingHability'] as int,
-      characterLevel: map['characterLevel'] as int,
-      currentHp: map['currentHp'] as int,
-      iniative: map['iniative'] as int,
-      magicResistance: map['magicResistance'] as int,
-      maxHp: map['maxHp'] as int,
-      speed: map['speed'] as int,
-      temporaryHp: map['temporaryHp'] as int,
-      alignment: map['alignment'] as String,
-      background: map['background'] as String,
-      castingClass: map['castingClass'] as String,
-      characterClass: map['characterClass'] as String,
-      characteristics: map['characteristics'] as String,
-      characterName: map['characterName'] as String,
-      characterRace: map['characterRace'] as String,
-      createdBy: map['createdBy'] as String,
-      hitDice: map['hitDice'] as String,
-      id: map['id'] as String,
-      languages: map['languages'] as String,
-      skills: map['skills'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Sheet.fromJson(String source) => Sheet.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool get stringify => true;
 }

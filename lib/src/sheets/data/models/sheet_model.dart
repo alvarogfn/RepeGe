@@ -28,6 +28,7 @@ class SheetModel extends Sheet {
     required super.id,
     required super.languages,
     required super.skills,
+    required super.attributes,
   });
 
   SheetModel copyWith({

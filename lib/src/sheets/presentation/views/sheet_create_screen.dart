@@ -5,7 +5,7 @@ import 'package:repege/core/utils/validations/required_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
-import 'package:repege/src/sheets/domain/usecase/create_sheet.dart';
+import 'package:repege/src/sheets/domain/params/add_sheet_params.dart';
 
 class SheetsCreateScreen extends StatefulWidget {
   const SheetsCreateScreen({super.key});
@@ -17,7 +17,7 @@ class SheetsCreateScreen extends StatefulWidget {
 class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final params = CreateSheetParams(createdBy: '');
+  AddSheetParams params = const AddSheetParams.empty(createdBy: '');
 
   bool _validateForm() {
     final currentState = _formKey.currentState;
@@ -46,9 +46,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
     }
 
     if (authState is Authenticated) {
-      params.createdBy = authState.user.id;
-
-      return context.pop(params);
+      return context.pop(params.copyWith(createdBy: authState.user.id));
     }
   }
 
@@ -69,7 +67,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Nome'),
-                  onChanged: (value) => params.characterName = value,
+                  onChanged: (value) => params = params.copyWith(characterName: value),
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -77,7 +75,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Classe'),
-                  onChanged: (value) => params.characterClass = value,
+                  onChanged: (value) => params = params.copyWith(characterClass: value),
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -85,7 +83,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Raça'),
-                  onChanged: (value) => params.characterRace = value,
+                  onChanged: (value) => params = params.copyWith(characterRace: value),
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -93,14 +91,14 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Antepassado'),
-                  onChanged: (value) => params.background = value,
+                  onChanged: (value) => params = params.copyWith(background: value),
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Alinhamento'),
-                  onChanged: (value) => params.alignment = value,
+                  onChanged: (value) => params = params.copyWith(alignment: value),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                 ),
@@ -110,7 +108,7 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                     labelText: 'Características adicionais',
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                   ),
-                  onChanged: (value) => params.characteristics = value,
+                  onChanged: (value) => params = params.copyWith(characteristics: value),
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.text,
                   maxLines: 5,

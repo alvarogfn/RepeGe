@@ -1,41 +1,39 @@
-import 'package:repege/core/utils/typedefs.dart';
+import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
+import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
+import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
 import 'package:repege/src/sheets/domain/entities/sheet.dart';
 
 abstract class SheetRepository {
   const SheetRepository();
 
-  ResultFuture<Sheet> createSheet({
-    required String createdBy,
-    DateTime? createdAt,
-    int? armorClass,
-    int? attackBonus,
-    int? castingHability,
-    int? characterLevel,
-    int? currentHp,
-    int? iniative,
-    int? magicResistance,
-    int? maxHp,
-    int? speed,
-    int? temporaryHp,
-    String? alignment,
-    String? background,
-    String? castingClass,
-    String? characterClass,
-    String? characteristics,
-    String? characterName,
-    String? characterRace,
-    String? hitDice,
-    String? languages,
-    String? skills,
+  Future<SheetListState?> addSheet({
+    final String createdBy,
+    int characterLevel,
+    String alignment,
+    String background,
+    String characterClass,
+    String characteristics,
+    String characterName,
+    String characterRace,
   });
 
-  ResultStream<List<Sheet>> streamAllSheets(String createdBy);
+  Stream<SheetListState> streamAllSheets(String createdBy);
 
-  ResultStream<Sheet> streamSheet(String sheetId);
+  Stream<SheetState> streamSheet(String sheetId);
 
-  ResultVoid deleteSheet(String sheetId);
+  Future<SheetListState?> deleteSheet(String sheetId);
 
-  ResultVoid editSheet({required String sheetId, required DataMap sheetMap});
+  Future<SheetUpdateState?> updateSheet(Sheet sheet);
+
+  // ResultVoid updateAttributes({required String sheetId, required DataMap newData});
+
+  // ResultVoid updateSpells({required String sheetId, required DataMap newData});
+  // ResultVoid updateSpell({required String spellId, required DataMap newData});
+
+  // ResultVoid updateBag({required String sheetId, required DataMap newData});
+  // ResultVoid updateEquipments({required String sheetId, required DataMap newData});
+
+  // ResultVoid updateEquipment({required String sheetId, required DataMap newData});
 
   // ResultFuture<Attributes> getAttributes(String sheetId);
 
