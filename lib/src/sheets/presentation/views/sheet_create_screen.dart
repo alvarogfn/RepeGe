@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/core/utils/validations/required_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/sheets/domain/usecase/create_sheet.dart';
 
 class SheetsCreateScreen extends StatefulWidget {

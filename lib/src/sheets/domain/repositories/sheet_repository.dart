@@ -36,4 +36,8 @@ abstract class SheetRepository {
   ResultVoid deleteSheet(String sheetId);
 
   ResultVoid editSheet({required String sheetId, required DataMap sheetMap});
+
+  // ResultFuture<Attributes> getAttributes(String sheetId);
+
+  // ResultFuture<Attributes> editAttributes({required String sheetId, required DataMap attributesMap});
 }

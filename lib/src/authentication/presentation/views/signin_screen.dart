@@ -7,7 +7,8 @@ import 'package:repege/core/utils/validations/required_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/core/widgets/paragraph.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/data/models/user_model.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/presentation/widgets/app_logo.dart';
 import 'package:repege/src/authentication/presentation/widgets/obscure_text_field.dart';
 
@@ -57,23 +58,27 @@ class _SigninScreenState extends State<SigninScreen> {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         switch (state) {
-          case Unverified():
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Paragraph(
-                    'Você precisa verificar o email enviado para **${state.user.email}** antes de poder utilizar o aplicativo.',
-                  ),
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () => context.read<AuthenticationCubit>().sendEmailVerification(),
-                      child: const Text('Re-enviar email'),
-                    )
-                  ],
-                );
-              },
-            );
+          case Authenticated<UserModel>():
+            if (!state.user.emailVerified) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Paragraph(
+                      'Você precisa verificar o email enviado para **${state.user.email}** antes de poder utilizar o aplicativo.',
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () => context.read<AuthenticationCubit>().sendEmailVerification(),
+                        child: const Text('Re-enviar email'),
+                      )
+                    ],
+                  );
+                },
+              );
+            } else {
+              context.goNamed(Routes.home.name);
+            }
             break;
           case AuthenticationError():
             showDialog(
@@ -84,9 +89,6 @@ class _SigninScreenState extends State<SigninScreen> {
                 );
               },
             );
-            break;
-          case Authenticated():
-            context.goNamed(Routes.home.name);
             break;
           default:
         }

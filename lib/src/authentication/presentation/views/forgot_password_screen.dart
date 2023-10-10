@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/presentation/widgets/app_logo.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {

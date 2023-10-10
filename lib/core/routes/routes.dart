@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/src/sheets/presentation/views/sheet_create_screen.dart';
 import 'package:repege/core/config/environment_variables.dart';
 import 'package:repege/core/routes/routes_name.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/presentation/views/forgot_password_screen.dart';
 import 'package:repege/src/authentication/presentation/views/signin_screen.dart';
 import 'package:repege/src/authentication/presentation/views/signup_screen.dart';

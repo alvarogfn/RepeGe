@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/core/routes/routes_name.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/miscellaneous/presentation/widgets/navigation_list_item.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
                         );
 
                         if (choice == true && context.mounted) {
-                          context.read<AuthenticationCubit>().signout();
+                          await context.read<AuthenticationCubit>().signout();
                         }
                       },
                       icon: const Icon(Icons.logout),

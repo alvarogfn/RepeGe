@@ -1,7 +1,3 @@
-import 'package:repege/helpers/parse_bool.dart';
-import 'package:repege/helpers/parse_int.dart';
-import 'package:repege/models/firebase_model.dart';
-
 abstract class Attribute implements FirebaseSheetModel {
   late int value;
 

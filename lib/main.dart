@@ -14,7 +14,7 @@ import 'package:repege/core/routes/routes.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/core/themes/dark_theme.dart';
 import 'package:repege/core/themes/light_theme.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

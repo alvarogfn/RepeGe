@@ -9,7 +9,7 @@ import 'package:repege/core/utils/validations/alphanum_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/core/widgets/paragraph.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/presentation/widgets/app_logo.dart';
 import 'package:repege/src/authentication/presentation/widgets/obscure_text_field.dart';
 
@@ -62,17 +62,19 @@ class _SignupScreenState extends State<SignupScreen> {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         switch (state) {
-          case Unverified():
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Paragraph(
-                    'Você precisa verificar o email enviado para **${state.user.email}** antes de poder utilizar o aplicativo.',
-                  ),
-                );
-              },
-            ).then((value) => context.go(Routes.signin.name));
+          case Authenticated():
+            if (!state.user.emailVerified) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Paragraph(
+                      'Você precisa verificar o email enviado para **${state.user.email}** antes de poder utilizar o aplicativo.',
+                    ),
+                  );
+                },
+              ).then((value) => context.go(Routes.signin.name));
+            }
             break;
           case AuthenticationError():
             showDialog(
@@ -83,22 +85,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 );
               },
             );
-          case Authenticated():
-            {
-              if (!state.user.emailVerified) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const AlertDialog(
-                      content: Text('Você precisa confirmar o seu email, enviado para email'),
-                    );
-                  },
-                );
-                break;
-              }
-            }
-          default:
             break;
+          default:
         }
       },
       builder: (context, state) {

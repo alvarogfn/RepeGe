@@ -1,10 +1,9 @@
-import 'package:repege/src/authentication/domain/entities/user.dart';
-import 'package:repege/core/utils/typedefs.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 
 abstract class AuthenticationRepository {
   const AuthenticationRepository();
 
-  ResultFuture<User> signup({
+  Future<AuthenticationState> signup({
     required String username,
     required String email,
     required String password,
@@ -12,11 +11,11 @@ abstract class AuthenticationRepository {
     String? avatarURL,
   });
 
-  ResultFuture<User> signin({required String email, required String password});
+  Future<AuthenticationState> signin({required String email, required String password});
 
-  ResultVoid signout();
+  Future<AuthenticationState> signout();
 
-  ResultStream<User?> authStateChanges();
+  Stream<AuthenticationState> authStateChanges();
 
-  ResultVoid sendEmailVerification();
+  Future<AuthenticationState?> sendEmailVerification();
 }

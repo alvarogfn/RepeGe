@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/services/injection_container.dart';
-import 'package:repege/src/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 import 'package:repege/src/sheets/domain/usecase/create_sheet.dart';
 import 'package:repege/src/sheets/domain/usecase/delete_sheet.dart';
