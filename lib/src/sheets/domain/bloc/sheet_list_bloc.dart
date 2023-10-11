@@ -25,7 +25,6 @@ class SheetListBloc extends Bloc<SheetListEvent, SheetListState> {
         characterLevel: event.characterLevel,
         characterName: event.characterName,
         characterRace: event.characterRace,
-        characteristics: event.characteristics,
       );
 
       if (result != null) emit(result);

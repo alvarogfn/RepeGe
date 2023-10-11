@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/core/widgets/show_keyboard_bottom_sheet.dart';
 
-class TitleFormFieldBottomSheet extends StatefulWidget {
-  const TitleFormFieldBottomSheet({
+class AttributeFormFieldBottomSheet extends StatefulWidget {
+  const AttributeFormFieldBottomSheet({
     required this.label,
     required this.value,
     required this.title,
@@ -15,16 +15,16 @@ class TitleFormFieldBottomSheet extends StatefulWidget {
 
   final String title;
   final String label;
-  final String value;
+  final int value;
   final String? fieldLabel;
-  final void Function(String value)? onFieldSubmitted;
-  final void Function(String value)? onChanged;
+  final void Function(int value)? onFieldSubmitted;
+  final void Function(int value)? onChanged;
 
   @override
-  State<TitleFormFieldBottomSheet> createState() => _TitleFormFieldBottomSheetState();
+  State<AttributeFormFieldBottomSheet> createState() => _AttributeFormFieldBottomSheetState();
 }
 
-class _TitleFormFieldBottomSheetState extends State<TitleFormFieldBottomSheet> {
+class _AttributeFormFieldBottomSheetState extends State<AttributeFormFieldBottomSheet> {
   FocusNode focusNode = FocusNode();
 
   @override
@@ -44,7 +44,7 @@ class _TitleFormFieldBottomSheetState extends State<TitleFormFieldBottomSheet> {
               ],
             ),
           ),
-          Text(widget.value, style: Theme.of(context).textTheme.labelLarge),
+          Text(widget.value.toString(), style: Theme.of(context).textTheme.labelLarge),
         ],
       ),
       onTap: () {
@@ -59,15 +59,15 @@ class _TitleFormFieldBottomSheetState extends State<TitleFormFieldBottomSheet> {
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
             child: TextFormField(
               focusNode: focusNode,
-              initialValue: widget.value,
+              initialValue: widget.value.toString(),
               keyboardType: TextInputType.number,
               onTapOutside: (_) => context.pop(),
               decoration: InputDecoration(
                 labelText: widget.fieldLabel ?? widget.label,
               ),
-              onChanged: widget.onChanged,
+              onChanged: (value) => widget.onChanged != null ? widget.onChanged!(int.tryParse(value) ?? 0) : null,
               onFieldSubmitted: (value) {
-                if (widget.onFieldSubmitted != null) widget.onFieldSubmitted!(value);
+                if (widget.onFieldSubmitted != null) widget.onFieldSubmitted!(int.tryParse(value) ?? 0);
                 context.pop();
               },
             ),

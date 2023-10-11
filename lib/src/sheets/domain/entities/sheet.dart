@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-class Sheet extends Equatable {
+import 'package:repege/src/sheets/domain/entities/attribute.dart';
+
+abstract class Sheet extends Equatable {
   final DateTime createdAt;
   final int armorClass;
   final int attackBonus;
@@ -16,14 +18,13 @@ class Sheet extends Equatable {
   final String background;
   final String castingClass;
   final String characterClass;
-  final String characteristics;
   final String characterName;
   final String characterRace;
   final String createdBy;
   final String hitDice;
   final String id;
   final String languages;
-  final String skills;
+  final List<Attribute> attributes;
 
   const Sheet({
     required this.createdAt,
@@ -41,14 +42,13 @@ class Sheet extends Equatable {
     required this.background,
     required this.castingClass,
     required this.characterClass,
-    required this.characteristics,
     required this.characterName,
     required this.characterRace,
     required this.createdBy,
     required this.hitDice,
     required this.id,
     required this.languages,
-    required this.skills,
+    required this.attributes,
   });
 
   @override
@@ -69,14 +69,45 @@ class Sheet extends Equatable {
       background,
       castingClass,
       characterClass,
-      characteristics,
       characterName,
       characterRace,
       createdBy,
       hitDice,
       id,
       languages,
-      skills,
+      attributes,
     ];
   }
+
+  Map<String, dynamic> toMap();
+
+  String toJson();
+
+  Sheet copyWith({
+    DateTime? createdAt,
+    int? armorClass,
+    int? attackBonus,
+    int? castingHability,
+    int? characterLevel,
+    int? currentHp,
+    int? iniative,
+    int? magicResistance,
+    int? maxHp,
+    int? speed,
+    int? temporaryHp,
+    String? alignment,
+    String? background,
+    String? castingClass,
+    String? characterClass,
+    String? characterName,
+    String? characterRace,
+    String? createdBy,
+    String? hitDice,
+    String? id,
+    String? languages,
+    List<Attribute>? attributes,
+  });
+
+  @override
+  bool get stringify => true;
 }

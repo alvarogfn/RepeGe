@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:repege/_older/icons/rpg_icons.dart';
+import 'package:repege/core/icons/rpg_icons.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart' as cubit;
-import 'package:repege/src/sheets/presentation/widgets/casting_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/character_page.dart';
-import 'package:repege/src/sheets/presentation/widgets/equipment_page.dart';
+import 'package:repege/src/sheets/presentation/widgets/equipments_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/show_text_snackbar.dart';
+import 'package:repege/src/sheets/presentation/widgets/spells_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/status_page.dart';
 
 class SheetScreen extends StatefulWidget {
@@ -65,8 +65,8 @@ class _SheetScreenState extends State<SheetScreen> {
                       children: [
                         CharacterPage(sheet),
                         StatusPage(sheet),
-                        EquipmentPage(sheet),
-                        CastingPage(sheet),
+                        EquipmentsPage(sheet),
+                        SpellsPage(sheet),
                       ],
                     ),
                   ),

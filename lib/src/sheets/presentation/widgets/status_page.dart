@@ -5,8 +5,8 @@ import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
-import 'package:repege/src/sheets/presentation/widgets/attributes_card.dart';
 import 'package:repege/src/sheets/presentation/widgets/life_tracker.dart';
+import 'package:repege/src/sheets/presentation/widgets/title_form_field_bottom_sheet.dart';
 
 class StatusPage extends StatelessWidget {
   const StatusPage(this.sheet, {super.key});
@@ -63,8 +63,37 @@ class StatusPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // const DeathSavesCard(),
-              const AttributesCard(),
+              CardTitle(
+                title: 'Atributos',
+                child: SizedBox(
+                  height: 100,
+                  child: Builder(builder: (context) {
+                    final updateAttribute = context.read<SheetUpdateCubit>().updateAttribute;
+
+                    return GridView(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 20,
+                        mainAxisExtent: 36,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: sheet.attributes.map((attribute) {
+                        return AttributeFormFieldBottomSheet(
+                          label: attribute.name,
+                          value: attribute.value,
+                          title: ((attribute.value - 10) ~/ 2).toString(),
+                          onFieldSubmitted: (value) => updateAttribute(
+                            sheet: sheet,
+                            name: attribute.name,
+                            value: value,
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
+              ),
             ],
           );
         }),

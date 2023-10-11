@@ -1,0 +1,19 @@
+enum Skills {
+  atletism,
+  sleightOfHand,
+  stealth,
+  acrobatics,
+  arcana,
+  history,
+  investigation,
+  nature,
+  religion,
+  insight,
+  medicine,
+  perception,
+  survival,
+  performance,
+  persuasion,
+  intimidation,
+  deception
+}

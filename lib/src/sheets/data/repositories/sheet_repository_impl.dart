@@ -19,39 +19,23 @@ class SheetRepositoryImpl extends SheetRepository {
     String? alignment,
     String? background,
     String? characterClass,
-    String? characteristics,
     String? characterName,
     String? characterRace,
   }) async {
     final sheetDoc = _firestore.collection('sheets').doc();
 
-    final sheet = SheetModel(
-      createdAt: DateTime.now(),
-      armorClass: 0,
-      attackBonus: 0,
-      castingHability: 0,
-      characterLevel: characterLevel ?? 1,
-      currentHp: 0,
-      iniative: 0,
-      magicResistance: 0,
-      maxHp: 0,
-      speed: 0,
-      temporaryHp: 0,
-      alignment: alignment ?? '',
-      background: background ?? '',
-      castingClass: '',
-      characterClass: characterClass ?? '',
-      characteristics: characteristics ?? '',
-      characterName: characterName ?? '',
-      characterRace: characterRace ?? '',
+    final sheetModel = SheetModel.empty().copyWith(
       createdBy: createdBy,
-      hitDice: '',
+      characterLevel: characterLevel,
+      background: background,
+      alignment: alignment,
+      characterClass: characterClass,
+      characterName: characterName,
+      characterRace: characterRace,
       id: sheetDoc.id,
-      languages: '',
-      skills: '',
     );
 
-    final sheetMap = sheet.toMap()..update('createdAt', (value) => FieldValue.serverTimestamp());
+    final sheetMap = sheetModel.toMap()..update('createdAt', (value) => FieldValue.serverTimestamp());
 
     await sheetDoc.set(sheetMap);
 

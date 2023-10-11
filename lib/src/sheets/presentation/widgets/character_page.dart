@@ -85,31 +85,6 @@ class CharacterPage extends StatelessWidget {
                     )),
                     border: InputBorder.none,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Detalhes Adicionais',
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 10),
-                  EditableTextFormField(
-                    label: 'Caracteristicas e talentos',
-                    initialValue: sheet.characteristics,
-                    maxLines: 5,
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    onSaved: (value) => update(sheet.copyWith(
-                      characteristics: value,
-                    )),
-                  ),
-                  EditableTextFormField(
-                    label: 'Habilidades e perícias',
-                    initialValue: sheet.skills,
-                    maxLines: 5,
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    onSaved: (value) => update(sheet.copyWith(
-                      skills: value,
-                    )),
-                  ),
                 ],
               );
             },

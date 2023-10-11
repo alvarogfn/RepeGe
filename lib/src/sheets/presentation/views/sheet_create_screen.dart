@@ -102,17 +102,6 @@ class _SheetsCreateScreenState extends State<SheetsCreateScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                 ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Características adicionais',
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                  ),
-                  onChanged: (value) => params = params.copyWith(characteristics: value),
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.text,
-                  maxLines: 5,
-                ),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () => _handleSubmit(context),

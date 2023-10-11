@@ -1,7 +1,9 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:repege/src/sheets/data/models/attribute_model.dart';
+import 'package:repege/src/sheets/domain/entities/attribute.dart';
 import 'package:repege/src/sheets/domain/entities/sheet.dart';
+import 'package:repege/src/sheets/domain/enums/attributes.dart';
 
 class SheetModel extends Sheet {
   const SheetModel({
@@ -20,45 +22,80 @@ class SheetModel extends Sheet {
     required super.background,
     required super.castingClass,
     required super.characterClass,
-    required super.characteristics,
     required super.characterName,
     required super.characterRace,
     required super.createdBy,
     required super.hitDice,
     required super.id,
     required super.languages,
-    required super.skills,
+    required super.attributes,
   });
 
-  @override
-  List<Object> get props {
-    return [
-      createdAt,
-      armorClass,
-      attackBonus,
-      castingHability,
-      characterLevel,
-      currentHp,
-      iniative,
-      magicResistance,
-      maxHp,
-      speed,
-      temporaryHp,
-      alignment,
-      background,
-      castingClass,
-      characterClass,
-      characteristics,
-      characterName,
-      characterRace,
-      createdBy,
-      hitDice,
-      id,
-      languages,
-      skills,
-    ];
+  factory SheetModel.empty() {
+    return SheetModel(
+      createdAt: DateTime.now(),
+      armorClass: 0,
+      attackBonus: 0,
+      castingHability: 0,
+      characterLevel: 1,
+      currentHp: 0,
+      iniative: 0,
+      magicResistance: 0,
+      maxHp: 0,
+      speed: 0,
+      temporaryHp: 0,
+      alignment: '',
+      background: '',
+      castingClass: '',
+      characterClass: '',
+      characterName: '',
+      characterRace: '',
+      createdBy: '',
+      hitDice: '',
+      id: '',
+      languages: '',
+      attributes: Attributes.values.map((e) => AttributeModel.empty().copyWith(name: e.name)).toList(),
+    );
   }
 
+  factory SheetModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
+    final map = snapshot.data()!;
+
+    if (map['createdAt'] == null) {
+      map.update('createdAt', (_) => Timestamp.now());
+    }
+
+    return SheetModel(
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+      armorClass: map['armorClass'] as int,
+      attackBonus: map['attackBonus'] as int,
+      castingHability: map['castingHability'] as int,
+      characterLevel: map['characterLevel'] as int,
+      currentHp: map['currentHp'] as int,
+      iniative: map['iniative'] as int,
+      magicResistance: map['magicResistance'] as int,
+      maxHp: map['maxHp'] as int,
+      speed: map['speed'] as int,
+      temporaryHp: map['temporaryHp'] as int,
+      alignment: map['alignment'] as String,
+      background: map['background'] as String,
+      castingClass: map['castingClass'] as String,
+      characterClass: map['characterClass'] as String,
+      characterName: map['characterName'] as String,
+      characterRace: map['characterRace'] as String,
+      createdBy: map['createdBy'] as String,
+      hitDice: map['hitDice'] as String,
+      id: map['id'] as String,
+      languages: map['languages'] as String,
+      attributes: List<AttributeModel>.from(
+        (map['attributes'] as List).map<AttributeModel>(
+          (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+    );
+  }
+
+  @override
   SheetModel copyWith({
     DateTime? createdAt,
     int? armorClass,
@@ -75,14 +112,13 @@ class SheetModel extends Sheet {
     String? background,
     String? castingClass,
     String? characterClass,
-    String? characteristics,
     String? characterName,
     String? characterRace,
     String? createdBy,
     String? hitDice,
     String? id,
     String? languages,
-    String? skills
+    List<Attribute>? attributes,
   }) {
     return SheetModel(
       createdAt: createdAt ?? this.createdAt,
@@ -100,17 +136,17 @@ class SheetModel extends Sheet {
       background: background ?? this.background,
       castingClass: castingClass ?? this.castingClass,
       characterClass: characterClass ?? this.characterClass,
-      characteristics: characteristics ?? this.characteristics,
       characterName: characterName ?? this.characterName,
       characterRace: characterRace ?? this.characterRace,
       createdBy: createdBy ?? this.createdBy,
       hitDice: hitDice ?? this.hitDice,
       id: id ?? this.id,
       languages: languages ?? this.languages,
-      skills: skills ?? this.skills,
+      attributes: attributes ?? this.attributes,
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'createdAt': createdAt.millisecondsSinceEpoch,
@@ -128,14 +164,13 @@ class SheetModel extends Sheet {
       'background': background,
       'castingClass': castingClass,
       'characterClass': characterClass,
-      'characteristics': characteristics,
       'characterName': characterName,
       'characterRace': characterRace,
       'createdBy': createdBy,
       'hitDice': hitDice,
       'id': id,
       'languages': languages,
-      'skills': skills,
+      'attributes': attributes.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -156,53 +191,25 @@ class SheetModel extends Sheet {
       background: map['background'] as String,
       castingClass: map['castingClass'] as String,
       characterClass: map['characterClass'] as String,
-      characteristics: map['characteristics'] as String,
       characterName: map['characterName'] as String,
       characterRace: map['characterRace'] as String,
       createdBy: map['createdBy'] as String,
       hitDice: map['hitDice'] as String,
       id: map['id'] as String,
       languages: map['languages'] as String,
-      skills: map['skills'] as String,
+      attributes: List<AttributeModel>.from(
+        (map['attributes'] as List<int>).map<AttributeModel>(
+          (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
+  @override
   String toJson() => json.encode(toMap());
 
   factory SheetModel.fromJson(String source) => SheetModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool get stringify => true;
-
-  factory SheetModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
-    final map = snapshot.data()!;
-
-    map.update('createdAt', (_) => Timestamp.now());
-
-    return SheetModel(
-      createdAt: (map['createdAt'] as Timestamp).toDate(),
-      armorClass: map['armorClass'] as int,
-      attackBonus: map['attackBonus'] as int,
-      castingHability: map['castingHability'] as int,
-      characterLevel: map['characterLevel'] as int,
-      currentHp: map['currentHp'] as int,
-      iniative: map['iniative'] as int,
-      magicResistance: map['magicResistance'] as int,
-      maxHp: map['maxHp'] as int,
-      speed: map['speed'] as int,
-      temporaryHp: map['temporaryHp'] as int,
-      alignment: map['alignment'] as String,
-      background: map['background'] as String,
-      castingClass: map['castingClass'] as String,
-      characterClass: map['characterClass'] as String,
-      characteristics: map['characteristics'] as String,
-      characterName: map['characterName'] as String,
-      characterRace: map['characterRace'] as String,
-      createdBy: map['createdBy'] as String,
-      hitDice: map['hitDice'] as String,
-      id: map['id'] as String,
-      languages: map['languages'] as String,
-      skills: map['skills'] as String,
-    );
-  }
 }

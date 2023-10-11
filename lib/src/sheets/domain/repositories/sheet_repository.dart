@@ -12,7 +12,6 @@ abstract class SheetRepository {
     String? alignment,
     String? background,
     String? characterClass,
-    String? characteristics,
     String? characterName,
     String? characterRace,
   });
@@ -24,18 +23,4 @@ abstract class SheetRepository {
   Future<SheetListState?> deleteSheet(String sheetId);
 
   Future<SheetUpdateState?> updateSheet({required String sheetId, required DataMap newData});
-
-  // ResultVoid updateAttributes({required String sheetId, required DataMap newData});
-
-  // ResultVoid updateSpells({required String sheetId, required DataMap newData});
-  // ResultVoid updateSpell({required String spellId, required DataMap newData});
-
-  // ResultVoid updateBag({required String sheetId, required DataMap newData});
-  // ResultVoid updateEquipments({required String sheetId, required DataMap newData});
-
-  // ResultVoid updateEquipment({required String sheetId, required DataMap newData});
-
-  // ResultFuture<Attributes> getAttributes(String sheetId);
-
-  // ResultFuture<Attributes> editAttributes({required String sheetId, required DataMap attributesMap});
 }
