@@ -1,7 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
-class Bag extends Equatable {
+abstract class Bag extends Equatable {
   final int copper;
   final int electrum;
   final int gold;
@@ -26,4 +25,19 @@ class Bag extends Equatable {
       silver,
     ];
   }
+
+  Bag copyWith({
+    int? copper,
+    int? electrum,
+    int? gold,
+    int? platinum,
+    int? silver,
+  });
+
+  String toJson();
+
+  @override
+  bool get stringify => true;
+
+  Map<String, dynamic> toMap();
 }

@@ -15,8 +15,6 @@ import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/core/themes/dark_theme.dart';
 import 'package:repege/core/themes/light_theme.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
-import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
-import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,8 +42,6 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<AuthenticationCubit>()),
-        BlocProvider(create: (context) => sl<SheetListBloc>()),
-        BlocProvider(create: (context) => sl<SheetBloc>()),
       ],
       child: MaterialApp.router(
         routerConfig: routes,

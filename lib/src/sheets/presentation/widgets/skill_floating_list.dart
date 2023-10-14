@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:repege/_older/modules/status/models/attributes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
+import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
+import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
+import 'package:repege/src/sheets/domain/entities/skill.dart';
 
-
-class SkillFloatingList extends StatefulWidget {
-  const SkillFloatingList({required this.attributes, required this.onChanged, super.key});
-
-  final Attributes attributes;
-
-  final void Function(String property, bool newValue) onChanged;
+class SkillList extends StatefulWidget {
+  const SkillList({super.key});
 
   @override
-  State<SkillFloatingList> createState() => _SkillFloatingListState();
+  State<SkillList> createState() => _SkillListState();
 }
 
-class _SkillFloatingListState extends State<SkillFloatingList> {
-  Map<String, dynamic> _data = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _data = widget.attributes.toMap();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _data = widget.attributes.toMap();
+class _SkillListState extends State<SkillList> {
+  Map<String, List<Skill>> _computeSkillMapByAttribute(List<Skill> skills) {
+    return skills.fold({}, (group, element) {
+      if (group.containsKey(element.attributeName)) {
+        group[element.attributeName]!.add(element);
+        return group;
+      }
+      group[element.attributeName] = [element];
+      return group;
+    });
   }
 
   @override
@@ -34,86 +29,49 @@ class _SkillFloatingListState extends State<SkillFloatingList> {
     return SizedBox(
       height: 500,
       child: FullScreenScroll(
-        child: Column(
-          children: [
-            generateSkillList('strength', title: 'Força', translationMap: {
-              'atletism': 'Atletismo',
-            }),
-            generateSkillList('constitution', title: 'Constituição', translationMap: {}),
-            generateSkillList('dextery', title: 'Destreza', translationMap: {
-              'sleightOfHand': 'Prestidigitação',
-              'stealth': 'Furtividade',
-              'acrobatics': 'Acrobacia',
-            }),
-            generateSkillList('intelligence', title: 'Inteligência', translationMap: {
-              'arcana': 'Arcanismo',
-              'history': 'História',
-              'investigation': 'Investigação',
-              'nature': 'Natureza',
-              'religion': 'Religião'
-            }),
-            generateSkillList('wisdom', title: 'Sabedoria', translationMap: {
-              'insight': 'Intuição',
-              'medicine': 'Medicina',
-              'perception': 'Percepção',
-              'survival': 'Sobrevivência'
-            }),
-            generateSkillList('charisma', title: 'Carisma', translationMap: {
-              'performance': 'Performance',
-              'persuasion': 'Persuasão',
-              'intimidation': 'Intimidação',
-              'deception': 'Enganação',
-            }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget generateSkillList(
-    String key, {
-    required String title,
-    required Map<String, String> translationMap,
-  }) {
-    final attributeMapCopy = Map.from(_data[key]!);
-
-    attributeMapCopy.remove('value');
-
-    if (attributeMapCopy.isEmpty) return const SizedBox();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Builder(
-          builder: (context) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Text(title, style: Theme.of(context).textTheme.titleLarge),
-            );
+        child: BlocBuilder<SheetBloc, SheetState>(
+          builder: (context, state) {
+            if (state is SheetLoaded) {
+              final cubit = context.read<SheetUpdateCubit>();
+              return Column(children: [
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  title: const Text('Perícias'),
+                ),
+                ..._computeSkillMapByAttribute(state.sheet.skills).entries.map((entry) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          entry.key,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      ...entry.value.map((skill) {
+                        return CheckboxMenuButton(
+                          value: skill.proficient,
+                          onChanged: (value) {
+                            cubit.updateSkill(
+                              sheet: state.sheet,
+                              name: skill.name,
+                              value: value ?? false,
+                            );
+                          },
+                          child: Text(skill.name),
+                        );
+                      }),
+                    ],
+                  );
+                }).toList(),
+              ]);
+            }
+            return const Center(child: CircularProgressIndicator());
           },
         ),
-        ...attributeMapCopy.entries.map((entry) {
-          final skill = translationMap[entry.key] ?? entry.key;
-          return Column(
-            children: [
-              CheckboxMenuButton(
-                value: _data[key]![entry.key],
-                onChanged: (newValue) {
-                  setState(() {
-                    _data[key]![entry.key] = newValue;
-                  });
-
-                  widget.onChanged(
-                    '${widget.attributes.propertyKey}.$key.${entry.key}',
-                    newValue ?? false,
-                  );
-                },
-                child: Text(skill),
-              )
-            ],
-          );
-        })
-      ],
+      ),
     );
   }
 }

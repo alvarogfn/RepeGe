@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/src/sheets/data/models/attribute_model.dart';
+import 'package:repege/src/sheets/data/models/bag_model.dart';
+import 'package:repege/src/sheets/data/models/skill_model.dart';
 import 'package:repege/src/sheets/domain/entities/attribute.dart';
+import 'package:repege/src/sheets/domain/entities/bag.dart';
 import 'package:repege/src/sheets/domain/entities/sheet.dart';
+import 'package:repege/src/sheets/domain/entities/skill.dart';
 import 'package:repege/src/sheets/domain/enums/attributes.dart';
+import 'package:repege/src/sheets/domain/enums/skills.dart';
 
 class SheetModel extends Sheet {
   const SheetModel({
@@ -29,7 +34,11 @@ class SheetModel extends Sheet {
     required super.id,
     required super.languages,
     required super.attributes,
+    required super.skills,
+    required super.bag,
   });
+
+  BagModel get bagModel => bag as BagModel;
 
   factory SheetModel.empty() {
     return SheetModel(
@@ -55,6 +64,8 @@ class SheetModel extends Sheet {
       id: '',
       languages: '',
       attributes: Attributes.values.map((e) => AttributeModel.empty().copyWith(name: e.name)).toList(),
+      skills: Skills.values.map((e) => SkillModel.empty().copyWith(name: e.name, attributeName: e.attribute)).toList(),
+      bag: BagModel.empty(),
     );
   }
 
@@ -87,11 +98,13 @@ class SheetModel extends Sheet {
       hitDice: map['hitDice'] as String,
       id: map['id'] as String,
       languages: map['languages'] as String,
-      attributes: List<AttributeModel>.from(
-        (map['attributes'] as List).map<AttributeModel>(
-          (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      attributes: List<AttributeModel>.from((map['attributes'] as List).map<AttributeModel>(
+        (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
+      )),
+      skills: List<SkillModel>.from((map['skills'] as List).map<SkillModel>(
+        (x) => SkillModel.fromMap(x as Map<String, dynamic>),
+      )),
+      bag: BagModel.empty(),
     );
   }
 
@@ -119,6 +132,8 @@ class SheetModel extends Sheet {
     String? id,
     String? languages,
     List<Attribute>? attributes,
+    List<Skill>? skills,
+    Bag? bag,
   }) {
     return SheetModel(
       createdAt: createdAt ?? this.createdAt,
@@ -143,6 +158,8 @@ class SheetModel extends Sheet {
       id: id ?? this.id,
       languages: languages ?? this.languages,
       attributes: attributes ?? this.attributes,
+      skills: skills ?? this.skills,
+      bag: bag ?? this.bag,
     );
   }
 
@@ -171,6 +188,8 @@ class SheetModel extends Sheet {
       'id': id,
       'languages': languages,
       'attributes': attributes.map((x) => x.toMap()).toList(),
+      'skills': skills.map((x) => x.toMap()).toList(),
+      'bag': bag.toMap(),
     };
   }
 
@@ -202,6 +221,12 @@ class SheetModel extends Sheet {
           (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      skills: List<SkillModel>.from(
+        (map['skills'] as List<int>).map<SkillModel>(
+          (x) => SkillModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+      bag: BagModel.fromMap(map['bag'] as Map<String, dynamic>),
     );
   }
 

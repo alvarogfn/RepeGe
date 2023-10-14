@@ -25,4 +25,7 @@ final class SheetListLoaded<T extends Sheet> extends SheetListState {
   final List<T> sheets;
 
   const SheetListLoaded(this.sheets);
+
+  @override
+  List<Object> get props => [for (var sheet in sheets) ...sheet.props];
 }

@@ -1,25 +1,31 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class Skill {
+import 'package:equatable/equatable.dart';
+
+abstract class Skill extends Equatable {
   final String name;
   final bool proficient;
-
-  final String attributeId;
-  
   final String attributeName;
-  
-  final DateTime createdBy;
-  
-  final String createdAt;
-  
-  final String sheetId;
+  final int id;
 
-  Skill({
+  const Skill({
     required this.name,
     required this.proficient,
-    required this.attributeId,
     required this.attributeName,
-    required this.createdBy,
-    required this.createdAt,
-    required this.sheetId,
+    required this.id,
   });
+
+  Skill copyWith({
+    String? name,
+    bool? proficient,
+    String? attributeName,
+  });
+
+  Map<String, dynamic> toMap();
+
+  String toJson();
+  @override
+  List<Object> get props => [name, proficient, attributeName, id];
+
+  @override
+  bool get stringify => true;
 }

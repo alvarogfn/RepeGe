@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/modules/sheets/components/sheet_dropdown_menu.dart';
-import 'package:repege/modules/equipments/components/equipment_form_field.dart';
-import 'package:repege/modules/equipments/models/equipment.dart';
-import 'package:repege/modules/equipments/models/equipment_types.dart';
+import 'package:repege/core/widgets/full_screen_scroll%20copy.dart';
+import 'package:repege/src/sheets/presentation/widgets/equipment_form_field.dart';
 
 class EquipmentCreateScreen extends StatefulWidget {
-  const EquipmentCreateScreen(this.equipment, {super.key});
+  const EquipmentCreateScreen({super.key});
 
-  final Equipment? equipment;
 
   @override
   State<EquipmentCreateScreen> createState() => _EquipmentCreateScreenState();
@@ -17,11 +13,9 @@ class EquipmentCreateScreen extends StatefulWidget {
 
 class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
   final _formKey = GlobalKey<FormState>();
-  EquipmentTypes type = EquipmentTypes.item;
   Map<String, dynamic> data = {};
 
   void _handleSubmit() {
-    data.putIfAbsent('type', () => type);
     context.pop(data);
   }
 
@@ -43,20 +37,6 @@ class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SheetDropdownMenu(
-                labelText: 'Tipo de Item',
-                initialSelection: type,
-                items: EquipmentTypes.values,
-                builder: (item) => DropdownMenuEntry(
-                  value: item,
-                  label: item.translation,
-                  leadingIcon: item.icon,
-                ),
-                onSelected: (type) {
-                  if (type == null) return;
-                  setState(() => this.type = type);
-                },
-              ),
               const SizedBox(height: 15),
               const Text(
                 'Detalhes',
@@ -92,8 +72,6 @@ class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
                       hintText: 'Ex: 2Kg',
                       onChanged: (weight) => data['weight'] = weight,
                     ),
-                    if (type == EquipmentTypes.weapon) ...weaponForm(),
-                    if (type == EquipmentTypes.armor) ...armorForm()
                   ],
                 ),
               ),
@@ -102,50 +80,5 @@ class _EquipmentCreateScreenState extends State<EquipmentCreateScreen> {
         ),
       ),
     );
-  }
-
-  List<Widget> weaponForm() {
-    return [
-      EquipmentFormField(
-        labelText: 'Tipo de Arma',
-        initialValue: data['kind'],
-        hintText: 'Ex: Arma de Duas Mãos',
-        onChanged: (kind) {
-          data['kind'] = kind;
-        },
-      ),
-      EquipmentFormField(
-        labelText: 'Dano',
-        initialValue: data['damage'],
-        hintText: 'Ex: 2D8 Perfurante',
-        onChanged: (damage) {
-          data['damage'] = damage;
-        },
-      ),
-    ];
-  }
-
-  List<Widget> armorForm() {
-    return [
-      EquipmentFormField(
-        labelText: 'Tipo de Armadura',
-        hintText: 'Ex: Armadura Pesada',
-        initialValue: data['kind'],
-        onChanged: (kind) => data['kind'] = kind,
-      ),
-      EquipmentFormField(
-        labelText: 'Classe de Armadura(CA)',
-        hintText: 'Ex: 14 + Destreza',
-        initialValue: data['armorClass'],
-        onChanged: (armorClass) => data['armorClass'] = armorClass,
-      ),
-      EquipmentFormField(
-        labelText: 'Força requerida',
-        hintText: 'Ex: 15',
-        initialValue: data['minStrength'],
-        keyboardType: TextInputType.number,
-        onChanged: (minStrength) => data['minStrength'] = minStrength,
-      ),
-    ];
   }
 }

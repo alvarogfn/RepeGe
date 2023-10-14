@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/config/routes_name.dart';
-import 'package:repege/form/validations/required_validation.dart';
-import 'package:repege/form/validations/validations.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
-import 'package:repege/modules/campaigns/service/campaigns_service.dart';
-
 class CampaignCreateScreen extends StatefulWidget {
   const CampaignCreateScreen({super.key});
 

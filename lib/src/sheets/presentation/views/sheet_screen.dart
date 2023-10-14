@@ -4,59 +4,59 @@ import 'package:repege/core/icons/rpg_icons.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
-import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart' as cubit;
+import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
 import 'package:repege/src/sheets/presentation/widgets/character_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/equipments_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/show_text_snackbar.dart';
 import 'package:repege/src/sheets/presentation/widgets/spells_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/status_page.dart';
 
-class SheetScreen extends StatefulWidget {
+class SheetScreen extends StatelessWidget {
   const SheetScreen(this.sheetId, {super.key});
   final String sheetId;
 
   @override
-  State<SheetScreen> createState() => _SheetScreenState();
-}
-
-class _SheetScreenState extends State<SheetScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<SheetBloc>().add(SheetInitEvent(widget.sheetId));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SheetBloc, SheetState>(
-      builder: (context, state) {
-        switch (state) {
-          case SheetLoaded<SheetModel>():
-            final sheet = state.sheet;
-            return DefaultTabController(
-              length: 4,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(sheet.characterName),
-                  bottom: const TabBar(
-                    labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
-                    isScrollable: true,
-                    tabs: [
-                      Tab(icon: Icon(Rpg.player)),
-                      Tab(icon: Icon(Rpg.health)),
-                      Tab(icon: Icon(Rpg.axe)),
-                      Tab(icon: Icon(Rpg.book)),
-                    ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            final sheetBloc = sl<SheetBloc>();
+            sheetBloc.add(SheetInitEvent(sheetId));
+            return sheetBloc;
+          },
+        ),
+        BlocProvider(
+          create: (context) => sl<SheetUpdateCubit>(),
+        ),
+      ],
+      child: BlocBuilder<SheetBloc, SheetState>(
+        builder: (context, state) {
+          switch (state) {
+            case SheetLoaded<SheetModel>():
+              final sheet = state.sheet;
+              return DefaultTabController(
+                length: 4,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(sheet.characterName),
+                    bottom: const TabBar(
+                      labelPadding: EdgeInsets.symmetric(horizontal: 35.0),
+                      isScrollable: true,
+                      tabs: [
+                        Tab(icon: Icon(Rpg.player)),
+                        Tab(icon: Icon(Rpg.health)),
+                        Tab(icon: Icon(Rpg.axe)),
+                        Tab(icon: Icon(Rpg.book)),
+                      ],
+                    ),
                   ),
-                ),
-                body: BlocProvider(
-                  create: (context) => sl<cubit.SheetUpdateCubit>(),
-                  child: BlocListener<cubit.SheetUpdateCubit, cubit.SheetUpdateState>(
+                  body: BlocListener<SheetUpdateCubit, SheetUpdateState>(
                     listener: (context, state) {
                       switch (state) {
-                        case cubit.SheetUpdateSucess():
+                        case SheetUpdateSucess():
                           showTextSnackbar(context, 'Atualizado com sucesso');
-                        case cubit.SheetUpdateError():
+                        case SheetUpdateError():
                           showTextSnackbar(context, 'Não foi possível atualizar o campo.');
                         default:
                       }
@@ -71,12 +71,12 @@ class _SheetScreenState extends State<SheetScreen> {
                     ),
                   ),
                 ),
-              ),
-            );
-          default:
-            return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        }
-      },
+              );
+            default:
+              return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          }
+        },
+      ),
     );
   }
 }

@@ -11,9 +11,10 @@ class SheetListBloc extends Bloc<SheetListEvent, SheetListState> {
 
   SheetListBloc(this._repository) : super(const SheetListLoading()) {
     on<SheetListInitEvent>((event, emit) async {
-      await emit.forEach(_repository.streamAllSheets(event.createdBy), onData: (sheet) {
-        return sheet;
-      });
+      await emit.onEach(
+        _repository.streamAllSheets(event.createdBy),
+        onData: (sheet) => emit(sheet),
+      );
     });
 
     on<SheetListAddEvent>((event, emit) async {

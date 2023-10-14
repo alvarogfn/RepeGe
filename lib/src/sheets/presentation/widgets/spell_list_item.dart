@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/components/headline.dart';
 import 'package:repege/config/routes_name.dart';
+import 'package:repege/core/routes/routes_name.dart';
+import 'package:repege/core/widgets/headline.dart';
 import 'package:repege/helpers/extensions.dart';
 import 'package:repege/modules/spell/models/spell.dart';
 
@@ -52,7 +54,7 @@ class SpellCard extends StatelessWidget {
           fontSize: 14,
         ),
         onTap: () async => context.pushNamed<Spell>(
-          RoutesName.spell.name,
+          Routes.spell.name,
           pathParameters: {'id': spell.id},
           extra: spell,
         ),
@@ -77,7 +79,7 @@ class SpellCard extends StatelessWidget {
       return spell.ref?.delete();
     } else if (direction == DismissDirection.startToEnd) {
       await context.pushNamed<Spell>(
-        RoutesName.spell.name,
+        Routes.spell.name,
         pathParameters: {'id': spell.id},
         extra: spell,
       );

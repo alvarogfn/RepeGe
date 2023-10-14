@@ -17,9 +17,7 @@ abstract class SheetRepository {
   });
 
   Stream<SheetListState> streamAllSheets(String createdBy);
-
   Stream<SheetState> streamSheet(String sheetId);
-
   Future<SheetListState?> deleteSheet(String sheetId);
 
   Future<SheetUpdateState?> updateSheet({required String sheetId, required DataMap newData});
