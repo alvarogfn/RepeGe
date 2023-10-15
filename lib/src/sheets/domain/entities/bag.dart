@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:repege/core/utils/typedefs.dart';
 
 abstract class Bag extends Equatable {
   final int copper;
@@ -26,6 +27,8 @@ abstract class Bag extends Equatable {
     ];
   }
 
+  Bag copyWithMap(DataMap map);
+
   Bag copyWith({
     int? copper,
     int? electrum,
@@ -39,5 +42,5 @@ abstract class Bag extends Equatable {
   @override
   bool get stringify => true;
 
-  Map<String, dynamic> toMap();
+  DataMap toMap();
 }

@@ -3,27 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
-import 'package:repege/src/sheets/domain/entities/skill.dart';
-
-class SkillList extends StatefulWidget {
-  const SkillList({super.key});
+class SkillFloatingList extends StatefulWidget {
+  const SkillFloatingList({super.key});
 
   @override
-  State<SkillList> createState() => _SkillListState();
+  State<SkillFloatingList> createState() => _SkillFloatingList();
 }
 
-class _SkillListState extends State<SkillList> {
-  Map<String, List<Skill>> _computeSkillMapByAttribute(List<Skill> skills) {
-    return skills.fold({}, (group, element) {
-      if (group.containsKey(element.attributeName)) {
-        group[element.attributeName]!.add(element);
-        return group;
-      }
-      group[element.attributeName] = [element];
-      return group;
-    });
-  }
-
+class _SkillFloatingList extends State<SkillFloatingList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -32,40 +19,26 @@ class _SkillListState extends State<SkillList> {
         child: BlocBuilder<SheetBloc, SheetState>(
           builder: (context, state) {
             if (state is SheetLoaded) {
-              final cubit = context.read<SheetUpdateCubit>();
+              final update = context.read<SheetUpdateCubit>().update;
+              final sheet = state.sheet;
               return Column(children: [
                 AppBar(
                   automaticallyImplyLeading: false,
                   title: const Text('Perícias'),
                 ),
-                ..._computeSkillMapByAttribute(state.sheet.skills).entries.map((entry) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          entry.key,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      ...entry.value.map((skill) {
-                        return CheckboxMenuButton(
-                          value: skill.proficient,
-                          onChanged: (value) {
-                            cubit.updateSkill(
-                              sheet: state.sheet,
-                              name: skill.name,
-                              value: value ?? false,
-                            );
-                          },
-                          child: Text(skill.name),
-                        );
-                      }),
-                    ],
+                ...sheet.skills.toMap().entries.map((entry) {
+                  return CheckboxMenuButton(
+                    value: entry.value,
+                    onChanged: (value) {
+                      update(sheet.copyWith(
+                        skills: sheet.skills.copyWithMap({
+                          entry.key: entry.value,
+                        }),
+                      ));
+                    },
+                    child: Text(entry.value),
                   );
-                }).toList(),
+                }),
               ]);
             }
             return const Center(child: CircularProgressIndicator());

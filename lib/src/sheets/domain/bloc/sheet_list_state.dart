@@ -9,17 +9,17 @@ sealed class SheetListState<T extends Sheet> extends Equatable {
   List<Object> get props => sheets.map((e) => e.id).toList();
 }
 
-final class SheetListEmpty extends SheetListState {
+final class SheetListEmpty<T extends Sheet> extends SheetListState<T> {
   const SheetListEmpty();
 }
 
-final class SheetListLoading extends SheetListState {
+final class SheetListLoading<T extends Sheet> extends SheetListState<T> {
   const SheetListLoading();
 }
 
-final class SheetListLoadError extends SheetListState {}
+final class SheetListLoadError<T extends Sheet> extends SheetListState<T> {}
 
-final class SheetListLoaded<T extends Sheet> extends SheetListState {
+final class SheetListLoaded<T extends Sheet> extends SheetListState<T> {
   @override
   // ignore: overridden_fields
   final List<T> sheets;

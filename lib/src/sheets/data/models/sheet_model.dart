@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/src/sheets/data/models/attribute_model.dart';
+import 'package:repege/src/sheets/data/models/attributes_model.dart';
 import 'package:repege/src/sheets/data/models/bag_model.dart';
-import 'package:repege/src/sheets/data/models/skill_model.dart';
-import 'package:repege/src/sheets/domain/entities/attribute.dart';
+import 'package:repege/src/sheets/data/models/skills_model.dart';
+import 'package:repege/src/sheets/domain/entities/attributes.dart';
 import 'package:repege/src/sheets/domain/entities/bag.dart';
 import 'package:repege/src/sheets/domain/entities/sheet.dart';
-import 'package:repege/src/sheets/domain/entities/skill.dart';
-import 'package:repege/src/sheets/domain/enums/attributes.dart';
-import 'package:repege/src/sheets/domain/enums/skills.dart';
+import 'package:repege/src/sheets/domain/entities/skills.dart';
 
 class SheetModel extends Sheet {
   const SheetModel({
@@ -38,8 +35,6 @@ class SheetModel extends Sheet {
     required super.bag,
   });
 
-  BagModel get bagModel => bag as BagModel;
-
   factory SheetModel.empty() {
     return SheetModel(
       createdAt: DateTime.now(),
@@ -63,47 +58,8 @@ class SheetModel extends Sheet {
       hitDice: '',
       id: '',
       languages: '',
-      attributes: Attributes.values.map((e) => AttributeModel.empty().copyWith(name: e.name)).toList(),
-      skills: Skills.values.map((e) => SkillModel.empty().copyWith(name: e.name, attributeName: e.attribute)).toList(),
-      bag: BagModel.empty(),
-    );
-  }
-
-  factory SheetModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
-    final map = snapshot.data()!;
-
-    if (map['createdAt'] == null) {
-      map.update('createdAt', (_) => Timestamp.now());
-    }
-
-    return SheetModel(
-      createdAt: (map['createdAt'] as Timestamp).toDate(),
-      armorClass: map['armorClass'] as int,
-      attackBonus: map['attackBonus'] as int,
-      castingHability: map['castingHability'] as int,
-      characterLevel: map['characterLevel'] as int,
-      currentHp: map['currentHp'] as int,
-      iniative: map['iniative'] as int,
-      magicResistance: map['magicResistance'] as int,
-      maxHp: map['maxHp'] as int,
-      speed: map['speed'] as int,
-      temporaryHp: map['temporaryHp'] as int,
-      alignment: map['alignment'] as String,
-      background: map['background'] as String,
-      castingClass: map['castingClass'] as String,
-      characterClass: map['characterClass'] as String,
-      characterName: map['characterName'] as String,
-      characterRace: map['characterRace'] as String,
-      createdBy: map['createdBy'] as String,
-      hitDice: map['hitDice'] as String,
-      id: map['id'] as String,
-      languages: map['languages'] as String,
-      attributes: List<AttributeModel>.from((map['attributes'] as List).map<AttributeModel>(
-        (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
-      )),
-      skills: List<SkillModel>.from((map['skills'] as List).map<SkillModel>(
-        (x) => SkillModel.fromMap(x as Map<String, dynamic>),
-      )),
+      attributes: AttributesModel.empty(),
+      skills: SkillsModel.empty(),
       bag: BagModel.empty(),
     );
   }
@@ -131,8 +87,8 @@ class SheetModel extends Sheet {
     String? hitDice,
     String? id,
     String? languages,
-    List<Attribute>? attributes,
-    List<Skill>? skills,
+    Attributes? attributes,
+    Skills? skills,
     Bag? bag,
   }) {
     return SheetModel(
@@ -187,10 +143,15 @@ class SheetModel extends Sheet {
       'hitDice': hitDice,
       'id': id,
       'languages': languages,
-      'attributes': attributes.map((x) => x.toMap()).toList(),
-      'skills': skills.map((x) => x.toMap()).toList(),
+      'attributes': attributes.toMap(),
+      'skills': skills.toMap(),
       'bag': bag.toMap(),
     };
+  }
+
+  @override
+  SheetModel copyWithMap(Map<String, dynamic> map) {
+    return SheetModel.fromMap(toMap()..addAll(map));
   }
 
   factory SheetModel.fromMap(Map<String, dynamic> map) {
@@ -216,16 +177,8 @@ class SheetModel extends Sheet {
       hitDice: map['hitDice'] as String,
       id: map['id'] as String,
       languages: map['languages'] as String,
-      attributes: List<AttributeModel>.from(
-        (map['attributes'] as List<int>).map<AttributeModel>(
-          (x) => AttributeModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      skills: List<SkillModel>.from(
-        (map['skills'] as List<int>).map<SkillModel>(
-          (x) => SkillModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      attributes: AttributesModel.fromMap(map['attributes'] as Map<String, dynamic>),
+      skills: SkillsModel.fromMap(map['skills'] as Map<String, dynamic>),
       bag: BagModel.fromMap(map['bag'] as Map<String, dynamic>),
     );
   }

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/headline.dart';
-import 'package:repege/config/routes_name.dart';
-import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/widgets/headline.dart';
-import 'package:repege/helpers/extensions.dart';
-import 'package:repege/modules/spell/models/spell.dart';
+import 'package:repege/src/sheets/data/models/spell_model.dart';
 
-class SpellCard extends StatelessWidget {
-  const SpellCard(this.spell, {super.key});
+class SpellListItem extends StatelessWidget {
+  const SpellListItem(this.spell, {super.key});
 
-  final Spell spell;
+  final SpellModel spell;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +35,7 @@ class SpellCard extends StatelessWidget {
       onDismissed: (direction) => handleDismiss(context, direction),
       child: ListTile(
         title: Headline(
-          spell.name.toCapitalize(),
+          spell.name,
           fontWeight: FontWeight.w600,
           fontSize: 16,
         ),
@@ -53,20 +50,20 @@ class SpellCard extends StatelessWidget {
           fontWeight: FontWeight.w900,
           fontSize: 14,
         ),
-        onTap: () async => context.pushNamed<Spell>(
-          Routes.spell.name,
-          pathParameters: {'id': spell.id},
-          extra: spell,
-        ),
+        // onTap: () async => context.pushNamed<SpellModel>(
+        //   Routes.spell.name,
+        //   pathParameters: {'id': spell.id},
+        //   extra: spell,
+        // ),
       ),
     );
   }
 
   String get details {
-    final type = spell.type.toCapitalize();
+    final type = spell.type;
     final duration = spell.duration;
     final effectType = spell.effectType;
-    final catalyts = spell.catalyts.join(' ');
+    final catalyts = '${spell.material}, ${spell.verbal}, ${spell.somatic}';
 
     return '$type  |  $catalyts  |  $duration  |  $effectType ';
   }
@@ -76,13 +73,13 @@ class SpellCard extends StatelessWidget {
     DismissDirection direction,
   ) async {
     if (direction == DismissDirection.endToStart) {
-      return spell.ref?.delete();
+      return context.read<dynamic>().delete(spell.id);
     } else if (direction == DismissDirection.startToEnd) {
-      await context.pushNamed<Spell>(
-        Routes.spell.name,
-        pathParameters: {'id': spell.id},
-        extra: spell,
-      );
+      // await context.pushNamed<SpellModel>(
+      //   Routes.spell.name,
+      //   pathParameters: {'id': spell.id},
+      //   extra: spell,
+      // );
     }
   }
 
@@ -98,14 +95,7 @@ class SpellCard extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(text),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              context.pop(true);
-            },
-            child: const Text('Confirmar'),
-          )
-        ],
+        actions: [ElevatedButton(onPressed: () => context.pop(true), child: const Text('Confirmar'))],
       ),
     );
   }

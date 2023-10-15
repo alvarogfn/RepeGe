@@ -11,14 +11,12 @@ enum Routes {
   sheetCreate(name: 'sheet-create', path: 'create'),
   sheet(name: 'sheet', path: 'sheet/:id'),
 
-  // spell(name: 'spell', path: '/spell/:id'),
-  // spellsSearch(name: 'spells-search', path: '/spells/search'),
-  // spellsForm(name: 'spells-form', path: '/spells/form'),
+  spell(name: 'spell', path: '/spell/:id'),
+  spellsSearch(name: 'spells-search', path: '/spells/search'),
+  spellsForm(name: 'spells-form', path: '/spells/form'),
 
-  // equipments(name: 'equipments', path: '/equipments'),
-  // equipmentsSearch(name: 'equipments-search', path: 'search'),
-  // equipmentsDetails(name: 'equipments-details', path: 'details'),
-  // equipmentsForm(name: 'equipments-form', path: 'form'),
+  equipment(name: 'equipment', path: '/equipment'),
+  equipmentForm(name: 'equipment-form', path: 'form'),
 
   // campaigns(name: 'campaigns', path: '/campaigns'),
   // campaignsCreate(name: 'campaign-create', path: 'create'),

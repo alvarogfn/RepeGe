@@ -16,47 +16,10 @@ class SheetListInitEvent extends SheetListEvent {
 }
 
 class SheetListAddEvent extends SheetListEvent {
-  final String createdBy;
-  final int characterLevel;
-  final String alignment;
-  final String background;
-  final String characterClass;
-  final String characteristics;
-  final String characterName;
-  final String characterRace;
+  final Sheet sheet;
+  final User user;
 
-  const SheetListAddEvent({
-    this.createdBy = '',
-    this.characterLevel = 1,
-    this.alignment = '',
-    this.background = '',
-    this.characterClass = '',
-    this.characteristics = '',
-    this.characterName = '',
-    this.characterRace = '',
-  });
-
-  SheetListAddEvent copyWith({
-    String? createdBy,
-    int? characterLevel,
-    String? alignment,
-    String? background,
-    String? characterClass,
-    String? characteristics,
-    String? characterName,
-    String? characterRace,
-  }) {
-    return SheetListAddEvent(
-      createdBy: createdBy ?? this.createdBy,
-      characterLevel: characterLevel ?? this.characterLevel,
-      alignment: alignment ?? this.alignment,
-      background: background ?? this.background,
-      characterClass: characterClass ?? this.characterClass,
-      characteristics: characteristics ?? this.characteristics,
-      characterName: characterName ?? this.characterName,
-      characterRace: characterRace ?? this.characterRace,
-    );
-  }
+  const SheetListAddEvent({required this.sheet, required this.user});
 }
 
 class SheetListRemoveEvent extends SheetListEvent {

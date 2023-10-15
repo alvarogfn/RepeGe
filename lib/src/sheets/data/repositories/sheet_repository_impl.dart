@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/core/utils/typedefs.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
@@ -13,39 +12,18 @@ class SheetRepositoryImpl extends SheetRepository {
   const SheetRepositoryImpl(this._firestore);
 
   @override
-  Future<SheetListState<SheetModel>?> addSheet({
-    required String createdBy,
-    int? characterLevel,
-    String? alignment,
-    String? background,
-    String? characterClass,
-    String? characterName,
-    String? characterRace,
-  }) async {
-    final sheetDoc = _firestore.collection('sheets').doc();
+  Future<SheetListState<SheetModel>?> create(Sheet sheet) async {
+    final sheetReference = _sheetsCollection.doc();
 
-    final sheetModel = SheetModel.empty().copyWith(
-      createdBy: createdBy,
-      characterLevel: characterLevel,
-      background: background,
-      alignment: alignment,
-      characterClass: characterClass,
-      characterName: characterName,
-      characterRace: characterRace,
-      id: sheetDoc.id,
-    );
-
-    final sheetMap = sheetModel.toMap()..update('createdAt', (value) => FieldValue.serverTimestamp());
-
-    await sheetDoc.set(sheetMap);
+    await sheetReference.set(sheet.copyWith(id: sheetReference.id));
 
     return null;
   }
 
   @override
-  Future<SheetListState<Sheet>?> deleteSheet(String sheetId) async {
+  Future<SheetListLoadError?> delete(String id) async {
     try {
-      await _sheetsCollection.doc(sheetId).delete();
+      await _sheetsCollection.doc(id).delete();
       return null;
     } catch (e) {
       return SheetListLoadError();
@@ -53,36 +31,31 @@ class SheetRepositoryImpl extends SheetRepository {
   }
 
   @override
-  Stream<SheetListState<Sheet>> streamAllSheets(String createdBy) {
+  Stream<SheetListState<SheetModel>> streamAll({required String createdBy}) {
     return _sheetsCollection.where('createdBy', isEqualTo: createdBy).snapshots().map((snapshot) {
-      final items = snapshot.docs.map((snapshot) => snapshot.data()).toList();
+      final items = snapshot.docs.map((snapshot) => snapshot.data() as SheetModel).toList();
       if (items.isEmpty) return const SheetListEmpty();
       return SheetListLoaded(items);
     });
   }
 
   @override
-  Stream<SheetState> streamSheet(String sheetId) {
+  Stream<SheetState> stream({required String sheetId}) {
     return _sheetsCollection.doc(sheetId).snapshots().map((snapshot) => SheetLoaded(snapshot.data()!));
   }
 
   @override
-  Future<SheetUpdateState?> updateSheet({required String sheetId, required DataMap newData}) async {
+  Future<SheetUpdateState?> update(Sheet sheet) async {
     try {
-      newData
-        ..remove('createdAt')
-        ..remove('createdBy')
-        ..remove('id');
-
-      await _sheetsCollection.doc(sheetId).update(newData);
+      await _sheetsCollection.doc(sheet.id).update(sheet.toMap());
       return SheetUpdateSucess();
     } catch (e) {
       return const SheetUpdateError();
     }
   }
 
-  CollectionReference<SheetModel> get _sheetsCollection => _firestore.collection('sheets').withConverter(
-        fromFirestore: (snapshot, options) => SheetModel.fromFirebase(snapshot),
+  CollectionReference<Sheet> get _sheetsCollection => _firestore.collection('sheets').withConverter(
+        fromFirestore: (snapshot, options) => SheetModel.fromMap(snapshot.data()!),
         toFirestore: (snapshot, options) => snapshot.toMap(),
       );
 }

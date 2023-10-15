@@ -22,6 +22,11 @@ class BagModel extends Bag {
   }
 
   @override
+  BagModel copyWithMap(map) {
+    return BagModel.fromMap(toMap()..addAll(map));
+  }
+
+  @override
   BagModel copyWith({
     int? copper,
     int? electrum,

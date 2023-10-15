@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:repege/core/widgets/card_title.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
+import 'package:repege/src/sheets/data/models/spell_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
+import 'package:repege/src/sheets/presentation/widgets/spell_list_item.dart';
 
 class SpellsPage extends StatelessWidget {
   const SpellsPage(this.sheet, {super.key});
@@ -23,10 +26,7 @@ class SpellsPage extends StatelessWidget {
           CardTitle(
             title: 'Atributos',
             child: Builder(builder: (context) {
-              update(SheetModel data) => context.read<SheetUpdateCubit>().updateSheet(
-                    id: sheet.id,
-                    newData: data.toMap(),
-                  );
+              final update = context.read<SheetUpdateCubit>().update;
 
               return GridView(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,9 +66,10 @@ class SpellsPage extends StatelessWidget {
                     PopupMenuItem(
                       child: const Text('Escrever Magia'),
                       onTap: () async {
-                        // final data = await context.pushNamed<Map<String, dynamic>>(Routes.spellsForm.name);
-                        // if (data == null) return;
-                        // service.add(data);
+                        final data = await context.pushNamed<SpellModel>('asdasdasd');
+                        if (data == null) return;
+
+                        // final update = context.read<SpellCubit>().update;
                       },
                     ),
                   ];
@@ -78,7 +79,7 @@ class SpellsPage extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: [].length,
                   itemBuilder: (context, index) {
-                    return Text(index.toString());
+                    return SpellListItem([][index]);
                   },
                 ),
               ),

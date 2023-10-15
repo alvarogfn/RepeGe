@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:repege/src/authentication/domain/entities/user.dart';
 import 'package:repege/src/sheets/domain/entities/sheet.dart';
 import 'package:repege/src/sheets/domain/repositories/sheet_repository.dart';
 
@@ -12,27 +13,24 @@ class SheetListBloc extends Bloc<SheetListEvent, SheetListState> {
   SheetListBloc(this._repository) : super(const SheetListLoading()) {
     on<SheetListInitEvent>((event, emit) async {
       await emit.onEach(
-        _repository.streamAllSheets(event.createdBy),
+        _repository.streamAll(createdBy: event.createdBy),
         onData: (sheet) => emit(sheet),
       );
     });
 
     on<SheetListAddEvent>((event, emit) async {
-      final result = await _repository.addSheet(
-        createdBy: event.createdBy,
-        alignment: event.alignment,
-        background: event.background,
-        characterClass: event.characterClass,
-        characterLevel: event.characterLevel,
-        characterName: event.characterName,
-        characterRace: event.characterRace,
+      final result = await _repository.create(
+        event.sheet.copyWith(
+          createdBy: event.user.id,
+          createdAt: DateTime.now(),
+        ),
       );
 
       if (result != null) emit(result);
     });
 
     on<SheetListRemoveEvent>((event, emit) async {
-      final result = await _repository.deleteSheet(event.sheetId);
+      final result = await _repository.delete(event.sheetId);
 
       if (result != null) emit(result);
     });

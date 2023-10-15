@@ -1,9 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
-import 'package:repege/src/sheets/domain/entities/attribute.dart';
+import 'package:repege/src/sheets/domain/entities/attributes.dart';
 import 'package:repege/src/sheets/domain/entities/bag.dart';
-import 'package:repege/src/sheets/domain/entities/skill.dart';
+import 'package:repege/src/sheets/domain/entities/skills.dart';
 
 abstract class Sheet extends Equatable {
   final DateTime createdAt;
@@ -27,8 +26,8 @@ abstract class Sheet extends Equatable {
   final String hitDice;
   final String id;
   final String languages;
-  final List<Attribute> attributes;
-  final List<Skill> skills;
+  final Attributes attributes;
+  final Skills skills;
   final Bag bag;
 
   const Sheet({
@@ -92,6 +91,8 @@ abstract class Sheet extends Equatable {
 
   String toJson();
 
+  Sheet copyWithMap(Map<String, dynamic> map);
+
   Sheet copyWith({
     DateTime? createdAt,
     int? armorClass,
@@ -114,8 +115,8 @@ abstract class Sheet extends Equatable {
     String? hitDice,
     String? id,
     String? languages,
-    List<Attribute>? attributes,
-    List<Skill>? skills,
+    Attributes? attributes,
+    Skills? skills,
     Bag? bag,
   });
 

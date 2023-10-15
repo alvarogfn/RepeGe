@@ -5,6 +5,7 @@ import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
+import 'package:repege/src/sheets/domain/entities/sheet.dart';
 import 'package:repege/src/sheets/presentation/widgets/character_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/equipments_page.dart';
 import 'package:repege/src/sheets/presentation/widgets/show_text_snackbar.dart';
@@ -33,7 +34,7 @@ class SheetScreen extends StatelessWidget {
       child: BlocBuilder<SheetBloc, SheetState>(
         builder: (context, state) {
           switch (state) {
-            case SheetLoaded<SheetModel>():
+            case SheetLoaded<Sheet>():
               final sheet = state.sheet;
               return DefaultTabController(
                 length: 4,
@@ -63,7 +64,7 @@ class SheetScreen extends StatelessWidget {
                     },
                     child: TabBarView(
                       children: [
-                        CharacterPage(sheet),
+                        CharacterPage(sheet as SheetModel),
                         StatusPage(sheet),
                         EquipmentsPage(sheet),
                         SpellsPage(sheet),
@@ -72,7 +73,9 @@ class SheetScreen extends StatelessWidget {
                   ),
                 ),
               );
-            default:
+            case SheetError():
+              return Text('paia');
+            case SheetLoading():
               return const Scaffold(body: Center(child: CircularProgressIndicator()));
           }
         },

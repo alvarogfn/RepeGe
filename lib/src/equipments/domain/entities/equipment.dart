@@ -1,6 +1,8 @@
-import 'package:equatable/equatable.dart';
 
-class Equipment extends Equatable {
+import 'package:equatable/equatable.dart';
+import 'package:repege/core/utils/typedefs.dart';
+
+abstract class Equipment extends Equatable {
   final String id;
   final String name;
   final String description;
@@ -34,4 +36,24 @@ class Equipment extends Equatable {
       sheetId,
     ];
   }
+
+  Equipment copyWithMap(DataMap map);
+
+  Equipment copyWith({
+    String? id,
+    String? name,
+    String? description,
+    String? price,
+    String? weight,
+    DateTime? createdAt,
+    String? createdBy,
+    String? sheetId,
+  });
+
+  Map<String, dynamic> toMap();
+
+  String toJson();
+
+  @override
+  bool get stringify => true;
 }

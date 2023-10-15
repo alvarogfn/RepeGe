@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:repege/components/empty.dart';
-import 'package:repege/components/loading.dart';
-import 'package:repege/helpers/is_snapshot_loading.dart';
-import 'package:repege/modules/auth/models/user.dart';
-import 'package:repege/modules/auth/services/auth_service.dart';
-import 'package:repege/modules/campaign/model/campaign.dart';
-import 'package:repege/modules/campaigns/service/campaigns_service.dart';
-import 'package:repege/modules/user/components/custom_drawer.dart';
-import 'package:repege/config/routes_name.dart';
+import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 
 class CampaingsScreen extends StatelessWidget {
   const CampaingsScreen({super.key});
@@ -26,7 +18,7 @@ class CampaingsScreen extends StatelessWidget {
           )
         ],
       ),
-      drawer: const CustomDrawer(),
+      drawer: const AppDrawer(),
       body: ChangeNotifierProxyProvider<AuthService, CampaignsService>(
         create: (context) => CampaignsService(
           context.read<AuthService>(),

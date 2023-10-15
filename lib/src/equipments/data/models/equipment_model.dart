@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:repege/src/sheets/domain/entities/equipment.dart';
+import 'package:repege/core/utils/typedefs.dart';
+import 'package:repege/src/equipments/domain/entities/equipment.dart';
 
 class EquipmentModel extends Equipment {
   const EquipmentModel({
@@ -29,6 +29,7 @@ class EquipmentModel extends Equipment {
     ];
   }
 
+  @override
   EquipmentModel copyWith({
     String? id,
     String? name,
@@ -51,6 +52,7 @@ class EquipmentModel extends Equipment {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -62,6 +64,19 @@ class EquipmentModel extends Equipment {
       'createdBy': createdBy,
       'sheetId': sheetId,
     };
+  }
+
+  factory EquipmentModel.empty() {
+    return EquipmentModel(
+      id: '',
+      name: '',
+      description: '',
+      price: '',
+      weight: '',
+      createdAt: DateTime.now(),
+      createdBy: '',
+      sheetId: '',
+    );
   }
 
   factory EquipmentModel.fromMap(Map<String, dynamic> map) {
@@ -77,6 +92,7 @@ class EquipmentModel extends Equipment {
     );
   }
 
+  @override
   String toJson() => json.encode(toMap());
 
   factory EquipmentModel.fromJson(String source) => EquipmentModel.fromMap(json.decode(source) as Map<String, dynamic>);
@@ -84,17 +100,8 @@ class EquipmentModel extends Equipment {
   @override
   bool get stringify => true;
 
-  factory EquipmentModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
-    final map = snapshot.data()!;
-    return EquipmentModel(
-      createdAt: (map['createdAt'] as Timestamp).toDate(),
-      createdBy: map['createdBy'] as String,
-      description: map['description'] as String,
-      id: map['id'] as String,
-      name: map['name'] as String,
-      price: map['price'] as String,
-      sheetId: map['sheetId'] as String,
-      weight: map['weight'] as String,
-    );
+  @override
+  Equipment copyWithMap(DataMap map) {
+    return EquipmentModel.fromMap(toMap()..addAll(map));
   }
 }

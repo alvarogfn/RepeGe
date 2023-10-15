@@ -5,6 +5,7 @@ import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
+import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
 
 class SheetsScreen extends StatelessWidget {
@@ -32,13 +33,13 @@ class SheetsScreen extends StatelessWidget {
             Builder(builder: (context) {
               return IconButton(
                 onPressed: () async {
-                  final createSheet = context.read<SheetListBloc>();
+                  final bloc = context.read<SheetListBloc>();
                   final state = context.read<AuthenticationCubit>().state;
 
-                  final data = await context.pushNamed<SheetListAddEvent>(Routes.sheetCreate.name);
+                  final data = await context.pushNamed<SheetModel>(Routes.sheetCreate.name);
 
                   if (data == null) return;
-                  if (state is Authenticated) createSheet.add(data);
+                  if (state is Authenticated) bloc.add(SheetListAddEvent(sheet: data, user: state.user));
                 },
                 icon: const Icon(Icons.add),
               );

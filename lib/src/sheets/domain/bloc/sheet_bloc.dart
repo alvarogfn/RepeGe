@@ -10,8 +10,8 @@ class SheetBloc extends Bloc<SheetEvent, SheetState> {
   final SheetRepository _repository;
   SheetBloc(this._repository) : super(const SheetLoading()) {
     on<SheetInitEvent>((event, emit) async {
-      await emit.forEach(_repository.streamSheet(event.sheetId), onData: (sheet) {
-        return sheet;
+      await emit.onEach(_repository.stream(sheetId: event.sheetId), onData: (sheet) {
+        emit(sheet);
       });
     });
   }

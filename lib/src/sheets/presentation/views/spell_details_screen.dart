@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:repege/components/card_title.dart';
-import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/components/paragraph.dart';
-import 'package:repege/icons/rpg_icons.dart';
-import 'package:repege/helpers/extensions.dart';
-import 'package:repege/models/utils.dart';
-import 'package:repege/modules/spell/models/spell.dart';
+import 'package:repege/core/icons/rpg_icons.dart';
+import 'package:repege/core/widgets/card_title.dart';
+import 'package:repege/core/widgets/full_screen_scroll.dart';
+import 'package:repege/core/widgets/paragraph.dart';
+import 'package:repege/src/sheets/data/models/spell_model.dart';
 
 class SpellDetailsScreen extends StatelessWidget {
   const SpellDetailsScreen(this.spell, {super.key});
 
-  final Spell spell;
+  final SpellModel spell;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(spell.name.toCapitalize())),
+      appBar: AppBar(title: Text(spell.name)),
       body: FullScreenScroll(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,11 +44,11 @@ class SpellDetailsScreen extends StatelessWidget {
                     Paragraph(margin: const EdgeInsets.only(left: 10), level),
                   ]),
                   const SizedBox(height: 10),
-                  Row(children: [
-                    const Icon(Rpg.hand),
+                  const Row(children: [
+                    Icon(Rpg.hand),
                     Paragraph(
-                      margin: const EdgeInsets.only(left: 10),
-                      formatedCatalytics,
+                      margin: EdgeInsets.only(left: 10),
+                      'catalytscs',
                     ),
                   ]),
                   const SizedBox(height: 10),
@@ -89,21 +87,7 @@ class SpellDetailsScreen extends StatelessWidget {
     if (spell.materials.isEmpty) {
       return '*Essa magia não possui materiais ou eles são desconhecidos.*';
     }
-    return spell.materials.toCapitalize();
-  }
-
-  String get formatedCatalytics {
-    const catalyts = SpellCatalyts.values;
-
-    final filteredCatalyts = catalyts.where((value) {
-      return spell.catalyts.contains(value.abbreviation);
-    }).map((e) => e.name);
-
-    if (filteredCatalyts.isEmpty) return '*Catalizadores desconhecidos.*';
-
-    final formatedCatalyts = filteredCatalyts.toList().join(', ');
-
-    return 'Catalizadores: **$formatedCatalyts.**';
+    return spell.materials;
   }
 
   String get castingTime {
@@ -115,7 +99,7 @@ class SpellDetailsScreen extends StatelessWidget {
   }
 
   String get level {
-    return 'Nível da Magia: **${spell.levelText}.**';
+    return 'Nível da Magia: **${spell.level}.**';
   }
 
   String get range {
@@ -130,7 +114,7 @@ class SpellDetailsScreen extends StatelessWidget {
 
   String get type {
     if (spell.type.isEmpty) return '*Escola desconhecida.*';
-    return 'Escola da Magia: **${spell.type.toCapitalize()}.**';
+    return 'Escola da Magia: **${spell.type}.**';
   }
 
   String get effectType {

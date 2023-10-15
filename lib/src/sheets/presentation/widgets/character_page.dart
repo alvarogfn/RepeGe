@@ -10,6 +10,8 @@ class CharacterPage extends StatelessWidget {
   final SheetModel sheet;
   @override
   Widget build(BuildContext context) {
+    final update = context.read<SheetUpdateCubit>().update;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Caracteristicas'),
@@ -18,76 +20,67 @@ class CharacterPage extends StatelessWidget {
       body: FullScreenScroll(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Builder(
-            builder: (context) {
-              update(SheetModel data) => context.read<SheetUpdateCubit>().updateSheet(
-                    id: sheet.id,
-                    newData: data.toMap(),
-                  );
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  EditableTextFormField(
-                    label: 'Nome',
-                    initialValue: sheet.characterName,
-                    onSaved: (value) => update(sheet.copyWith(
-                      characterName: value,
-                    )),
-                    border: InputBorder.none,
-                  ),
-                  EditableTextFormField(
-                    label: 'Classe',
-                    initialValue: sheet.characterClass,
-                    onSaved: (value) => update(sheet.copyWith(
-                      characterClass: value,
-                    )),
-                    border: InputBorder.none,
-                  ),
-                  EditableTextFormField(
-                    label: 'Nível',
-                    initialValue: sheet.characterLevel.toString(),
-                    onSaved: (value) => update(sheet.copyWith(
-                      characterLevel: int.parse(value ?? '0'),
-                    )),
-                    border: InputBorder.none,
-                    keyboardType: TextInputType.number,
-                  ),
-                  EditableTextFormField(
-                    label: 'Raça',
-                    initialValue: sheet.characterRace,
-                    onSaved: (value) => update(sheet.copyWith(
-                      characterRace: value,
-                    )),
-                    border: InputBorder.none,
-                  ),
-                  EditableTextFormField(
-                    label: 'Alinhamento',
-                    initialValue: sheet.alignment,
-                    onSaved: (value) => update(sheet.copyWith(
-                      alignment: value,
-                    )),
-                    border: InputBorder.none,
-                  ),
-                  EditableTextFormField(
-                    label: 'Antepassado',
-                    initialValue: sheet.background,
-                    onSaved: (value) => update(sheet.copyWith(
-                      background: value,
-                    )),
-                    border: InputBorder.none,
-                  ),
-                  EditableTextFormField(
-                    label: 'Línguas',
-                    initialValue: sheet.languages,
-                    onSaved: (value) => update(sheet.copyWith(
-                      languages: value,
-                    )),
-                    border: InputBorder.none,
-                  ),
-                ],
-              );
-            },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              EditableTextFormField(
+                label: 'Nome',
+                initialValue: sheet.characterName,
+                onSaved: (value) => update(sheet.copyWith(
+                  characterName: value,
+                )),
+                border: InputBorder.none,
+              ),
+              EditableTextFormField(
+                label: 'Classe',
+                initialValue: sheet.characterClass,
+                onSaved: (value) => update(sheet.copyWith(
+                  characterClass: value,
+                )),
+                border: InputBorder.none,
+              ),
+              EditableTextFormField(
+                label: 'Nível',
+                initialValue: sheet.characterLevel.toString(),
+                onSaved: (value) => update(sheet.copyWith(
+                  characterLevel: int.parse(value ?? '0'),
+                )),
+                border: InputBorder.none,
+                keyboardType: TextInputType.number,
+              ),
+              EditableTextFormField(
+                label: 'Raça',
+                initialValue: sheet.characterRace,
+                onSaved: (value) => update(sheet.copyWith(
+                  characterRace: value,
+                )),
+                border: InputBorder.none,
+              ),
+              EditableTextFormField(
+                label: 'Alinhamento',
+                initialValue: sheet.alignment,
+                onSaved: (value) => update(sheet.copyWith(
+                  alignment: value,
+                )),
+                border: InputBorder.none,
+              ),
+              EditableTextFormField(
+                label: 'Antepassado',
+                initialValue: sheet.background,
+                onSaved: (value) => update(sheet.copyWith(
+                  background: value,
+                )),
+                border: InputBorder.none,
+              ),
+              EditableTextFormField(
+                label: 'Línguas',
+                initialValue: sheet.languages,
+                onSaved: (value) => update(sheet.copyWith(
+                  languages: value,
+                )),
+                border: InputBorder.none,
+              ),
+            ],
           ),
         ),
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/components/full_screen_scroll.dart';
-import 'package:repege/form/validations/required_validation.dart';
-import 'package:repege/form/validations/validations.dart';
-import 'package:repege/models/utils.dart';
+import 'package:repege/core/models/utils.dart';
+import 'package:repege/core/utils/validations/required_validation.dart';
+import 'package:repege/core/utils/validations/validations.dart';
+import 'package:repege/core/widgets/full_screen_scroll.dart';
 
 class SpellFormScreen extends StatefulWidget {
   const SpellFormScreen({super.key});

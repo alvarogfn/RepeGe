@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:repege/src/equipments/presentation/views/equipment_form_screen.dart';
 import 'package:repege/src/sheets/presentation/views/sheet_create_screen.dart';
 import 'package:repege/core/config/environment_variables.dart';
 import 'package:repege/core/routes/routes_name.dart';
@@ -54,6 +55,19 @@ final GoRouter routes = GoRouter(
       path: Routes.home.path,
       name: Routes.home.name,
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: Routes.equipment.path,
+      name: Routes.equipment.name,
+      builder: (context, state) => const Scaffold(),
+      routes: [
+        GoRoute(
+          path: Routes.equipmentForm.path,
+          name: Routes.equipmentForm.name,
+          builder: (context, state) => const EquipmentFormScreen(),
+        ),
+      ],
     ),
     GoRoute(
       parentNavigatorKey: rootNavigatorKey,
