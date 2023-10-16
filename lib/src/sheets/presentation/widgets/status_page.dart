@@ -4,7 +4,7 @@ import 'package:repege/core/widgets/card_title.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
-import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
+import 'package:repege/src/sheets/data/models/skills_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
 import 'package:repege/src/sheets/presentation/widgets/life_tracker.dart';
 import 'package:repege/src/sheets/presentation/widgets/skill_floating_list.dart';
@@ -68,23 +68,19 @@ class StatusPage extends StatelessWidget {
               title: 'Atributos',
               icon: GestureDetector(
                 child: const Icon(Icons.expand),
-                onTap: () {
-                  showModalBottomSheet(
+                onTap: () async {
+                  final skills = await showModalBottomSheet<SkillsModel>(
                     context: context,
-                    builder: (_) {
-                      return MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (context) => context.read<SheetBloc>(),
-                          ),
-                          BlocProvider(
-                            create: (context) => context.read<SheetUpdateCubit>(),
-                          ),
-                        ],
-                        child: const SkillFloatingList(),
-                      );
+                    builder: (context) {
+                      return SkillFloatingList(skills: sheet.skills as SkillsModel);
                     },
                   );
+
+                  if (skills == null) return;
+
+                  if (context.mounted) {
+                    context.read<SheetUpdateCubit>().update(sheet.copyWith(skills: skills));
+                  }
                 },
               ),
               child: SizedBox(
@@ -102,7 +98,9 @@ class StatusPage extends StatelessWidget {
                       label: attribute.key,
                       value: attribute.value,
                       title: ((attribute.value - 10) ~/ 2).toString(),
-                      onFieldSubmitted: (value) => update(sheet.copyWithMap({attribute.key: value})),
+                      onFieldSubmitted: (value) => update(
+                        sheet.copyWith(attributes: sheet.attributes.copyWithMap({attribute.key: value})),
+                      ),
                     );
                   }).toList(),
                 ),

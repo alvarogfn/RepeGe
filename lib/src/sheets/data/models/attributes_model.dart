@@ -23,6 +23,7 @@ class AttributesModel extends Attributes {
     );
   }
 
+  @override
   AttributesModel copyWithMap(Map<String, dynamic> map) {
     return AttributesModel.fromMap(toMap()..addAll(map));
   }

@@ -10,9 +10,9 @@ class EquipmentBloc extends Bloc<EquipmentEvent, EquipmentState> {
   final EquipmentRepository _repository;
 
   EquipmentBloc(this._repository) : super(const EquipmentStateEmpty()) {
-    on<EquipmentInitEvent>((event, emit) {
-      emit.onEach(
-        stream,
+    on<EquipmentInitEvent>((event, emit) async {
+      await emit.onEach(
+        _repository.streamAll(sheetId: event.sheetId),
         onData: (equipment) => emit(equipment),
         onError: (error, _) => emit(EquipmentStateError(error.toString())),
       );
@@ -27,7 +27,7 @@ class EquipmentBloc extends Bloc<EquipmentEvent, EquipmentState> {
     });
 
     on<EquipmentDeleteEvent>((event, emit) async {
-      final result = await _repository.delete(event.equipmentId);
+      final result = await _repository.delete(event.equipment);
 
       if (result == null) return;
 

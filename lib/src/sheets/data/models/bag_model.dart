@@ -23,6 +23,7 @@ class BagModel extends Bag {
 
   @override
   BagModel copyWithMap(map) {
+    print({toMap(), map});
     return BagModel.fromMap(toMap()..addAll(map));
   }
 
@@ -45,7 +46,7 @@ class BagModel extends Bag {
 
   @override
   Map<String, dynamic> toMap() {
-    return <String, int>{
+    return {
       'copper': copper,
       'electrum': electrum,
       'gold': gold,

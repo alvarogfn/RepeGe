@@ -13,7 +13,7 @@ class EquipmentRepositoryImpl extends EquipmentRepository {
 
   @override
   Future<EquipmentState?> create(Equipment equipment) async {
-    final reference = _collectionReference.doc();
+    final reference = _collectionReference(sheetId: equipment.sheetId).doc();
 
     await reference.set(equipment.copyWith(id: reference.id));
 
@@ -21,9 +21,9 @@ class EquipmentRepositoryImpl extends EquipmentRepository {
   }
 
   @override
-  Future<EquipmentState?> delete(String id) async {
+  Future<EquipmentState?> delete(Equipment equipment) async {
     try {
-      await _collectionReference.doc(id).delete();
+      await _collectionReference(sheetId: equipment.sheetId).doc(equipment.id).delete();
       return null;
     } catch (e) {
       return EquipmentStateError(e.toString());
@@ -31,8 +31,8 @@ class EquipmentRepositoryImpl extends EquipmentRepository {
   }
 
   @override
-  Stream<EquipmentState> streamAll({required String createdBy}) {
-    return _collectionReference.where('createdBy', isEqualTo: createdBy).snapshots().map((snapshot) {
+  Stream<EquipmentState> streamAll({required String sheetId}) {
+    return _collectionReference(sheetId: sheetId).snapshots().map((snapshot) {
       final items = snapshot.docs.map((snapshot) => snapshot.data() as EquipmentModel).toList();
       if (items.isEmpty) return const EquipmentStateEmpty();
       return EquipmentStateLoaded<EquipmentModel>(items);
@@ -42,14 +42,15 @@ class EquipmentRepositoryImpl extends EquipmentRepository {
   @override
   Future<EquipmentState?> update(Equipment equipment) async {
     try {
-      await _collectionReference.doc(equipment.id).update(equipment.toMap());
+      await _collectionReference(sheetId: equipment.sheetId).doc(equipment.id).update(equipment.toMap());
       return null;
     } catch (e) {
       return EquipmentStateError(e.toString());
     }
   }
 
-  CollectionReference<Equipment> get _collectionReference => _firestore.collection('equipments').withConverter(
-      fromFirestore: (snapshot, _) => EquipmentModel.fromMap(snapshot.data()!),
-      toFirestore: (snapshot, _) => snapshot.toMap());
+  CollectionReference<Equipment> _collectionReference({required String sheetId}) =>
+      _firestore.collection('sheets').doc(sheetId).collection('equipments').withConverter(
+          fromFirestore: (snapshot, _) => EquipmentModel.fromMap(snapshot.data()!),
+          toFirestore: (snapshot, _) => snapshot.toMap());
 }

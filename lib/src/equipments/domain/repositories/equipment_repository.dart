@@ -6,9 +6,9 @@ abstract class EquipmentRepository {
 
   Future<EquipmentState?> create(Equipment equipment);
 
-  Future<EquipmentState?> delete(String id);
+  Future<EquipmentState?> delete(Equipment equipment);
 
   Future<EquipmentState?> update(Equipment equipment);
 
-  Stream<EquipmentState> streamAll({required String createdBy});
+  Stream<EquipmentState> streamAll({required String sheetId});
 }

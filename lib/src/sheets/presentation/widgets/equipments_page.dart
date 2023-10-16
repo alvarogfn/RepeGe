@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/core/icons/rpg_icons.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/core/widgets/card_title.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/src/equipments/data/models/equipment_model.dart';
 import 'package:repege/src/equipments/domain/bloc/equipment_bloc.dart';
+import 'package:repege/src/equipments/presentation/widgets/equipment_card.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
 
@@ -43,14 +43,20 @@ class EquipmentsPage extends StatelessWidget {
                   onFieldSubmitted: (value) {
                     context
                         .read<SheetUpdateCubit>()
-                        .update(sheet.copyWith(bag: sheet.bag.copyWithMap({entry.key: entry.value})));
+                        .update(sheet.copyWith(bag: sheet.bag.copyWithMap({entry.key: int.parse(value)})));
                   },
                 );
               }).toList(),
             ),
           ),
           BlocProvider(
-            create: (context) => sl<EquipmentBloc>(),
+            create: (context) {
+              final bloc = sl<EquipmentBloc>();
+
+              bloc.add(EquipmentInitEvent(sheet.id));
+
+              return bloc;
+            },
             child: Builder(
               builder: (context) {
                 return Expanded(
@@ -63,7 +69,7 @@ class EquipmentsPage extends StatelessWidget {
                         if (result == null) return;
 
                         if (context.mounted) {
-                          context.read<EquipmentBloc>().add(EquipmentCreateEvent(result));
+                          context.read<EquipmentBloc>().add(EquipmentCreateEvent(result.copyWith(sheetId: sheet.id)));
                         }
                       },
                     ),
@@ -76,41 +82,11 @@ class EquipmentsPage extends StatelessWidget {
                                 itemCount: state.equipments.length,
                                 itemBuilder: (context, index) {
                                   final equipment = state.equipments[index];
-                                  return Dismissible(
-                                    key: ValueKey(equipment.id),
-                                    confirmDismiss: (_) => showDialog<bool>(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            content: const Text('Confirmar?'),
-                                            actions: [
-                                              ElevatedButton(
-                                                onPressed: () => context.pop(true),
-                                                child: const Text('sim'),
-                                              )
-                                            ],
-                                          );
-                                        }),
+                                  return EquipmentCard(
+                                    equipment: equipment,
                                     onDismissed: (_) => context.read<EquipmentBloc>().add(
-                                          EquipmentDeleteEvent(equipment.id),
+                                          EquipmentDeleteEvent(equipment),
                                         ),
-                                    child: ListTile(
-                                      title: Text(equipment.name),
-                                      trailing: Text('${equipment.price} | ${equipment.weight}'),
-                                      subtitle: Text(
-                                        equipment.description,
-                                        maxLines: 1,
-                                        style: const TextStyle(overflow: TextOverflow.ellipsis),
-                                      ),
-                                      minLeadingWidth: 20,
-                                      leading: const SizedBox(
-                                        width: 20,
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          child: Icon(Rpg.shield, size: 25, color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
                                   );
                                 },
                               ),

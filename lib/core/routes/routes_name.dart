@@ -11,9 +11,9 @@ enum Routes {
   sheetCreate(name: 'sheet-create', path: 'create'),
   sheet(name: 'sheet', path: 'sheet/:id'),
 
-  spell(name: 'spell', path: '/spell/:id'),
-  spellsSearch(name: 'spells-search', path: '/spells/search'),
-  spellsForm(name: 'spells-form', path: '/spells/form'),
+  spell(name: 'spell', path: '/spell'),
+  spellsForm(name: 'spells-form', path: 'form'),
+  spellsDetails(name: 'spells-details', path: 'details/:id'),
 
   equipment(name: 'equipment', path: '/equipment'),
   equipmentForm(name: 'equipment-form', path: 'form'),

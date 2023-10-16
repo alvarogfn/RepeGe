@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:repege/src/sheets/domain/entities/spell.dart';
+import 'package:repege/src/spells/domain/entities/spell.dart';
 
 class SpellModel extends Spell {
   const SpellModel({
@@ -20,8 +20,10 @@ class SpellModel extends Spell {
     required super.name,
     required super.range,
     required super.type,
+    required super.sheetId,
   });
 
+  @override
   SpellModel copyWith({
     bool? isPrepared,
     bool? material,
@@ -29,6 +31,7 @@ class SpellModel extends Spell {
     bool? verbal,
     DateTime? createdAt,
     String? createdBy,
+    String? sheetId,
     int? level,
     String? castingTime,
     String? description,
@@ -47,6 +50,7 @@ class SpellModel extends Spell {
       verbal: verbal ?? this.verbal,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
+      sheetId: sheetId ?? this.sheetId,
       level: level ?? this.level,
       castingTime: castingTime ?? this.castingTime,
       description: description ?? this.description,
@@ -60,6 +64,7 @@ class SpellModel extends Spell {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'isPrepared': isPrepared,
@@ -68,6 +73,7 @@ class SpellModel extends Spell {
       'verbal': verbal,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'createdBy': createdBy,
+      'sheetId': sheetId,
       'level': level,
       'castingTime': castingTime,
       'description': description,
@@ -81,6 +87,12 @@ class SpellModel extends Spell {
     };
   }
 
+  @override
+  String toJson() => json.encode(toMap());
+
+  @override
+  bool get stringify => true;
+
   factory SpellModel.fromMap(Map<String, dynamic> map) {
     return SpellModel(
       isPrepared: map['isPrepared'] as bool,
@@ -89,6 +101,7 @@ class SpellModel extends Spell {
       verbal: map['verbal'] as bool,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       createdBy: map['createdBy'] as String,
+      sheetId: map['sheetId'] as String,
       level: map['level'] as int,
       castingTime: map['castingTime'] as String,
       description: map['description'] as String,
@@ -102,37 +115,26 @@ class SpellModel extends Spell {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory SpellModel.fromJson(String source) => SpellModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'SpellModel(isPrepared: $isPrepared, material: $material, somatic: $somatic, verbal: $verbal, createdAt: $createdAt, createdBy: $createdBy, level: $level, castingTime: $castingTime, description: $description, duration: $duration, effectType: $effectType, id: $id, materials: $materials, name: $name, range: $range, type: $type)';
-  }
-
-  @override
-  bool get stringify => true;
-
-  @override
-  List<Object> get props {
-    return [
-      isPrepared,
-      material,
-      somatic,
-      verbal,
-      createdAt,
-      createdBy,
-      level,
-      castingTime,
-      description,
-      duration,
-      effectType,
-      id,
-      materials,
-      name,
-      range,
-      type,
-    ];
+  factory SpellModel.empty() {
+    return SpellModel(
+      castingTime: '',
+      createdAt: DateTime.now(),
+      createdBy: '',
+      description: '',
+      duration: '',
+      effectType: '',
+      id: '',
+      isPrepared: false,
+      level: 0,
+      material: false,
+      materials: '',
+      name: '',
+      range: '',
+      sheetId: '',
+      somatic: false,
+      type: '',
+      verbal: false,
+    );
   }
 }

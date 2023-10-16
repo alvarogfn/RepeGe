@@ -17,24 +17,21 @@ class CardTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
+                Text(title, style: Theme.of(context).textTheme.labelLarge),
                 if (icon != null) icon!,
               ],
             ),
-            SizedBox(height: marginBetween),
-            if (child != null) child!,
-          ],
-        ),
+          ),
+          SizedBox(height: marginBetween),
+          if (child != null) child!,
+        ],
       ),
     );
   }

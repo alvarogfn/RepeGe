@@ -12,6 +12,9 @@ import 'package:repege/src/sheets/domain/bloc/sheet_bloc.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
 import 'package:repege/src/sheets/domain/repositories/sheet_repository.dart';
+import 'package:repege/src/spells/data/repositories/spell_repository_impl.dart';
+import 'package:repege/src/spells/domain/bloc/spell_bloc.dart';
+import 'package:repege/src/spells/domain/repositories/spell_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -22,10 +25,12 @@ Future<void> init() async {
   sl.registerFactory(() => SheetListBloc(sl()));
   sl.registerFactory(() => SheetUpdateCubit(sl()));
   sl.registerFactory(() => EquipmentBloc(sl()));
+  sl.registerFactory(() => SpellBloc(sl()));
 
   // Repository
   sl.registerLazySingleton<SheetRepository>(() => SheetRepositoryImpl(sl()));
   sl.registerLazySingleton<EquipmentRepository>(() => EquipmentRepositoryImpl(sl()));
+  sl.registerLazySingleton<SpellRepository>(() => SpellRepositoryImpl(sl()));
   sl.registerLazySingleton<AuthenticationRepository>(
     () => AuthenticationRepositoryImpl(firebaseAuth: sl(), firebaseFirestore: sl()),
   );

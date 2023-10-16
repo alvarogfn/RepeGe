@@ -1,45 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:repege/core/models/utils.dart';
 import 'package:repege/core/utils/validations/required_validation.dart';
 import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
+import 'package:repege/src/sheets/data/models/spell_model.dart';
+import 'package:repege/src/spells/domain/enums/spell_levels.dart';
+import 'package:repege/src/spells/domain/enums/spell_types.dart';
 
 class SpellFormScreen extends StatefulWidget {
-  const SpellFormScreen({super.key});
+  const SpellFormScreen({this.spell, super.key});
+
+  final SpellModel? spell;
 
   @override
   State<SpellFormScreen> createState() => _SpellFormScreenState();
 }
 
 class _SpellFormScreenState extends State<SpellFormScreen> {
-  Map<String, dynamic> data = {};
+  SpellModel spell = SpellModel.empty();
   final _formKey = GlobalKey<FormState>();
-
-  List<String> get types {
-    return SpellTypes.values.map((e) => e.name.toLowerCase()).toList();
-  }
-
-  List<String> get levels {
-    return SpellLevels.values.map((e) => e.value.toString()).toList();
-  }
-
-  Map<String, String> get catalytics {
-    return Map.fromEntries(
-      SpellCatalyts.values.map((e) => MapEntry(e.name, e.abbreviation)).toList(),
-    );
-  }
-
-  Future<void> showAddErrorDialog(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) => const AlertDialog(
-        title: Text(
-          'Não foi possível realizar esta ação, tente novamente.',
-        ),
-      ),
-    );
-  }
 
   bool _validateForm() {
     final currentState = _formKey.currentState;
@@ -57,7 +36,14 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
     final isValid = _validateForm();
     if (!isValid) return;
 
-    context.pop(data);
+    context.pop(spell);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.spell != null) spell = widget.spell!;
   }
 
   @override
@@ -66,10 +52,7 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
       appBar: AppBar(
         title: const Text('Criar'),
         actions: [
-          IconButton(
-            onPressed: _handleSubmit,
-            icon: const Icon(Icons.save),
-          )
+          IconButton(onPressed: _handleSubmit, icon: const Icon(Icons.save)),
         ],
       ),
       body: FullScreenScroll(
@@ -81,16 +64,16 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Nome'),
-                  initialValue: data['name'],
-                  onSaved: (value) => data['name'] = value,
+                  initialValue: spell.name,
+                  onSaved: (value) => setState(() => spell = spell.copyWith(name: value)),
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Descrição'),
-                  initialValue: data['description'],
-                  onSaved: (value) => data['description'] = value,
+                  initialValue: spell.description,
+                  onSaved: (value) => setState(() => spell = spell.copyWith(description: value)),
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   maxLines: 5,
@@ -98,46 +81,56 @@ class _SpellFormScreenState extends State<SpellFormScreen> {
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Materiais'),
-                  initialValue: data['materials'],
-                  onSaved: (value) => data['materials'] = value,
+                  initialValue: spell.materials,
+                  onSaved: (value) => setState(() => spell = spell.copyWith(materials: value)),
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                   maxLines: 2,
                 ),
                 const SizedBox(height: 20),
                 LayoutBuilder(builder: (context, constraints) {
-                  return DropdownMenu<String>(
+                  return DropdownMenu<SpellLevels>(
                     width: constraints.maxWidth,
-                    initialSelection: data['level'] ?? levels[0],
+                    initialSelection: SpellLevels.values.firstWhere(
+                      (element) => element.value == spell.level,
+                      orElse: () => SpellLevels.l0,
+                    ),
                     label: const Text('Nível'),
-                    onSelected: (value) => data['level'] = value,
-                    dropdownMenuEntries: levels.map((level) => DropdownMenuEntry(label: level, value: level)).toList(),
+                    onSelected: (level) => setState(() => spell = spell.copyWith(level: level!.value)),
+                    dropdownMenuEntries: SpellLevels.values.map((level) {
+                      return DropdownMenuEntry(label: level.name, value: level);
+                    }).toList(),
                   );
                 }),
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Tempo de Conjuração'),
-                  initialValue: data['castingTime'],
-                  onSaved: (value) => data['castingTime'] = value,
+                  initialValue: spell.castingTime,
+                  onSaved: (value) => setState(() => spell = spell.copyWith(castingTime: value)),
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Alcance'),
-                  initialValue: data['range'],
-                  onSaved: (value) => data['range'] = value,
+                  initialValue: spell.range,
+                  onSaved: (value) => setState(() => spell = spell.copyWith(range: value)),
                   textInputAction: TextInputAction.next,
                   validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
                 ),
                 const SizedBox(height: 20),
                 LayoutBuilder(builder: (context, constraints) {
-                  return DropdownMenu<String>(
+                  return DropdownMenu(
                     width: constraints.maxWidth,
-                    initialSelection: data['type'] ?? types[0],
+                    initialSelection: SpellTypes.values.firstWhere(
+                      (element) => element.name == spell.type,
+                      orElse: () => SpellTypes.abjuration,
+                    ),
                     label: const Text('Escola da magia:'),
-                    onSelected: (value) => data['type'] = value,
-                    dropdownMenuEntries: types.map((type) => DropdownMenuEntry(label: type, value: type)).toList(),
+                    onSelected: (type) => setState(() => spell = spell.copyWith(type: type!.name)),
+                    dropdownMenuEntries: SpellTypes.values.map((type) {
+                      return DropdownMenuEntry(label: type.name, value: type);
+                    }).toList(),
                   );
                 }),
                 const SizedBox(height: 20),

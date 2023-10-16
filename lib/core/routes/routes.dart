@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/src/equipments/presentation/views/equipment_form_screen.dart';
+import 'package:repege/src/sheets/data/models/spell_model.dart';
 import 'package:repege/src/sheets/presentation/views/sheet_create_screen.dart';
 import 'package:repege/core/config/environment_variables.dart';
 import 'package:repege/core/routes/routes_name.dart';
@@ -15,6 +16,8 @@ import 'package:repege/src/authentication/presentation/views/signup_screen.dart'
 import 'package:repege/src/miscellaneous/presentation/views/home_screen.dart';
 import 'package:repege/src/sheets/presentation/views/sheet_screen.dart';
 import 'package:repege/src/sheets/presentation/views/sheets_screen.dart';
+import 'package:repege/src/spells/presentation/views/spell_details_screen.dart';
+import 'package:repege/src/spells/presentation/views/spell_form_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final sheetsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'sheets');
@@ -67,6 +70,23 @@ final GoRouter routes = GoRouter(
           name: Routes.equipmentForm.name,
           builder: (context, state) => const EquipmentFormScreen(),
         ),
+      ],
+    ),
+    GoRoute(
+      path: Routes.spell.path,
+      name: Routes.spell.name,
+      builder: (context, state) => const Scaffold(),
+      routes: [
+        GoRoute(
+          path: Routes.spellsForm.path,
+          name: Routes.spellsForm.name,
+          builder: (context, state) => const SpellFormScreen(),
+        ),
+        GoRoute(
+          path: Routes.spellsDetails.path,
+          name: Routes.spellsDetails.name,
+          builder: (context, state) => SpellDetailsScreen(state.extra as SpellModel),
+        )
       ],
     ),
     GoRoute(

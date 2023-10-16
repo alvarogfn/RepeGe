@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:repege/core/routes/routes_name.dart';
+import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/core/widgets/card_title.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/data/models/spell_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
-import 'package:repege/src/sheets/presentation/widgets/spell_list_item.dart';
+import 'package:repege/src/spells/domain/bloc/spell_bloc.dart';
+import 'package:repege/src/spells/presentation/widgets/spell_list_item.dart';
 
 class SpellsPage extends StatelessWidget {
   const SpellsPage(this.sheet, {super.key});
@@ -56,30 +59,50 @@ class SpellsPage extends StatelessWidget {
               );
             }),
           ),
-          Expanded(
-            child: CardTitle(
-              title: 'Magias',
-              icon: PopupMenuButton(
-                child: const Icon(Icons.more_vert),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                      child: const Text('Escrever Magia'),
+          BlocProvider(
+            create: (context) {
+              final bloc = sl<SpellBloc>();
+              bloc.add(SpellInitEvent(sheet.id));
+              return bloc;
+            },
+            child: Expanded(
+              child: CardTitle(
+                title: 'Magias',
+                icon: Builder(
+                  builder: (context) {
+                    return GestureDetector(
+                      child: const Icon(Icons.add),
                       onTap: () async {
-                        final data = await context.pushNamed<SpellModel>('asdasdasd');
-                        if (data == null) return;
+                        final spell = await context.pushNamed<SpellModel>(Routes.spellsForm.name);
 
-                        // final update = context.read<SpellCubit>().update;
+                        if (spell == null) return;
+
+                        if (context.mounted) {
+                          context.read<SpellBloc>().add(SpellCreateEvent(spell.copyWith(sheetId: sheet.id)));
+                        }
                       },
-                    ),
-                  ];
-                },
-              ),
-              child: Expanded(
-                child: ListView.builder(
-                  itemCount: [].length,
-                  itemBuilder: (context, index) {
-                    return SpellListItem([][index]);
+                    );
+                  },
+                ),
+                child: BlocBuilder<SpellBloc, SpellState>(
+                  builder: (context, state) {
+                    switch (state) {
+                      case SpellStateLoaded():
+                        return Expanded(
+                          child: ListView.builder(
+                            itemCount: state.spells.length,
+                            itemBuilder: (context, index) {
+                              return SpellListItem(state.spells[index] as SpellModel);
+                            },
+                          ),
+                        );
+                      case SpellStateEmpty():
+                        return const Text('Nenhuma magia cadastrada.');
+                      case SpellStateLoading():
+                        return const Center(child: CircularProgressIndicator());
+                      case SpellStateError():
+                        return Text(state.message);
+                    }
                   },
                 ),
               ),

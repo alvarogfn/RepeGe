@@ -28,53 +28,48 @@ class SpellDetailsScreen extends StatelessWidget {
             ),
             CardTitle(
               title: 'Detalhes',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(children: [
-                    const Icon(Icons.hourglass_empty),
-                    Paragraph(
-                      margin: const EdgeInsets.only(left: 10),
-                      castingTime,
-                    ),
-                  ]),
-                  const SizedBox(height: 10),
-                  Row(children: [
-                    const Icon(Icons.trending_up),
-                    Paragraph(margin: const EdgeInsets.only(left: 10), level),
-                  ]),
-                  const SizedBox(height: 10),
-                  const Row(children: [
-                    Icon(Rpg.hand),
-                    Paragraph(
-                      margin: EdgeInsets.only(left: 10),
-                      'catalytscs',
-                    ),
-                  ]),
-                  const SizedBox(height: 10),
-                  Row(children: [
-                    const Icon(Icons.map),
-                    Paragraph(margin: const EdgeInsets.only(left: 10), range),
-                  ]),
-                  const SizedBox(height: 10),
-                  Row(children: [
-                    const Icon(Rpg.stopwatch),
-                    Paragraph(margin: const EdgeInsets.only(left: 10), duration),
-                  ]),
-                  const SizedBox(height: 10),
-                  Row(children: [
-                    const Icon(Icons.school),
-                    Paragraph(margin: const EdgeInsets.only(left: 10), type),
-                  ]),
-                  const SizedBox(height: 10),
-                  Row(children: [
-                    const Icon(Rpg.fire),
-                    Paragraph(
-                      margin: const EdgeInsets.only(left: 10),
-                      effectType,
-                    ),
-                  ]),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(children: [
+                      const Icon(Icons.hourglass_empty),
+                      Paragraph(
+                        margin: const EdgeInsets.only(left: 10),
+                        castingTime,
+                      ),
+                    ]),
+                    const SizedBox(height: 10),
+                    Row(children: [
+                      const Icon(Icons.trending_up),
+                      Paragraph(margin: const EdgeInsets.only(left: 10), level),
+                    ]),
+                    const SizedBox(height: 10),
+                    Row(children: [
+                      const Icon(Icons.map),
+                      Paragraph(margin: const EdgeInsets.only(left: 10), range),
+                    ]),
+                    const SizedBox(height: 10),
+                    Row(children: [
+                      const Icon(Rpg.stopwatch),
+                      Paragraph(margin: const EdgeInsets.only(left: 10), duration),
+                    ]),
+                    const SizedBox(height: 10),
+                    Row(children: [
+                      const Icon(Icons.school),
+                      Paragraph(margin: const EdgeInsets.only(left: 10), type),
+                    ]),
+                    const SizedBox(height: 10),
+                    Row(children: [
+                      const Icon(Rpg.fire),
+                      Paragraph(
+                        margin: const EdgeInsets.only(left: 10),
+                        effectType,
+                      ),
+                    ]),
+                  ],
+                ),
               ),
             ),
           ],

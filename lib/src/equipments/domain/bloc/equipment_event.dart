@@ -17,7 +17,6 @@ class EquipmentCreateEvent<T extends Equipment> extends EquipmentEvent {
 
 class EquipmentInitEvent extends EquipmentEvent {
   final String sheetId;
-
   const EquipmentInitEvent(this.sheetId);
 
   @override
@@ -25,10 +24,10 @@ class EquipmentInitEvent extends EquipmentEvent {
 }
 
 class EquipmentDeleteEvent extends EquipmentEvent {
-  final String equipmentId;
+  final Equipment equipment;
 
-  const EquipmentDeleteEvent(this.equipmentId);
+  const EquipmentDeleteEvent(this.equipment);
 
   @override
-  List<Object> get props => [equipmentId];
+  List<Object> get props => [equipment];
 }
