@@ -19,6 +19,7 @@ class Paragraph extends StatelessWidget {
       padding: padding,
       child: MarkdownBody(
         data: text,
+        softLineBreak: true,
         styleSheet: MarkdownStyleSheet(
           p: const TextStyle(
             height: 1.5,

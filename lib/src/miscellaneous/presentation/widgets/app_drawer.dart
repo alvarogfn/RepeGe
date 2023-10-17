@@ -6,9 +6,7 @@ import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart
 import 'package:repege/src/miscellaneous/presentation/widgets/navigation_list_item.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({
-    super.key,
-  });
+  const AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +57,7 @@ class AppDrawer extends StatelessWidget {
                       NavigationListItem(
                         icon: Icons.groups,
                         text: 'Campanhas',
-                        onTap: () => context.goNamed(''),
+                        onTap: () => context.goNamed(Routes.campaigns.name),
                       ),
                     ],
                   ),

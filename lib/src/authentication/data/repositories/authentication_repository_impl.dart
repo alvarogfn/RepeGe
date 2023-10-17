@@ -8,19 +8,13 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
 
-  AuthenticationRepositoryImpl({
-    required FirebaseAuth firebaseAuth,
-    required FirebaseFirestore firebaseFirestore,
-  })  : _firebaseAuth = firebaseAuth,
-        _firebaseFirestore = firebaseFirestore;
+  AuthenticationRepositoryImpl(this._firebaseAuth, this._firebaseFirestore);
 
   @override
   Future<AuthenticationState> signup({
     required username,
     required password,
     required email,
-    createdAt,
-    avatarURL,
   }) async {
     final usernameDoc = _firebaseFirestore.collection('usernames').doc(username);
     final usernameRef = await usernameDoc.get();
@@ -44,7 +38,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final userReference = _firebaseFirestore.collection('users').doc(user.uid);
 
       batch.set(usernameDoc, {
-        'createdAt': createdAt != null ? Timestamp.fromDate(createdAt) : FieldValue.serverTimestamp(),
+        'createdAt': DateTime.now().millisecondsSinceEpoch,
         'createdBy': user.uid,
         'ref': userReference,
       });
@@ -58,7 +52,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         'displayName': user.displayName,
         'phoneNumber': user.phoneNumber,
         'avatarURL': user.photoURL,
-        'createdAt': createdAt != null ? Timestamp.fromDate(createdAt) : FieldValue.serverTimestamp(),
+        'createdAt': DateTime.now().millisecondsSinceEpoch,
       });
 
       await user.sendEmailVerification();
@@ -116,8 +110,10 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   CollectionReference<UserModel> get _userCollection => _firebaseFirestore.collection('users').withConverter(
         fromFirestore: (snapshot, options) {
-          final user = UserModel.fromFirebase(snapshot);
-          return user.copyWith(
+          final data = snapshot.data();
+          if (data == null) return UserModel.empty();
+
+          return UserModel.fromMap(data).copyWith(
             emailVerified: _firebaseAuth.currentUser?.emailVerified,
           );
         },
@@ -125,8 +121,18 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       );
 
   Future<AuthenticationState> getUser(String id) async {
-    final userModel = await _userCollection.doc(id).get();
+    try {
+      final snapshot = await _userCollection.doc(id).get();
 
-    return Authenticated(user: userModel.data()!);
+      final userModel = snapshot.data();
+
+      if (userModel == null) {
+        return const AuthenticationLoading();
+      }
+
+      return Authenticated(user: userModel);
+    } catch (e) {
+      return AuthenticationError(message: e.toString());
+    }
   }
 }

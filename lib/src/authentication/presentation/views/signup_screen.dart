@@ -156,7 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton(
-                      onPressed: state is AuthenticationLoading ? () {} : () => _handleSubmit(),
+                      onPressed: () => _handleSubmit(),
                       child: const Text('Criar Conta'),
                     ),
                     const SizedBox(height: 20),

@@ -13,7 +13,7 @@ class SheetRepositoryImpl extends SheetRepository {
 
   @override
   Future<SheetListState<SheetModel>?> create(Sheet sheet) async {
-    final sheetReference = _sheetsCollection.doc();
+    final sheetReference = _collectionReference.doc();
 
     await sheetReference.set(sheet.copyWith(id: sheetReference.id));
 
@@ -23,7 +23,7 @@ class SheetRepositoryImpl extends SheetRepository {
   @override
   Future<SheetListLoadError?> delete(String id) async {
     try {
-      await _sheetsCollection.doc(id).delete();
+      await _collectionReference.doc(id).delete();
       return null;
     } catch (e) {
       return SheetListLoadError();
@@ -32,7 +32,7 @@ class SheetRepositoryImpl extends SheetRepository {
 
   @override
   Stream<SheetListState<SheetModel>> streamAll({required String createdBy}) {
-    return _sheetsCollection.where('createdBy', isEqualTo: createdBy).snapshots().map((snapshot) {
+    return _collectionReference.where('createdBy', isEqualTo: createdBy).snapshots().map((snapshot) {
       final items = snapshot.docs.map((snapshot) => snapshot.data() as SheetModel).toList();
       if (items.isEmpty) return const SheetListEmpty();
       return SheetListLoaded(items);
@@ -41,20 +41,20 @@ class SheetRepositoryImpl extends SheetRepository {
 
   @override
   Stream<SheetState> stream({required String sheetId}) {
-    return _sheetsCollection.doc(sheetId).snapshots().map((snapshot) => SheetLoaded(snapshot.data()!));
+    return _collectionReference.doc(sheetId).snapshots().map((snapshot) => SheetLoaded(snapshot.data()!));
   }
 
   @override
   Future<SheetUpdateState?> update(Sheet sheet) async {
     try {
-      await _sheetsCollection.doc(sheet.id).update(sheet.toMap());
+      await _collectionReference.doc(sheet.id).update(sheet.toMap());
       return SheetUpdateSucess();
     } catch (e) {
       return const SheetUpdateError();
     }
   }
 
-  CollectionReference<Sheet> get _sheetsCollection => _firestore.collection('sheets').withConverter(
+  CollectionReference<Sheet> get _collectionReference => _firestore.collection('sheets').withConverter(
         fromFirestore: (snapshot, options) => SheetModel.fromMap(snapshot.data()!),
         toFirestore: (snapshot, options) => snapshot.toMap(),
       );

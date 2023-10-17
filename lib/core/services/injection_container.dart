@@ -4,6 +4,10 @@ import 'package:get_it/get_it.dart';
 import 'package:repege/src/authentication/data/repositories/authentication_repository_impl.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/domain/repositories/authentication_repository.dart';
+import 'package:repege/src/campaigns/data/repositories/campaign_repository_impl.dart';
+import 'package:repege/src/campaigns/domain/bloc/campaign_bloc.dart';
+import 'package:repege/src/campaigns/domain/bloc/campaigns_bloc.dart';
+import 'package:repege/src/campaigns/domain/repositories/campaign_repository.dart';
 import 'package:repege/src/equipments/data/repositories/equipment_repository_impl.dart';
 import 'package:repege/src/equipments/domain/bloc/equipment_bloc.dart';
 import 'package:repege/src/equipments/domain/repositories/equipment_repository.dart';
@@ -26,14 +30,15 @@ Future<void> init() async {
   sl.registerFactory(() => SheetUpdateCubit(sl()));
   sl.registerFactory(() => EquipmentBloc(sl()));
   sl.registerFactory(() => SpellBloc(sl()));
+  sl.registerFactory(() => CampaignsBloc(sl()));
+  sl.registerFactory(() => CampaignBloc(sl()));
 
   // Repository
+  sl.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(sl(), sl()));
   sl.registerLazySingleton<SheetRepository>(() => SheetRepositoryImpl(sl()));
   sl.registerLazySingleton<EquipmentRepository>(() => EquipmentRepositoryImpl(sl()));
-  sl.registerLazySingleton<SpellRepository>(() => SpellRepositoryImpl(sl()));
-  sl.registerLazySingleton<AuthenticationRepository>(
-    () => AuthenticationRepositoryImpl(firebaseAuth: sl(), firebaseFirestore: sl()),
-  );
+  sl.registerLazySingleton<SpellRepository>(() => SpellRepositoryImpl(sl())); 
+  sl.registerLazySingleton<CampaignRepository>(() => CampaignRepositoryImpl(sl(), sl()));
 
   // Firebase
   sl.registerLazySingleton(() => FirebaseAuth.instance);

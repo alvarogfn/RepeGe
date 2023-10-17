@@ -18,6 +18,7 @@ class CardTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),

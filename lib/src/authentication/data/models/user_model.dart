@@ -1,7 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:repege/core/utils/typedefs.dart';
 import 'package:repege/src/authentication/domain/entities/user.dart';
 
@@ -57,24 +55,18 @@ class UserModel extends User {
     );
   }
 
+  factory UserModel.empty() {
+    return UserModel(
+      username: 'Usuário',
+      id: '0',
+      email: '',
+      emailVerified: false,
+      avatarURL: '',
+      createdAt: DateTime.now(),
+    );
+  }
+
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as DataMap);
-
-  factory UserModel.fromFirebase(DocumentSnapshot<Map> snapshot) {
-    final map = snapshot.data()!;
-
-    if (map['createdAt'] == null) {
-      map.update('createdAt', (value) => DateTime.now());
-    }
-
-    return UserModel(
-      id: map['id'],
-      createdAt: (map['createdAt'] as Timestamp).toDate(),
-      email: map['email'],
-      emailVerified: map['emailVerified'],
-      username: map['username'],
-      avatarURL: map['avatarURL'],
-    );
-  }
 }

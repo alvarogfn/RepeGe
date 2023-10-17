@@ -18,9 +18,9 @@ enum Routes {
   equipment(name: 'equipment', path: '/equipment'),
   equipmentForm(name: 'equipment-form', path: 'form'),
 
-  // campaigns(name: 'campaigns', path: '/campaigns'),
-  // campaignsCreate(name: 'campaign-create', path: 'create'),
-  // campaign(name: 'campaign', path: '/campaign/:id'),
+  campaigns(name: 'campaigns', path: '/campaigns'),
+  campaignsCreate(name: 'campaign-create', path: 'create'),
+  campaign(name: 'campaign', path: 'campaign/:id'),
 
   // invitations(name: 'invitations', path: '/invitations'),
   // invitationsSheetChoose(name: 'invitations-sheet-choose', path: 'sheet-choose'),

@@ -13,7 +13,7 @@ final class Authenticated<T extends User> extends AuthenticationState {
   final T user;
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => user.props;
 }
 
 final class AuthenticationLoading extends AuthenticationState {
