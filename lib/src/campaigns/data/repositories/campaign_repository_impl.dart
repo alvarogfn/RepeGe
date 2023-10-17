@@ -17,7 +17,7 @@ class CampaignRepositoryImpl extends CampaignRepository {
     final reference = _collectionReference.doc();
 
     try {
-      await _collectionReference.add(
+      await reference.set(
         campaign.copyWith(
           id: reference.id,
           createdBy: _auth.currentUser!.uid,
@@ -43,8 +43,8 @@ class CampaignRepositoryImpl extends CampaignRepository {
   }
 
   @override
-  Stream<CampaignsState> streamAll({required String createdBy}) {
-    return _collectionReference.where('createdBy', isEqualTo: createdBy).snapshots().map((snapshot) {
+  Stream<CampaignsState> streamAll({required String userId}) {
+    return _collectionReference.where('users', arrayContains: userId).snapshots().map((snapshot) {
       final items = snapshot.docs.map((snapshot) => snapshot.data() as CampaignModel).toList();
       if (items.isEmpty) return const CampaignsEmptyState();
       return CampaignsLoadedState(campaigns: items);

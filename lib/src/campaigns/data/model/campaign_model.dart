@@ -12,7 +12,21 @@ class CampaignModel extends Campaign {
     required super.createdAt,
     required super.name,
     required super.description,
+    required super.creatorUsername,
   });
+
+  factory CampaignModel.empty() {
+    return CampaignModel(
+      id: '',
+      sheetsId: const [],
+      users: const [],
+      createdBy: '',
+      createdAt: DateTime.now(),
+      name: '',
+      creatorUsername: '',
+      description: 'description',
+    );
+  }
 
   @override
   CampaignModel copyWith({
@@ -23,6 +37,7 @@ class CampaignModel extends Campaign {
     DateTime? createdAt,
     String? name,
     String? description,
+    String? creatorUsername,
   }) {
     return CampaignModel(
       id: id ?? this.id,
@@ -31,6 +46,7 @@ class CampaignModel extends Campaign {
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       name: name ?? this.name,
+      creatorUsername: creatorUsername ?? this.creatorUsername,
       description: description ?? this.description,
     );
   }
@@ -44,6 +60,7 @@ class CampaignModel extends Campaign {
       'createdBy': createdBy,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'name': name,
+      'creatorUsername': creatorUsername,
       'description': description,
     };
   }
@@ -51,11 +68,12 @@ class CampaignModel extends Campaign {
   factory CampaignModel.fromMap(Map<String, dynamic> map) {
     return CampaignModel(
       id: map['id'] as String,
-      sheetsId: List<String>.from((map['sheetsId'] as List<String>)),
-      users: List<String>.from((map['users'] as List<String>)),
+      sheetsId: List<String>.from((map['sheetsId'] as List<dynamic>)),
+      users: List<String>.from((map['users'] as List<dynamic>)),
       createdBy: map['createdBy'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       name: map['name'] as String,
+      creatorUsername: map['creatorUsername'] as String,
       description: map['description'] as String,
     );
   }
@@ -77,6 +95,7 @@ class CampaignModel extends Campaign {
       createdBy,
       createdAt,
       name,
+      creatorUsername,
       description,
     ];
   }

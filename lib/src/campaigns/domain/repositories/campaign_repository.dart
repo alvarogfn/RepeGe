@@ -9,7 +9,7 @@ abstract class CampaignRepository {
 
   Future<CampaignsState?> delete(String campaignId);
 
-  Stream<CampaignsState> streamAll({required String createdBy});
+  Stream<CampaignsState> streamAll({required String userId});
 
   Stream<CampaignState> stream(String campaignId);
 

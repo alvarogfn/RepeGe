@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:repege/core/utils/validations/required_validation.dart';
+import 'package:repege/core/utils/validations/validations.dart';
+import 'package:repege/src/campaigns/data/model/campaign_model.dart';
 
 class CampaignCreateScreen extends StatefulWidget {
   const CampaignCreateScreen({super.key});
@@ -8,7 +12,7 @@ class CampaignCreateScreen extends StatefulWidget {
 }
 
 class _CampaignCreateScreenState extends State<CampaignCreateScreen> {
-  Map<String, dynamic> _data = {};
+  CampaignModel campaign = CampaignModel.empty();
   final _formKey = GlobalKey<FormState>();
 
   bool _validateForm() {
@@ -23,76 +27,59 @@ class _CampaignCreateScreenState extends State<CampaignCreateScreen> {
     return true;
   }
 
-  Future<void> _handleSubmit(BuildContext context) async {
+  void _handleSubmit(BuildContext context) {
     final isValid = _validateForm();
     if (!isValid) return;
 
-    // final campaignsService = context.read<CampaignsService>();
-
-    // final campaign = await campaignsService.add(_data);
-
-    // if (context.mounted) {
-    //   context.pushReplacementNamed(Routes.campaign.name, pathParameters: {'id': campaign.id});
-    // }
+    context.pop(campaign);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text('');
-    // return FutureProvider(
-    //   initialData: null,
-    //   create: (context) => context.read<AuthService>().getCurrentFirestoreUser(),
-    //   child: ChangeNotifierProxyProvider<AuthService, CampaignsService>(
-    //     create: (context) => CampaignsService(context.read<AuthService>()),
-    //     update: (context, authService, campaignsService) {
-    //       if (campaignsService == null) return CampaignsService(authService);
-    //       campaignsService.authService = authService;
-    //       return campaignsService;
-    //     },
-    //     builder: (context, _) {
-    //       return Scaffold(
-    //         appBar: AppBar(
-    //           title: const Text('Criar nova campanha'),
-    //           actions: [
-    //             IconButton(onPressed: () => _handleSubmit(context), icon: const Icon(Icons.save)),
-    //           ],
-    //         ),
-    //         body: Container(
-    //           padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-    //           child: Form(
-    //             key: _formKey,
-    //             child: Column(
-    //               crossAxisAlignment: CrossAxisAlignment.stretch,
-    //               children: [
-    //                 TextFormField(
-    //                   decoration: const InputDecoration(
-    //                     labelText: 'Nome',
-    //                     hintText: 'Qual é o nome da sua história.',
-    //                     floatingLabelBehavior: FloatingLabelBehavior.always,
-    //                   ),
-    //                   onSaved: (value) => _data['name'] = value,
-    //                   validator: (v) => Validator.validateWith(v, [RequiredValidation()]),
-    //                 ),
-    //                 const SizedBox(height: 30),
-    //                 TextFormField(
-    //                   maxLines: 5,
-    //                   decoration: const InputDecoration(
-    //                     labelText: 'Descrição',
-    //                     hintText: 'Sobre o que é a sua história, descreva brevemente o mundo.',
-    //                     alignLabelWithHint: true,
-    //                     floatingLabelBehavior: FloatingLabelBehavior.always,
-    //                   ),
-    //                   onSaved: (value) => _data['description'] = value,
-    //                   validator: (v) => Validator.validateWith(v, [RequiredValidation()]),
-    //                 ),
-    //                 const SizedBox(height: 30),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
+    return Builder(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Criar nova campanha')),
+        body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                    hintText: 'Qual é o nome da sua história.',
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                  ),
+                  onSaved: (value) => setState(() => campaign = campaign.copyWith(name: value)),
+                  validator: (v) => Validator.validateWith(v, [RequiredValidation()]),
+                ),
+                const SizedBox(height: 30),
+                TextFormField(
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    labelText: 'Descrição',
+                    hintText: 'Sobre o que é a sua história, descreva brevemente o mundo.',
+                    alignLabelWithHint: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                  ),
+                  onSaved: (value) => setState(() => campaign = campaign.copyWith(description: value)),
+                  validator: (v) => Validator.validateWith(v, [RequiredValidation()]),
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => _handleSubmit(context),
+                    child: const Text('Criar nova campanha'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

@@ -13,7 +13,7 @@ class CampaignsBloc extends Bloc<CampaignsEvent, CampaignsState> {
   CampaignsBloc(this._repository) : super(const CampaignsEmptyState()) {
     on<CampaignsInitEvent>((event, emit) async {
       await emit.onEach(
-        _repository.streamAll(createdBy: event.createdBy),
+        _repository.streamAll(userId: event.userId),
         onData: (campaign) => emit(campaign),
       );
     });
@@ -21,7 +21,9 @@ class CampaignsBloc extends Bloc<CampaignsEvent, CampaignsState> {
     on<CampaignsCreateEvent>((event, emit) async {
       final result = await _repository.create(
         event.campaign.copyWith(
+          creatorUsername: event.user.username,
           createdBy: event.user.id,
+          users: [event.user.id],
           createdAt: DateTime.now(),
         ),
       );

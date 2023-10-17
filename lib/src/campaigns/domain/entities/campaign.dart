@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
 abstract class Campaign extends Equatable {
@@ -7,6 +8,7 @@ abstract class Campaign extends Equatable {
   final String createdBy;
   final DateTime createdAt;
   final String name;
+  final String creatorUsername;
   final String description;
 
   const Campaign({
@@ -16,6 +18,7 @@ abstract class Campaign extends Equatable {
     required this.createdBy,
     required this.createdAt,
     required this.name,
+    required this.creatorUsername,
     required this.description,
   });
 
@@ -27,6 +30,7 @@ abstract class Campaign extends Equatable {
     DateTime? createdAt,
     String? name,
     String? description,
+    String? creatorUsername,
   });
 
   Map<String, dynamic> toMap();
@@ -45,6 +49,7 @@ abstract class Campaign extends Equatable {
       createdBy,
       createdAt,
       name,
+      creatorUsername,
       description,
     ];
   }

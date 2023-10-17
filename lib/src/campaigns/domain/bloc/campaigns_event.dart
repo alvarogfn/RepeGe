@@ -8,9 +8,9 @@ sealed class CampaignsEvent extends Equatable {
 }
 
 class CampaignsInitEvent extends CampaignsEvent {
-  final String createdBy;
+  final String userId;
 
-  const CampaignsInitEvent({required this.createdBy});
+  const CampaignsInitEvent({required this.userId});
 }
 
 class CampaignsCreateEvent extends CampaignsEvent {
@@ -24,4 +24,11 @@ class CampaignsDeleteEvent extends CampaignsEvent {
   final Campaign campaign;
 
   const CampaignsDeleteEvent({required this.campaign});
+}
+
+
+class CampaignsErrorEvent extends CampaignsEvent {
+  final String message;
+
+  const CampaignsErrorEvent({required this.message});
 }

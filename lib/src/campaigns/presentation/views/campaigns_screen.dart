@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
+import 'package:repege/src/campaigns/data/model/campaign_model.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaigns_bloc.dart';
 import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 
@@ -14,19 +15,34 @@ class CampaignsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final campaign = sl<CampaignsBloc>();
-        final state = context.read<AuthenticationCubit>().state;
-        if (state is Authenticated) {
-          campaign.add(CampaignsInitEvent(createdBy: state.user.id));
+        final bloc = sl<CampaignsBloc>();
+
+        final authState = context.read<AuthenticationCubit>().state;
+        if (authState is! Authenticated) {
+          bloc.add(const CampaignsErrorEvent(message: 'Não foi possível buscar, você não está autenticado.'));
+          return bloc;
         }
-        return campaign;
+
+        bloc.add(CampaignsInitEvent(userId: authState.user.id));
+        return bloc;
       },
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Campanhas'),
           actions: [
             IconButton(
-              onPressed: () => context.pushNamed(Routes.campaignsCreate.name),
+              onPressed: () async {
+                final campaign = await context.pushNamed<CampaignModel>(Routes.campaignsCreate.name);
+                if (campaign == null) return;
+                if (context.mounted) {
+                  final userState = context.read<AuthenticationCubit>().state;
+                  if (userState is! Authenticated) return;
+
+                  final campaignsBloc = context.read<CampaignsBloc>();
+
+                  campaignsBloc.add(CampaignsCreateEvent(campaign: campaign, user: userState.user));
+                }
+              },
               icon: const Icon(Icons.add),
             )
           ],
@@ -84,7 +100,7 @@ class CampaignsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: [
                                       TextSpan(
-                                        text: 'user.username',
+                                        text: campaign.creatorUsername,
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       )
                                     ],
