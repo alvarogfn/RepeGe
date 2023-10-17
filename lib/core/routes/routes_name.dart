@@ -21,6 +21,8 @@ enum Routes {
   campaigns(name: 'campaigns', path: '/campaigns'),
   campaignsCreate(name: 'campaign-create', path: 'create'),
   campaign(name: 'campaign', path: 'campaign/:id'),
+  acts(name: 'acts', path: 'acts'),
+  actsForm(name: 'acts-form', path: 'form'),
 
   // invitations(name: 'invitations', path: '/invitations'),
   // invitationsSheetChoose(name: 'invitations-sheet-choose', path: 'sheet-choose'),

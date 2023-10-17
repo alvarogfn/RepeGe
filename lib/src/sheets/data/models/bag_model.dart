@@ -23,7 +23,6 @@ class BagModel extends Bag {
 
   @override
   BagModel copyWithMap(map) {
-    print({toMap(), map});
     return BagModel.fromMap(toMap()..addAll(map));
   }
 

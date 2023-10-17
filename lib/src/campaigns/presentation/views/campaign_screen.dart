@@ -36,6 +36,15 @@ class _CampaignScreenState extends State<CampaignScreen> {
               return Scaffold(
                 appBar: AppBar(
                   title: Text(state.campaign.name),
+                  actions: [
+                    PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Text('Editar'),
+                        )
+                      ],
+                    )
+                  ],
                 ),
                 bottomNavigationBar: NavigationBar(
                   selectedIndex: currentPageIndex,
@@ -43,10 +52,6 @@ class _CampaignScreenState extends State<CampaignScreen> {
                     currentPageIndex = destination;
                   }),
                   destinations: const [
-                    NavigationDestination(
-                      icon: Icon(Icons.info),
-                      label: 'Detalhes',
-                    ),
                     NavigationDestination(
                       icon: Icon(Icons.history_edu),
                       label: 'Atos',
@@ -58,10 +63,12 @@ class _CampaignScreenState extends State<CampaignScreen> {
                   ],
                 ),
                 body: [
-                  CampaignInfoPage(campaign),
                   CampaignActPage(campaign),
-                  ListView(
-                    children: [],
+                  Scaffold(
+                    appBar: AppBar(
+                      automaticallyImplyLeading: false,
+                      title: const Text('Participantes'),
+                    ),
                   ),
                 ][currentPageIndex],
               );
@@ -70,7 +77,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
             case CampaignErrorState():
               return Scaffold(appBar: AppBar(), body: Text(state.message));
             default:
-              return SizedBox(
+              return const SizedBox(
                 child: Text('default'),
               );
           }

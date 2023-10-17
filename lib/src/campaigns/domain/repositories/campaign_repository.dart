@@ -1,5 +1,7 @@
+import 'package:repege/src/campaigns/domain/bloc/act_bloc.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaign_bloc.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaigns_bloc.dart';
+import 'package:repege/src/campaigns/domain/entities/act.dart';
 import 'package:repege/src/campaigns/domain/entities/campaign.dart';
 
 abstract class CampaignRepository {
@@ -14,4 +16,12 @@ abstract class CampaignRepository {
   Stream<CampaignState> stream(String campaignId);
 
   Future<CampaignState?> update(Campaign campaign);
+
+  Future<ActState?> addAct(Act act);
+
+  Future<ActState?> updateAct(Act act);
+
+  Future<ActState?> deleteAct(Act act);
+
+  Stream<ActState> streamActs(String campaignId);
 }

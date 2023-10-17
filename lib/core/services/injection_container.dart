@@ -5,6 +5,7 @@ import 'package:repege/src/authentication/data/repositories/authentication_repos
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/authentication/domain/repositories/authentication_repository.dart';
 import 'package:repege/src/campaigns/data/repositories/campaign_repository_impl.dart';
+import 'package:repege/src/campaigns/domain/bloc/act_bloc.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaign_bloc.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaigns_bloc.dart';
 import 'package:repege/src/campaigns/domain/repositories/campaign_repository.dart';
@@ -32,6 +33,7 @@ Future<void> init() async {
   sl.registerFactory(() => SpellBloc(sl()));
   sl.registerFactory(() => CampaignsBloc(sl()));
   sl.registerFactory(() => CampaignBloc(sl()));
+  sl.registerFactory(() => ActBloc(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(sl(), sl()));

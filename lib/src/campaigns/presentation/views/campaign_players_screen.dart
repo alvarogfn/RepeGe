@@ -10,7 +10,7 @@ class CampaignPlayersScreen extends StatefulWidget {
 class _CampaignPlayersScreenState extends State<CampaignPlayersScreen> {
   @override
   Widget build(BuildContext context) {
-    return Text('');
+    return const Text('');
     // return Scaffold(
     //   appBar: AppBar(
     //     title: Text('Jogadores'),

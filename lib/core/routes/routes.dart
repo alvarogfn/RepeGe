@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:repege/src/campaigns/data/model/act_model.dart';
+import 'package:repege/src/campaigns/presentation/views/act_form_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaign_create_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaign_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaigns_screen.dart';
@@ -125,13 +127,29 @@ final GoRouter routes = GoRouter(
           path: Routes.campaign.path,
           name: Routes.campaign.name,
           builder: (context, state) => CampaignScreen(state.pathParameters['id'] as String),
+          routes: [
+            GoRoute(
+              path: Routes.acts.name,
+              name: Routes.acts.path,
+              builder: (context, state) => const Scaffold(),
+              routes: [
+                GoRoute(
+                  path: Routes.actsForm.path,
+                  name: Routes.actsForm.name,
+                  builder: (context, state) => ActFormScreen(
+                    act: state.extra as ActModel?,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     ),
   ],
   redirect: (context, state) async {
     // ignore: avoid_print
-    print('refreshing');
+    if (!EnvironmentVariables.production) print('refreshing');
 
     final bool toUnauth = Routes.values
         .where((element) => element.state == AuthState.unauth)
