@@ -1,63 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:repege/core/routes/routes_name.dart';
+import 'package:repege/core/services/injection_container.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
+import 'package:repege/src/campaigns/domain/bloc/campaigns_bloc.dart';
 import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 
-class CampaingsScreen extends StatelessWidget {
-  const CampaingsScreen({super.key});
+class CampaignsScreen extends StatelessWidget {
+  const CampaignsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Campanhas'),
-        actions: [
-          IconButton(
-            onPressed: () => context.pushNamed(RoutesName.campaignsCreate.name),
-            icon: const Icon(Icons.add),
-          )
-        ],
-      ),
-      drawer: const AppDrawer(),
-      body: ChangeNotifierProxyProvider<AuthService, CampaignsService>(
-        create: (context) => CampaignsService(
-          context.read<AuthService>(),
+    return BlocProvider(
+      create: (context) {
+        final campaign = sl<CampaignsBloc>();
+        final state = context.read<AuthenticationCubit>().state;
+        if (state is Authenticated) {
+          campaign.add(CampaignsInitEvent(createdBy: state.user.id));
+        }
+        return campaign;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Campanhas'),
+          actions: [
+            IconButton(
+              onPressed: () => context.pushNamed(Routes.campaignsCreate.name),
+              icon: const Icon(Icons.add),
+            )
+          ],
         ),
-        update: (context, authService, sheetService) {
-          if (sheetService == null) return CampaignsService(authService);
-          sheetService.authService = authService;
-
-          return sheetService;
-        },
-        child: StreamProvider<List<Campaign>>(
-          initialData: const [],
-          create: (context) => context.read<CampaignsService>().streamAll(),
-          builder: (context, _) {
-            final campaigns = context.watch<List<Campaign>>();
-
-            if (campaigns.isEmpty) {
-              return const Empty('Você não criou ou entrou em nenhuma campanha.');
-            }
-
-            return ListView.builder(
-              itemCount: campaigns.length,
-              padding: const EdgeInsets.all(5),
-              itemBuilder: (context, index) {
-                final campaign = campaigns[index];
-
-                return StreamBuilder(
-                  initialData: null,
-                  stream: User.collection.doc(campaign.ownerUID).snapshots(),
-                  builder: (context, snapshot) {
-                    if (isSnapshotLoading(snapshot)) return const Loading();
-
-                    final user = snapshot.data!.data()!;
-
+        drawer: const AppDrawer(),
+        body: BlocBuilder<CampaignsBloc, CampaignsState>(
+          builder: (context, state) {
+            switch (state) {
+              case CampaignsEmptyState():
+                return const Center(child: Text('Nenhuma campanha.'));
+              case CampaignsLoadingState():
+                return const Center(child: CircularProgressIndicator());
+              case CampaignsErrorState():
+                return Center(
+                  child: Text(state.message),
+                );
+              case CampaignsLoadedState():
+                return ListView.builder(
+                  itemCount: state.campaigns.length,
+                  padding: const EdgeInsets.all(5),
+                  itemBuilder: (context, index) {
+                    final campaign = state.campaigns[index];
                     return Container(
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: Card(
                         child: InkWell(
-                          onTap: () => context.pushNamed(RoutesName.campaign.name, pathParameters: {
+                          onTap: () => context.pushNamed(Routes.campaign.name, pathParameters: {
                             'id': campaign.id,
                           }),
                           child: Column(
@@ -71,15 +67,12 @@ class CampaingsScreen extends StatelessWidget {
                                       PopupMenuItem(
                                         child: const Text('Excluir'),
                                         onTap: () {
-                                          campaign.ref.delete();
+                                          final bloc = context.read<CampaignsBloc>();
+                                          bloc.add(CampaignsDeleteEvent(campaign: campaign));
                                         },
                                       ),
                                     ];
                                   },
-                                ),
-                                leading: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage: user.avatar,
                                 ),
                                 title: Text(
                                   campaign.name,
@@ -91,7 +84,7 @@ class CampaingsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: [
                                       TextSpan(
-                                        text: user.username,
+                                        text: 'user.username',
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       )
                                     ],
@@ -114,8 +107,7 @@ class CampaingsScreen extends StatelessWidget {
                     );
                   },
                 );
-              },
-            );
+            }
           },
         ),
       ),

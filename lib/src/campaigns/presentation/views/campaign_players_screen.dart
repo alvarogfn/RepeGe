@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class CampaignPl
-ayersScreen extends StatefulWidget {
-  const CampaignPlayersScreen(
-    this.playersId, {
-    super.key,
-  });
-
-  final List<String> playersId;
+class CampaignPlayersScreen extends StatefulWidget {
+  const CampaignPlayersScreen({super.key});
 
   @override
   State<CampaignPlayersScreen> createState() => _CampaignPlayersScreenState();
@@ -17,18 +10,19 @@ ayersScreen extends StatefulWidget {
 class _CampaignPlayersScreenState extends State<CampaignPlayersScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Jogadores'),
-      ),
-      body: ListView(
-        children: widget.playersId.map((e) {
-          return FutureBuilder(
-            create: () {},
-            initialData: initialData,
-          );
-        }).toList(),
-      ),
-    );
+    return Text('');
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text('Jogadores'),
+    //   ),
+    //   body: ListView(
+    //     children: widget.playersId.map((e) {
+    //       return FutureBuilder(
+    //         create: () {},
+    //         initialData: initialData,
+    //       );
+    //     }).toList(),
+    //   ),
+    // );
   }
 }
