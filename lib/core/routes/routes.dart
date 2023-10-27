@@ -9,6 +9,8 @@ import 'package:repege/src/campaigns/presentation/views/act_form_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaign_create_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaign_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaigns_screen.dart';
+import 'package:repege/src/campaigns/presentation/views/invite_new_player_screen.dart';
+import 'package:repege/src/campaigns/presentation/views/invitation_screen.dart';
 import 'package:repege/src/equipments/presentation/views/equipment_form_screen.dart';
 import 'package:repege/src/sheets/data/models/spell_model.dart';
 import 'package:repege/src/sheets/presentation/views/sheet_create_screen.dart';
@@ -113,6 +115,11 @@ final GoRouter routes = GoRouter(
       ],
     ),
     GoRoute(
+      path: Routes.invites.path,
+      name: Routes.invites.name,
+      builder: (context, state) => const InvitationScreen(),
+    ),
+    GoRoute(
       parentNavigatorKey: rootNavigatorKey,
       path: Routes.campaigns.path,
       name: Routes.campaigns.name,
@@ -128,6 +135,11 @@ final GoRouter routes = GoRouter(
           name: Routes.campaign.name,
           builder: (context, state) => CampaignScreen(state.pathParameters['id'] as String),
           routes: [
+            GoRoute(
+              path: Routes.campaignInvite.path,
+              name: Routes.campaignInvite.name,
+              builder: (context, state) => const InviteNewPlayerScreen(),
+            ),
             GoRoute(
               path: Routes.acts.name,
               name: Routes.acts.path,

@@ -4,8 +4,9 @@ import 'package:repege/core/icons/rpg_icons.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/campaigns/data/model/campaign_model.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaign_bloc.dart';
+import 'package:repege/src/campaigns/domain/bloc/invitation_bloc.dart';
 import 'package:repege/src/campaigns/presentation/widgets/campaign_act_page.dart';
-import 'package:repege/src/campaigns/presentation/widgets/campaign_info_page.dart';
+import 'package:repege/src/campaigns/presentation/widgets/campaign_players_screen.dart';
 
 class CampaignScreen extends StatefulWidget {
   const CampaignScreen(this.campaignId, {super.key});
@@ -21,12 +22,17 @@ class _CampaignScreenState extends State<CampaignScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final bloc = sl<CampaignBloc>();
-        bloc.add(CampaignInitEvent(widget.campaignId));
-        return bloc;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            final bloc = sl<CampaignBloc>();
+            bloc.add(CampaignInitEvent(widget.campaignId));
+            return bloc;
+          },
+        ),
+        BlocProvider(create: (context) => sl<InvitationBloc>()),
+      ],
       child: BlocBuilder<CampaignBloc, CampaignState>(
         builder: (context, state) {
           switch (state) {
@@ -39,7 +45,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
                   actions: [
                     PopupMenuButton(
                       itemBuilder: (context) => [
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           child: Text('Editar'),
                         )
                       ],
@@ -64,12 +70,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
                 ),
                 body: [
                   CampaignActPage(campaign),
-                  Scaffold(
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      title: const Text('Participantes'),
-                    ),
-                  ),
+                  CampaignPlayersPage(campaign),
                 ][currentPageIndex],
               );
             case CampaignLoadingState():
@@ -77,9 +78,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
             case CampaignErrorState():
               return Scaffold(appBar: AppBar(), body: Text(state.message));
             default:
-              return const SizedBox(
-                child: Text('default'),
-              );
+              return const SizedBox(child: Text('default'));
           }
         },
       ),

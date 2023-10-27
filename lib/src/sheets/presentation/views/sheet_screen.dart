@@ -74,7 +74,7 @@ class SheetScreen extends StatelessWidget {
                 ),
               );
             case SheetError():
-              return Text('paia');
+              return const Text('paia');
             case SheetLoading():
               return const Scaffold(body: Center(child: CircularProgressIndicator()));
           }

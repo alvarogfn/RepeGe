@@ -30,23 +30,29 @@ class CampaignsScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Campanhas'),
           actions: [
-            Builder(builder: (context) {
-              return IconButton(
-                onPressed: () async {
-                  final campaign = await context.pushNamed<CampaignModel>(Routes.campaignsCreate.name);
-                  if (campaign == null) return;
-                  if (context.mounted) {
-                    final userState = context.read<AuthenticationCubit>().state;
-                    if (userState is! Authenticated) return;
+            IconButton(
+              onPressed: () => context.pushNamed(Routes.invites.name),
+              icon: const Icon(Icons.mail),
+            ),
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  onPressed: () async {
+                    final campaign = await context.pushNamed<CampaignModel>(Routes.campaignsCreate.name);
+                    if (campaign == null) return;
+                    if (context.mounted) {
+                      final userState = context.read<AuthenticationCubit>().state;
+                      if (userState is! Authenticated) return;
 
-                    final campaignsBloc = context.read<CampaignsBloc>();
+                      final campaignsBloc = context.read<CampaignsBloc>();
 
-                    campaignsBloc.add(CampaignsCreateEvent(campaign: campaign, user: userState.user));
-                  }
-                },
-                icon: const Icon(Icons.add),
-              );
-            })
+                      campaignsBloc.add(CampaignsCreateEvent(campaign: campaign, user: userState.user));
+                    }
+                  },
+                  icon: const Icon(Icons.add),
+                );
+              },
+            ),
           ],
         ),
         drawer: const AppDrawer(),

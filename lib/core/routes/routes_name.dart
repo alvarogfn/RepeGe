@@ -10,6 +10,7 @@ enum Routes {
   sheets(name: 'sheets', path: '/sheets'),
   sheetCreate(name: 'sheet-create', path: 'create'),
   sheet(name: 'sheet', path: 'sheet/:id'),
+  sheetSelect(name: 'sheet-select', path: ':createdBy'),
 
   spell(name: 'spell', path: '/spell'),
   spellsForm(name: 'spells-form', path: 'form'),
@@ -18,9 +19,12 @@ enum Routes {
   equipment(name: 'equipment', path: '/equipment'),
   equipmentForm(name: 'equipment-form', path: 'form'),
 
+  invites(name: 'invites', path: '/invites'),
+
   campaigns(name: 'campaigns', path: '/campaigns'),
   campaignsCreate(name: 'campaign-create', path: 'create'),
   campaign(name: 'campaign', path: 'campaign/:id'),
+  campaignInvite(name: 'campaign-invite', path: 'invite'),
   acts(name: 'acts', path: 'acts'),
   actsForm(name: 'acts-form', path: 'form'),
 

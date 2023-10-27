@@ -88,7 +88,7 @@ class ActListItem extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               width: double.infinity,
               child: Text(
                 act.footer,
