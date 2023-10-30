@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/services/injection_container.dart';
+import 'package:repege/src/authentication/data/models/user_model.dart';
 import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/campaigns/data/model/act_model.dart';
 import 'package:repege/src/campaigns/data/model/campaign_model.dart';
@@ -10,8 +11,9 @@ import 'package:repege/src/campaigns/domain/bloc/act_bloc.dart';
 import 'package:repege/src/campaigns/presentation/widgets/act_list_item.dart';
 
 class CampaignActPage extends StatelessWidget {
-  const CampaignActPage(this.campaign, {super.key});
+  const CampaignActPage({required this.campaign, required this.currentUser, super.key});
 
+  final UserModel currentUser;
   final CampaignModel campaign;
 
   Future<void> _handleAddAct(BuildContext context) async {
@@ -24,6 +26,8 @@ class CampaignActPage extends StatelessWidget {
       context.read<ActBloc>().add(ActCreateOrUpdateActEvent(act: newAct.copyWith(campaignId: campaign.id)));
     }
   }
+
+  bool get isOwner => currentUser.id == campaign.createdBy;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +42,21 @@ class CampaignActPage extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: const Text('Acontecimentos'),
         ),
-        floatingActionButton: Builder(builder: (context) {
-          return FloatingActionButton(
-            onPressed: () => _handleAddAct(context),
-            child: const Icon(Icons.add),
-          );
-        }),
+        floatingActionButton: isOwner
+            ? Builder(builder: (context) {
+                return FloatingActionButton(
+                  onPressed: () => _handleAddAct(context),
+                  child: const Icon(Icons.add),
+                );
+              })
+            : null,
         body: BlocBuilder<ActBloc, ActState>(
           builder: (context, state) {
             switch (state) {
               case ActEmptyState():
-                return const Text('Nada aconteceu');
+                return const Center(child: Text('Nada aconteceu'));
               case ActErrorState():
-                return Text(state.message);
+                return Center(child: Text(state.message));
               case ActLoadingState():
                 return const Center(child: CircularProgressIndicator());
               case ActLoadedState():

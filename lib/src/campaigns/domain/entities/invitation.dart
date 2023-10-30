@@ -5,11 +5,13 @@ abstract class Invitation extends Equatable {
   final String inviter;
   final String id;
   final String campaignId;
+  final String? sheetId;
   final DateTime createdAt;
   final bool accepted;
   final bool pending;
 
   const Invitation({
+    this.sheetId,
     required this.guest,
     required this.inviter,
     required this.id,
@@ -20,6 +22,7 @@ abstract class Invitation extends Equatable {
   });
 
   Invitation copyWith({
+    String? sheetId,
     String? guest,
     String? inviter,
     String? id,
@@ -39,6 +42,7 @@ abstract class Invitation extends Equatable {
   @override
   List<Object> get props {
     return [
+      sheetId ?? '',
       guest,
       inviter,
       id,

@@ -58,6 +58,8 @@ class CampaignsScreen extends StatelessWidget {
         drawer: const AppDrawer(),
         body: BlocBuilder<CampaignsBloc, CampaignsState>(
           builder: (context, state) {
+            final user = (context.read<AuthenticationCubit>().state as Authenticated).user;
+
             switch (state) {
               case CampaignsEmptyState():
                 return const Center(child: Text('Nenhuma campanha.'));
@@ -88,13 +90,14 @@ class CampaignsScreen extends StatelessWidget {
                                 trailing: PopupMenuButton(
                                   itemBuilder: (context) {
                                     return [
-                                      PopupMenuItem(
-                                        child: const Text('Excluir'),
-                                        onTap: () {
-                                          final bloc = context.read<CampaignsBloc>();
-                                          bloc.add(CampaignsDeleteEvent(campaign: campaign));
-                                        },
-                                      ),
+                                      if (campaign.createdBy == user.id)
+                                        PopupMenuItem(
+                                          child: const Text('Excluir'),
+                                          onTap: () {
+                                            final bloc = context.read<CampaignsBloc>();
+                                            bloc.add(CampaignsDeleteEvent(campaign: campaign));
+                                          },
+                                        ),
                                     ];
                                   },
                                 ),

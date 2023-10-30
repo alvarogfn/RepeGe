@@ -14,5 +14,5 @@ abstract class SheetRepository {
 
   Stream<SheetState> stream({required String sheetId});
 
-  Stream<SheetListState> streamAll({required String createdBy});
+  Stream<SheetListState> streamAll({String? createdBy, List<String>? whereIn});
 }

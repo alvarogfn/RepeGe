@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
+import 'package:repege/src/sheets/presentation/widgets/sheet_list_item.dart';
 
 class SheetSelectScreen extends StatelessWidget {
-  const SheetSelectScreen({required this.createdBy, super.key});
+  const SheetSelectScreen(this.createdBy, {super.key});
 
   final String createdBy;
   @override
@@ -13,36 +14,38 @@ class SheetSelectScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final bloc = sl<SheetListBloc>();
-        bloc.add(SheetListInitEvent(createdBy));
+        bloc.add(SheetListInitEvent(createdBy: createdBy));
         return bloc;
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: const Text('Selecione um personagem'),
+        ),
         body: BlocBuilder<SheetListBloc, SheetListState>(
           builder: (context, state) {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                switch (state) {
-                  case SheetListLoading():
-                    return const Center(child: CircularProgressIndicator());
-                  case SheetListLoaded():
-                    return ListView.builder(
-                        itemCount: state.sheets.length,
-                        itemBuilder: (context, index) {
-                          final sheet = state.sheets[index];
-                          return ListTile(
-                            onTap: () => context.pop(sheet),
-                            title: Text(sheet.characterName),
-                            subtitle: Text(
-                              '${sheet.characterRace}, ${sheet.characterClass}, ${sheet.alignment}.',
-                            ),
-                          );
-                        });
-                  default:
-                    return const Center(child: Text('Não foi possível carregar'));
-                }
-              },
-            );
+            switch (state) {
+              case SheetListLoading():
+                return const Center(child: CircularProgressIndicator());
+              case SheetListLoaded():
+                return ListView.builder(
+                    itemCount: state.sheets.length,
+                    itemBuilder: (context, index) {
+                      final sheet = state.sheets[index];
+                      return SheetListItem(
+                        sheet: sheet,
+                        onTap: () => context.pop(state.sheets[index]),
+                      );
+                    });
+              case SheetListEmpty():
+                return const Center(
+                  child: Text(
+                    'Você ainda não criou nenhuma ficha.\n É preciso selecionar a ficha para entrar em uma campanha.',
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              case SheetListLoadError():
+                return const Center(child: Text('Não foi possível carregar'));
+            }
           },
         ),
       ),

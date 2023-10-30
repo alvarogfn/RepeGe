@@ -29,17 +29,19 @@ class InvitationScreen extends StatelessWidget {
           builder: (context, state) {
             switch (state) {
               case InvitationEmptyState():
-                return const Center(child: Text('Nenhum convite pendente'));
+                return const Center(child: Text('Nenhum convite pendente.'));
               case InvitationLoadedState():
                 return ListView.builder(
                   itemBuilder: (context, index) => InvitationListItem(state.invitations[index]),
                   itemCount: state.invitations.length,
                   padding: const EdgeInsets.all(5),
                 );
-              case InvitationLoading():
+              case InvitationLoadingEvent():
                 return const Center(child: CircularProgressIndicator());
               case InvitationErrorState():
                 return Center(child: Text(state.message));
+              default:
+                return const SizedBox();
             }
           },
         ),

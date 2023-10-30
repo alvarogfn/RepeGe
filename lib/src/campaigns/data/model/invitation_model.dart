@@ -10,11 +10,13 @@ class InvitationModel extends Invitation {
     required super.createdAt,
     required super.accepted,
     required super.pending,
+    super.sheetId,
   });
 
   @override
-  Invitation copyWith({
+  InvitationModel copyWith({
     String? guest,
+    String? sheetId,
     String? inviter,
     String? id,
     String? campaignId,
@@ -30,6 +32,7 @@ class InvitationModel extends Invitation {
       createdAt: createdAt ?? this.createdAt,
       accepted: accepted ?? this.accepted,
       pending: pending ?? this.pending,
+      sheetId: sheetId ?? this.sheetId,
     );
   }
 
@@ -40,9 +43,10 @@ class InvitationModel extends Invitation {
       'inviter': inviter,
       'id': id,
       'campaignId': campaignId,
-      'createdAt': createdAt,
+      'createdAt': createdAt.millisecondsSinceEpoch,
       'accepted': accepted,
       'pending': pending,
+      'sheetId': sheetId,
     };
   }
 
@@ -55,6 +59,7 @@ class InvitationModel extends Invitation {
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       accepted: map['accepted'] as bool,
       pending: map['pending'] as bool,
+      sheetId: map['sheetId'] as String?,
     );
   }
 
@@ -66,7 +71,8 @@ class InvitationModel extends Invitation {
       campaignId: '',
       createdAt: DateTime.now(),
       accepted: false,
-      pending: false,
+      pending: true,
+      sheetId: null,
     );
   }
 
@@ -83,6 +89,7 @@ class InvitationModel extends Invitation {
   @override
   List<Object> get props {
     return [
+      sheetId ?? '',
       guest,
       inviter,
       id,

@@ -59,11 +59,6 @@ class AppDrawer extends StatelessWidget {
                         text: 'Campanhas',
                         onTap: () => context.goNamed(Routes.campaigns.name),
                       ),
-                      NavigationListItem(
-                        icon: Icons.mail,
-                        text: 'Convites',
-                        onTap: () => context.goNamed(Routes.invites.name),
-                      ),
                     ],
                   ),
                 )

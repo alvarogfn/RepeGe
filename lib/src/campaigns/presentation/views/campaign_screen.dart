@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repege/core/icons/rpg_icons.dart';
 import 'package:repege/core/services/injection_container.dart';
+import 'package:repege/src/authentication/data/models/user_model.dart';
+import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart';
 import 'package:repege/src/campaigns/data/model/campaign_model.dart';
 import 'package:repege/src/campaigns/domain/bloc/campaign_bloc.dart';
-import 'package:repege/src/campaigns/domain/bloc/invitation_bloc.dart';
 import 'package:repege/src/campaigns/presentation/widgets/campaign_act_page.dart';
 import 'package:repege/src/campaigns/presentation/widgets/campaign_players_screen.dart';
 
@@ -31,10 +32,12 @@ class _CampaignScreenState extends State<CampaignScreen> {
             return bloc;
           },
         ),
-        BlocProvider(create: (context) => sl<InvitationBloc>()),
       ],
       child: BlocBuilder<CampaignBloc, CampaignState>(
         builder: (context, state) {
+          final authState = context.read<AuthenticationCubit>().state as Authenticated;
+          final user = authState.user as UserModel;
+
           switch (state) {
             case CampaignLoadedState():
               final campaign = state.campaign as CampaignModel;
@@ -69,8 +72,8 @@ class _CampaignScreenState extends State<CampaignScreen> {
                   ],
                 ),
                 body: [
-                  CampaignActPage(campaign),
-                  CampaignPlayersPage(campaign),
+                  CampaignActPage(campaign: campaign, currentUser: user),
+                  CampaignPlayersPage(campaign: campaign, currentUser: user),
                 ][currentPageIndex],
               );
             case CampaignLoadingState():

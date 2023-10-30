@@ -9,7 +9,6 @@ import 'package:repege/src/campaigns/presentation/views/act_form_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaign_create_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaign_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/campaigns_screen.dart';
-import 'package:repege/src/campaigns/presentation/views/invite_new_player_screen.dart';
 import 'package:repege/src/campaigns/presentation/views/invitation_screen.dart';
 import 'package:repege/src/equipments/presentation/views/equipment_form_screen.dart';
 import 'package:repege/src/sheets/data/models/spell_model.dart';
@@ -22,6 +21,8 @@ import 'package:repege/src/authentication/presentation/views/signin_screen.dart'
 import 'package:repege/src/authentication/presentation/views/signup_screen.dart';
 import 'package:repege/src/miscellaneous/presentation/views/home_screen.dart';
 import 'package:repege/src/sheets/presentation/views/sheet_screen.dart';
+import 'package:repege/src/sheets/presentation/views/sheet_select_screen.dart';
+import 'package:repege/src/sheets/presentation/views/sheet_view_screen.dart';
 import 'package:repege/src/sheets/presentation/views/sheets_screen.dart';
 import 'package:repege/src/spells/presentation/views/spell_details_screen.dart';
 import 'package:repege/src/spells/presentation/views/spell_form_screen.dart';
@@ -103,9 +104,21 @@ final GoRouter routes = GoRouter(
       builder: (context, state) => const SheetsScreen(),
       routes: [
         GoRoute(
+          path: Routes.sheetView.path,
+          name: Routes.sheetView.name,
+          builder: (context, state) => SheetViewScreen(
+            state.pathParameters['id'] as String,
+          ),
+        ),
+        GoRoute(
           path: Routes.sheetCreate.path,
           name: Routes.sheetCreate.name,
           builder: (context, state) => const SheetsCreateScreen(),
+        ),
+        GoRoute(
+          path: Routes.sheetSelect.path,
+          name: Routes.sheetSelect.name,
+          builder: (context, state) => SheetSelectScreen(state.pathParameters['createdBy'] as String),
         ),
         GoRoute(
           path: Routes.sheet.path,
@@ -135,11 +148,6 @@ final GoRouter routes = GoRouter(
           name: Routes.campaign.name,
           builder: (context, state) => CampaignScreen(state.pathParameters['id'] as String),
           routes: [
-            GoRoute(
-              path: Routes.campaignInvite.path,
-              name: Routes.campaignInvite.name,
-              builder: (context, state) => const InviteNewPlayerScreen(),
-            ),
             GoRoute(
               path: Routes.acts.name,
               name: Routes.acts.path,

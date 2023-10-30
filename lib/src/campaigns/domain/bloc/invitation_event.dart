@@ -15,18 +15,19 @@ class InvitationInitEvent extends InvitationEvent {
 
 class InvitationNewInviteEvent extends InvitationEvent {
   final String username;
-  final Invitation invitation;
+  final String inviter;
+  final String campaignId;
 
   const InvitationNewInviteEvent({
     required this.username,
-    required this.invitation,
+    required this.inviter,
+    required this.campaignId,
   });
 }
 
 class InvitationAcceptInviteEvent extends InvitationEvent {
   final Invitation invitation;
-  final String sheetId;
-  const InvitationAcceptInviteEvent({required this.invitation, required this.sheetId});
+  const InvitationAcceptInviteEvent({required this.invitation});
 }
 
 class InvitationDenyInviteEvent extends InvitationEvent {

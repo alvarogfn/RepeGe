@@ -7,12 +7,21 @@ sealed class InvitationState extends Equatable {
   List<Object> get props => [];
 }
 
+final class InvitationInvitedState extends InvitationState {
+  const InvitationInvitedState();
+}
+
 final class InvitationEmptyState extends InvitationState {
   const InvitationEmptyState();
 }
 
-final class InvitationLoading extends InvitationState {
-  const InvitationLoading();
+final class InvitationLoadingEvent extends InvitationState {
+  final String id;
+
+  const InvitationLoadingEvent([this.id = '']);
+
+  @override
+  List<Object> get props => [];
 }
 
 final class InvitationLoadedState extends InvitationState {

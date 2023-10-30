@@ -8,11 +8,13 @@ sealed class SheetListEvent extends Equatable {
 }
 
 class SheetListInitEvent extends SheetListEvent {
-  final String createdBy;
-  const SheetListInitEvent(this.createdBy);
+  final String? createdBy;
+  final List<String>? whereIn;
+
+  const SheetListInitEvent({this.createdBy, this.whereIn});
 
   @override
-  List<Object> get props => [createdBy];
+  List<Object> get props => [createdBy ?? '', whereIn ?? []];
 }
 
 class SheetListAddEvent extends SheetListEvent {

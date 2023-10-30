@@ -13,7 +13,7 @@ class SheetListBloc extends Bloc<SheetListEvent, SheetListState> {
   SheetListBloc(this._repository) : super(const SheetListLoading()) {
     on<SheetListInitEvent>((event, emit) async {
       await emit.onEach(
-        _repository.streamAll(createdBy: event.createdBy),
+        _repository.streamAll(createdBy: event.createdBy, whereIn: event.whereIn),
         onData: (sheet) => emit(sheet),
       );
     });

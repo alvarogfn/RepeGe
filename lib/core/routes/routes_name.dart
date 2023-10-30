@@ -10,6 +10,7 @@ enum Routes {
   sheets(name: 'sheets', path: '/sheets'),
   sheetCreate(name: 'sheet-create', path: 'create'),
   sheet(name: 'sheet', path: 'sheet/:id'),
+  sheetView(name: 'sheet-view', path: 'sheet/:id/view'),
   sheetSelect(name: 'sheet-select', path: ':createdBy'),
 
   spell(name: 'spell', path: '/spell'),

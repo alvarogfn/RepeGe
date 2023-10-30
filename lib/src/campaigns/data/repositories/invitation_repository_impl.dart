@@ -1,104 +1,182 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:repege/src/authentication/data/models/user_model.dart';
+import 'package:repege/src/campaigns/data/model/campaign_model.dart';
+import 'package:repege/src/campaigns/data/model/invitation_model.dart';
 import 'package:repege/src/campaigns/domain/bloc/invitation_bloc.dart';
+import 'package:repege/src/campaigns/domain/entities/campaign.dart';
 import 'package:repege/src/campaigns/domain/entities/invitation.dart';
 import 'package:repege/src/campaigns/domain/repositories/invitation_repository.dart';
 
 class InvitationRepositoryImpl extends InvitationRepository {
-  final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
+  final FirebaseAuth _auth;
 
-  const InvitationRepositoryImpl(this._auth, this._firestore);
+  InvitationRepositoryImpl(this._firestore, this._auth);
 
   @override
-  Future<InvitationState?> acceptInvite(Invitation invite) {
-    // TODO: implement acceptInvite
-    throw UnimplementedError();
+  Future<InvitationState?> acceptInvite(Invitation invite) async {
+    try {
+      final acceptedInvite = invite.copyWith(
+        pending: false,
+        accepted: true,
+      );
+
+      final batch = _firestore.batch();
+
+      batch.set(invitationCollection.doc(invite.id), acceptedInvite);
+
+      final campaignSnapshot = await campaignsCollection.doc(invite.campaignId).get();
+
+      final campaign = campaignSnapshot.data()!;
+
+      batch.set(
+        campaignSnapshot.reference,
+        campaign.copyWith(
+          users: campaign.users..add(invite.guest),
+          sheetsId: campaign.sheetsId..add(invite.sheetId!),
+        ),
+      );
+
+      await batch.commit();
+
+      return null;
+    } catch (e) {
+      return InvitationErrorState(e.toString());
+    }
+  }
+
+  Future<InvitationState?> _verifyIfIsNotInCampaignAlready({required String userId, required String campaignId}) async {
+    final campaignSnapshot = await campaignsCollection.doc(campaignId).get();
+    final campaign = campaignSnapshot.data()!;
+
+    if (campaign.users.contains(userId)) {
+      return const InvitationErrorState('Não é possível convidar alguém que já está na campanha');
+    }
+
+    return null;
   }
 
   @override
-  Future<InvitationState?> denyInvite(Invitation invite) {
-    // TODO: implement denyInvite
-    throw UnimplementedError();
+  Future<InvitationState?> createInvite({required Invitation invite, required String username}) async {
+    try {
+      final user = await _getUserByUsername(username);
+
+      final result = await _verifyIfIsNotInCampaignAlready(
+        campaignId: invite.campaignId,
+        userId: user.id,
+      );
+
+      if (result != null) return result;
+
+      final newInviteDoc = invitationCollection.doc();
+
+      await newInviteDoc.set(invite.copyWith(
+        guest: user.id,
+        inviter: _auth.currentUser!.uid,
+        createdAt: DateTime.now(),
+        pending: true,
+        accepted: false,
+        id: newInviteDoc.id,
+        sheetId: null,
+      ));
+
+      return null;
+    } catch (e) {
+      return InvitationErrorState(e.toString());
+    }
   }
 
   @override
-  Future<InvitationState?> inviteNewPlayer(String nickname, Invitation invite) {
-    // TODO: implement inviteNewPlayer
-    throw UnimplementedError();
+  Future<InvitationState?> denyInvite(Invitation invite) async {
+    try {
+      final deniedInvite = invite.copyWith(
+        pending: false,
+        accepted: false,
+        sheetId: null,
+      );
+
+      await invitationCollection.doc(invite.id).set(deniedInvite);
+
+      return null;
+    } catch (e) {
+      return InvitationErrorState(e.toString());
+    }
   }
 
   @override
-  Stream<InvitationState> stream({required String invitedId}) {
-    // TODO: implement stream 
-    throw UnimplementedError();
+  Stream<InvitationState> stream({required String guest}) {
+    try {
+      return invitationCollection
+          .where('guest', isEqualTo: guest)
+          .where('pending', isEqualTo: true)
+          .snapshots()
+          .map((query) {
+        return InvitationLoadedState(
+          query.docs.map((snapshot) {
+            return snapshot.data() as InvitationModel;
+          }).toList(),
+        );
+      });
+    } catch (e) {
+      return Stream.value(InvitationErrorState(e.toString()));
+    }
   }
 
-  // @override
-  // Future<InvitationState> acceptInvite(Invitation invite) {
-  //   // TODO: implement acceptInvite
-  //   throw UnimplementedError();
-  // }
+  Future<UserModel> _getUserByUsername(String username) async {
+    final usernameDoc = await _firestore.collection('usernames').doc(username).get();
 
-  // @override
-  // Future<InvitationState> denyInvite(Invitation invite) {
-  //   // TODO: implement denyInvite
-  //   throw UnimplementedError();
-  // }
+    final usernameData = usernameDoc.data()!;
+    final userId = usernameData['createdBy'];
 
-  // Future<bool> _notInvitingSelf(String nickname) async {
-  //   final userDoc = await _firestore.collection('usernames').doc(nickname).get();
-  //   final user = userDoc.data();
-  //   if (user == null) throw Exception('Esse usuário não existe');
-  //   if (invite.invitedId == user['username']) throw Exception('Não é possível convidar a sí mesmo.');
-  //   return true;
-  // }
+    final user = await _firestore.collection('users').doc(userId).get();
 
-  // Future<bool> _notInvitingAlreadyInvited(Invitation invite) async {
-  //   final documents = await _invitationReference
-  //       .where('campaignId', isEqualTo: invite.campaignId)
-  //       .where('invitedId', isEqualTo: invite.inviter)
-  //       .where('pending', isEqualTo: true)
-  //       .limit(1)
-  //       .get();
+    return UserModel.fromMap(user.data()!);
+  }
 
-  //   if (documents.docs[0].exists) throw Exception('Esse usuário já tem um convite pendente para a sua campanha.');
+  @override
+  Future<InvitationState?> verifyUsername(String username) async {
+    try {
+      final usernameDoc = await _firestore.collection('usernames').doc(username).get();
 
-  //   return true;
-  // }
+      if (!usernameDoc.exists) throw Exception('Esse nome de usuário não existe.');
 
-  // CollectionReference<Invitation> get _invitationReference => _firestore.collection('invites').withConverter(
-  //       fromFirestore: (snapshot, _) => InvitationModel.fromMap(snapshot.data()!),
-  //       toFirestore: (snapshot, _) => snapshot.toMap(),
-  //     );
+      final usernameData = usernameDoc.data()!;
+      final userId = usernameData['createdBy'];
 
-  // @override
-  // Future<InvitationState?> inviteNewPlayer(String nickname, Invitation invite) async {
-  //   try {
-  //     final notInvitingSelf = await _notInvitingSelf(nickname);
-  //     final notInvitingAlreadyInvited = await _notInvitingAlreadyInvited(nickname);
-  //     if (!notInvitingSelf && !notInvitingAlreadyInvited) return null;
-  //     final inviteDoc = _invitationReference.doc();
+      if (userId == _auth.currentUser!.uid) {
+        return const InvitationErrorState(
+          'Não é possível convidar a sí mesmo',
+        );
+      }
 
-  //     await inviteDoc.set(invite.copyWith(
-  //       id: inviteDoc.id,
-  //       createdAt: DateTime.now(),
-  //       pending: true,
-  //       accepted: false,
-  //     ));
+      final pendingInvites = await invitationCollection
+          .where('guest', isEqualTo: userId)
+          .where(
+            'pending',
+            isEqualTo: true,
+          )
+          .count()
+          .get();
 
-  //     return null;
-  //   } catch (e) {
-  //     return InvitationErrorState(e.toString());
-  //   }
-  // }
+      if (pendingInvites.count > 0) {
+        return const InvitationErrorState(
+          'Não é possível convidar alguém já convidado.',
+        );
+      }
 
-  // @override
-  // Stream<InvitationState> stream({required String invitedId}) {
-  //   return _invitationReference.where('createdBy', isEqualTo: invitedId).snapshots().map((snapshot) {
-  //     final items = snapshot.docs.map((snapshot) => snapshot.data() as InvitationModel).toList();
-  //     if (items.isEmpty) return const InvitationEmptyState();
-  //     return InvitationLoadedState(items);
-  //   });
-  // }
+      return null;
+    } catch (e) {
+      return InvitationErrorState(e.toString());
+    }
+  }
+
+  CollectionReference<Invitation> get invitationCollection => _firestore.collection('invites').withConverter(
+        fromFirestore: (snapshot, _) => InvitationModel.fromMap(snapshot.data()!),
+        toFirestore: (snapshot, _) => snapshot.toMap(),
+      );
+  CollectionReference<Campaign> get campaignsCollection => _firestore.collection('campaigns').withConverter(
+        fromFirestore: (snapshot, _) => CampaignModel.fromMap(snapshot.data()!),
+        toFirestore: (snapshot, _) => snapshot.toMap(),
+      );
 }

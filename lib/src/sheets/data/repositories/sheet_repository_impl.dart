@@ -31,8 +31,22 @@ class SheetRepositoryImpl extends SheetRepository {
   }
 
   @override
-  Stream<SheetListState<SheetModel>> streamAll({required String createdBy}) {
-    return _collectionReference.where('createdBy', isEqualTo: createdBy).snapshots().map((snapshot) {
+  Stream<SheetListState<SheetModel>> streamAll({createdBy, whereIn}) {
+    if (createdBy == null && ((whereIn != null && whereIn.isEmpty) || whereIn == null)) {
+      return Stream.value(const SheetListEmpty());
+    }
+
+    Query<Sheet> query = _collectionReference;
+
+    if (createdBy != null) {
+      query = query.where('createdBy', isEqualTo: createdBy);
+    }
+
+    if (whereIn != null && whereIn.isNotEmpty) {
+      query = query.where('id', whereIn: whereIn);
+    }
+
+    return query.snapshots().map((snapshot) {
       final items = snapshot.docs.map((snapshot) => snapshot.data() as SheetModel).toList();
       if (items.isEmpty) return const SheetListEmpty();
       return SheetListLoaded(items);

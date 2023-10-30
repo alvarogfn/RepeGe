@@ -7,6 +7,7 @@ import 'package:repege/src/authentication/domain/cubit/authentication_cubit.dart
 import 'package:repege/src/miscellaneous/presentation/widgets/app_drawer.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
+import 'package:repege/src/sheets/presentation/widgets/sheet_list_item.dart';
 
 class SheetsScreen extends StatelessWidget {
   const SheetsScreen({super.key});
@@ -20,7 +21,7 @@ class SheetsScreen extends StatelessWidget {
         final authState = context.read<AuthenticationCubit>().state;
 
         if (authState is Authenticated) {
-          sheetListBloc.add(SheetListInitEvent(authState.user.id));
+          sheetListBloc.add(SheetListInitEvent(createdBy: authState.user.id));
         }
 
         return sheetListBloc;
@@ -63,51 +64,44 @@ class SheetsScreen extends StatelessWidget {
 
                     return SizedBox(
                       height: 80,
-                      child: Card(
-                        child: Dismissible(
-                          key: ValueKey<String>(sheet.id),
-                          onDismissed: (_) {
-                            context.read<SheetListBloc>().add(SheetListRemoveEvent(sheet.id));
-                          },
-                          confirmDismiss: (_) {
-                            return showDialog<bool>(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    'Tem certeza que deseja deletar a ficha ${sheet.characterName}?',
-                                  ),
-                                  content: const Text('Essa ação é irreversível.'),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () => context.pop(true),
-                                      child: const Text('Excluir'),
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: const BoxDecoration(color: Colors.red),
-                            child: const Padding(
-                              padding: EdgeInsets.only(right: 20),
-                              child: Icon(Icons.delete),
-                            ),
+                      child: Dismissible(
+                        key: ValueKey<String>(sheet.id),
+                        onDismissed: (_) {
+                          context.read<SheetListBloc>().add(SheetListRemoveEvent(sheet.id));
+                        },
+                        confirmDismiss: (_) {
+                          return showDialog<bool>(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(
+                                  'Tem certeza que deseja deletar a ficha ${sheet.characterName}?',
+                                ),
+                                content: const Text('Essa ação é irreversível.'),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () => context.pop(true),
+                                    child: const Text('Excluir'),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          decoration: const BoxDecoration(color: Colors.red),
+                          child: const Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: Icon(Icons.delete),
                           ),
-                          child: InkWell(
-                            onTap: () => context.pushNamed(Routes.sheet.name, pathParameters: {
-                              'id': sheet.id,
-                            }),
-                            child: ListTile(
-                              title: Text(sheet.characterName),
-                              subtitle: Text(
-                                '${sheet.characterRace}, ${sheet.characterClass}, ${sheet.alignment}.',
-                              ),
-                            ),
-                          ),
+                        ),
+                        child: SheetListItem(
+                          sheet: sheet,
+                          onTap: () => context.pushNamed(Routes.sheet.name, pathParameters: {
+                            'id': sheet.id,
+                          }),
                         ),
                       ),
                     );
