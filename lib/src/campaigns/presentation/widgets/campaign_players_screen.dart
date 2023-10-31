@@ -11,6 +11,7 @@ import 'package:repege/src/authentication/data/models/user_model.dart';
 import 'package:repege/src/campaigns/data/model/campaign_model.dart';
 import 'package:repege/src/campaigns/domain/bloc/invitation_bloc.dart';
 import 'package:repege/src/sheets/domain/bloc/sheet_list_bloc.dart';
+import 'package:repege/src/sheets/domain/entities/sheet.dart';
 import 'package:repege/src/sheets/presentation/widgets/sheet_list_item.dart';
 
 class CampaignPlayersPage extends StatelessWidget {
@@ -88,16 +89,19 @@ class CampaignPlayersPage extends StatelessWidget {
     }
   }
 
-  Future<void> _openSheetView(BuildContext context, String sheetId) {
-    return context.pushNamed(
-      Routes.sheetView.name,
-      pathParameters: {
-        'id': sheetId,
-      },
-    );
-  }
-
   bool get isOwner => currentUser.id == campaign.createdBy;
+
+  void Function()? _handleSheetOpen(BuildContext context, Sheet sheet) {
+    if (isOwner) {
+      return () => context.pushNamed(Routes.sheetView.name, pathParameters: {'id': sheet.id});
+    }
+
+    if (currentUser.id == sheet.createdBy) {
+      return () => context.pushNamed(Routes.sheet.name, pathParameters: {'id': sheet.id});
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +121,14 @@ class CampaignPlayersPage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return AlertDialog(title: Text(state.message));
+                  return AlertDialog(
+                    title: Text(
+                      state.message,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
                 },
               );
             default:
@@ -137,10 +148,12 @@ class CampaignPlayersPage extends StatelessWidget {
               title: const Text('Participantes'),
               actions: [
                 if (isOwner)
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => _inviteNewPlayer(context),
-                  ),
+                  Builder(builder: (context) {
+                    return IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => _inviteNewPlayer(context),
+                    );
+                  }),
               ],
             ),
             body: BlocBuilder<SheetListBloc, SheetListState>(
@@ -151,9 +164,10 @@ class CampaignPlayersPage extends StatelessWidget {
                       itemCount: state.sheets.length,
                       itemBuilder: (context, index) {
                         final sheet = state.sheets[index];
+
                         return SheetListItem(
                           sheet: sheet,
-                          onTap: isOwner ? () => _openSheetView(context, sheet.id) : null,
+                          onTap: _handleSheetOpen(context, sheet),
                         );
                       },
                     );

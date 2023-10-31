@@ -41,19 +41,22 @@ class _CampaignScreenState extends State<CampaignScreen> {
           switch (state) {
             case CampaignLoadedState():
               final campaign = state.campaign as CampaignModel;
+              final isOwner = campaign.createdBy == user.id;
 
               return Scaffold(
                 appBar: AppBar(
                   title: Text(state.campaign.name),
-                  actions: [
-                    PopupMenuButton(
-                      itemBuilder: (context) => [
-                        const PopupMenuItem(
-                          child: Text('Editar'),
-                        )
-                      ],
-                    )
-                  ],
+                  actions: isOwner
+                      ? [
+                          PopupMenuButton(
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                child: Text('Editar'),
+                              )
+                            ],
+                          )
+                        ]
+                      : null,
                 ),
                 bottomNavigationBar: NavigationBar(
                   selectedIndex: currentPageIndex,

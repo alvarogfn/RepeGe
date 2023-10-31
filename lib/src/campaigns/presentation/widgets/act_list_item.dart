@@ -12,9 +12,11 @@ class ActListItem extends StatelessWidget {
   const ActListItem({
     super.key,
     required this.act,
+    this.disableDismiss = true,
   });
 
   final Act act;
+  final bool disableDismiss;
 
   Future<void> _handleEditAct(BuildContext context) async {
     final newAct = await context.pushNamed<ActModel>(Routes.actsForm.name, extra: act, pathParameters: {
@@ -32,73 +34,80 @@ class ActListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Dismissible(
-        key: ValueKey(act.id),
-        onDismissed: (direction) async {
-          context.read<ActBloc>().add(ActDeleteEvent(act: act));
-        },
-        confirmDismiss: (direction) async {
-          if (direction != DismissDirection.endToStart) {
-            _handleEditAct(context);
-            return false;
-          }
-          return showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Deletar o ato?', style: TextStyle(color: Colors.black)),
-              content: Paragraph('Você deletará **${act.title}**. Essa ação é permanente.'),
-              actions: [
-                ElevatedButton(onPressed: () => context.pop(true), child: const Text('Confirmar')),
-              ],
-            ),
-          );
-        },
-        secondaryBackground: Container(
-          color: Colors.red,
-          alignment: Alignment.centerRight,
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        background: Container(
-          color: Colors.blue,
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        child: ExpansionTile(
-          trailing: Text(act.trailing),
-          title: Text(
-            act.title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(act.subtitle, style: const TextStyle(fontStyle: FontStyle.italic)),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SizedBox(width: double.infinity, child: Paragraph(act.content)),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(10),
-              width: double.infinity,
-              child: Text(
-                act.footer,
-                textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 12),
+      child: disableDismiss
+          ? content()
+          : Dismissible(
+              key: ValueKey(act.id),
+              onDismissed: (direction) async {
+                context.read<ActBloc>().add(ActDeleteEvent(act: act));
+              },
+              confirmDismiss: (direction) async {
+                if (direction != DismissDirection.endToStart) {
+                  _handleEditAct(context);
+                  return false;
+                }
+                return showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Deletar o ato?', style: TextStyle(color: Colors.black)),
+                    content: Paragraph('Você deletará **${act.title}**. Essa ação é permanente.'),
+                    actions: [
+                      ElevatedButton(onPressed: () => context.pop(true), child: const Text('Confirmar')),
+                    ],
+                  ),
+                );
+              },
+              secondaryBackground: Container(
+                color: Colors.red,
+                alignment: Alignment.centerRight,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
               ),
+              background: Container(
+                color: Colors.blue,
+                alignment: Alignment.centerLeft,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              child: content(),
             ),
-          ],
-        ),
+    );
+  }
+
+  ExpansionTile content() {
+    return ExpansionTile(
+      trailing: Text(act.trailing),
+      title: Text(
+        act.title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
+      subtitle: Text(act.subtitle, style: const TextStyle(fontStyle: FontStyle.italic)),
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: SizedBox(width: double.infinity, child: Paragraph(act.content)),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          child: Text(
+            act.footer,
+            textAlign: TextAlign.left,
+            style: const TextStyle(fontSize: 12),
+          ),
+        ),
+      ],
     );
   }
 }

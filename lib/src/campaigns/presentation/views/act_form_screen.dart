@@ -104,7 +104,7 @@ class _ActFormScreenState extends State<ActFormScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _handleSubmit,
-                    child: const Text('Criar novo Ato'),
+                    child: Text(act.id.isNotEmpty ? 'Editar esse ato' : 'Criar novo Ato'),
                   ),
                 )
               ],

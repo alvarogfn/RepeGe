@@ -112,11 +112,11 @@ class InvitationRepositoryImpl extends InvitationRepository {
           .where('pending', isEqualTo: true)
           .snapshots()
           .map((query) {
-        return InvitationLoadedState(
-          query.docs.map((snapshot) {
-            return snapshot.data() as InvitationModel;
-          }).toList(),
-        );
+        final invites = query.docs.map((snapshot) {
+          return snapshot.data() as InvitationModel;
+        }).toList();
+        if (invites.isEmpty) return const InvitationEmptyState();
+        return InvitationLoadedState(invites);
       });
     } catch (e) {
       return Stream.value(InvitationErrorState(e.toString()));

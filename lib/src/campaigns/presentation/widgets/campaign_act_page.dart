@@ -64,7 +64,10 @@ class CampaignActPage extends StatelessWidget {
                   itemCount: state.acts.length,
                   itemBuilder: ((context, index) {
                     final act = state.acts[index];
-                    return ActListItem(act: act);
+                    return ActListItem(
+                      act: act,
+                      disableDismiss: currentUser.id != campaign.createdBy,
+                    );
                   }),
                 );
             }
