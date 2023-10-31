@@ -25,7 +25,7 @@ class CampaignRepositoryImpl extends CampaignRepository {
           id: reference.id,
           createdBy: _auth.currentUser!.uid,
           createdAt: DateTime.now(),
-          users: [_auth.currentUser!.uid],
+          participants: {campaign.createdBy: ''},
         ),
       );
 
@@ -47,7 +47,7 @@ class CampaignRepositoryImpl extends CampaignRepository {
 
   @override
   Stream<CampaignsState> streamAll({required String userId}) {
-    return _campaignsCollection.where('users', arrayContains: userId).snapshots().map((snapshot) {
+    return _campaignsCollection.where('participants.$userId', isNull: false).snapshots().map((snapshot) {
       final items = snapshot.docs.map((snapshot) => snapshot.data() as CampaignModel).toList();
       if (items.isEmpty) return const CampaignsEmptyState();
       return CampaignsLoadedState(campaigns: items);

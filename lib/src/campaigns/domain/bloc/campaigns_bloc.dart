@@ -23,7 +23,6 @@ class CampaignsBloc extends Bloc<CampaignsEvent, CampaignsState> {
         event.campaign.copyWith(
           creatorUsername: event.user.username,
           createdBy: event.user.id,
-          users: [event.user.id],
           createdAt: DateTime.now(),
         ),
       );

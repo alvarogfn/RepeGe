@@ -33,8 +33,7 @@ class InvitationRepositoryImpl extends InvitationRepository {
       batch.set(
         campaignSnapshot.reference,
         campaign.copyWith(
-          users: campaign.users..add(invite.guest),
-          sheetsId: campaign.sheetsId..add(invite.sheetId!),
+          participants: campaign.participants..putIfAbsent(invite.guest, () => invite.sheetId!),
         ),
       );
 
@@ -50,7 +49,7 @@ class InvitationRepositoryImpl extends InvitationRepository {
     final campaignSnapshot = await campaignsCollection.doc(campaignId).get();
     final campaign = campaignSnapshot.data()!;
 
-    if (campaign.users.contains(userId)) {
+    if (campaign.participants.keys.contains(userId)) {
       return const InvitationErrorState('Não é possível convidar alguém que já está na campanha');
     }
 

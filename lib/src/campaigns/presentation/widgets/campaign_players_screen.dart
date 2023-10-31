@@ -138,7 +138,7 @@ class CampaignPlayersPage extends StatelessWidget {
           create: (context) {
             final bloc = sl<SheetListBloc>();
 
-            bloc.add(SheetListInitEvent(whereIn: campaign.sheetsId));
+            bloc.add(SheetListInitEvent(whereIn: campaign.participants.values.toList()));
 
             return bloc;
           },

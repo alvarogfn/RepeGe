@@ -26,7 +26,6 @@ class CampaignsDeleteEvent extends CampaignsEvent {
   const CampaignsDeleteEvent({required this.campaign});
 }
 
-
 class CampaignsErrorEvent extends CampaignsEvent {
   final String message;
 

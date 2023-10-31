@@ -6,8 +6,7 @@ import 'package:repege/src/campaigns/domain/entities/campaign.dart';
 class CampaignModel extends Campaign {
   const CampaignModel({
     required super.id,
-    required super.sheetsId,
-    required super.users,
+    required super.participants,
     required super.createdBy,
     required super.createdAt,
     required super.name,
@@ -18,8 +17,7 @@ class CampaignModel extends Campaign {
   factory CampaignModel.empty() {
     return CampaignModel(
       id: '',
-      sheetsId: const [],
-      users: const [],
+      participants: const {},
       createdBy: '',
       createdAt: DateTime.now(),
       name: '',
@@ -38,11 +36,11 @@ class CampaignModel extends Campaign {
     String? name,
     String? description,
     String? creatorUsername,
+    Map<String, String>? participants,
   }) {
     return CampaignModel(
       id: id ?? this.id,
-      sheetsId: sheetsId ?? this.sheetsId,
-      users: users ?? this.users,
+      participants: participants ?? this.participants,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       name: name ?? this.name,
@@ -55,8 +53,7 @@ class CampaignModel extends Campaign {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'sheetsId': sheetsId,
-      'users': users,
+      'participants': participants,
       'createdBy': createdBy,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'name': name,
@@ -68,8 +65,7 @@ class CampaignModel extends Campaign {
   factory CampaignModel.fromMap(Map<String, dynamic> map) {
     return CampaignModel(
       id: map['id'] as String,
-      sheetsId: List<String>.from((map['sheetsId'] as List<dynamic>)),
-      users: List<String>.from((map['users'] as List<dynamic>)),
+      participants: Map.from(map['participants']),
       createdBy: map['createdBy'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       name: map['name'] as String,
@@ -90,8 +86,7 @@ class CampaignModel extends Campaign {
   List<Object> get props {
     return [
       id,
-      sheetsId,
-      users,
+      participants,
       createdBy,
       createdAt,
       name,

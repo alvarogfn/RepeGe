@@ -3,8 +3,7 @@ import 'package:equatable/equatable.dart';
 
 abstract class Campaign extends Equatable {
   final String id;
-  final List<String> sheetsId;
-  final List<String> users;
+  final Map<String, String> participants;
   final String createdBy;
   final DateTime createdAt;
   final String name;
@@ -13,8 +12,7 @@ abstract class Campaign extends Equatable {
 
   const Campaign({
     required this.id,
-    required this.sheetsId,
-    required this.users,
+    required this.participants,
     required this.createdBy,
     required this.createdAt,
     required this.name,
@@ -23,9 +21,8 @@ abstract class Campaign extends Equatable {
   });
 
   Campaign copyWith({
+    Map<String, String> participants,
     String? id,
-    List<String>? sheetsId,
-    List<String>? users,
     String? createdBy,
     DateTime? createdAt,
     String? name,
@@ -44,8 +41,6 @@ abstract class Campaign extends Equatable {
   List<Object> get props {
     return [
       id,
-      sheetsId,
-      users,
       createdBy,
       createdAt,
       name,
