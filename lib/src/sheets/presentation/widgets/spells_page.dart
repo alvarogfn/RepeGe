@@ -97,7 +97,7 @@ class SpellsPage extends StatelessWidget {
                           ),
                         );
                       case SpellStateEmpty():
-                        return const Text('Nenhuma magia cadastrada.');
+                        return const Center(child: Text('Nenhuma magia cadastrada.'));
                       case SpellStateLoading():
                         return const Center(child: CircularProgressIndicator());
                       case SpellStateError():

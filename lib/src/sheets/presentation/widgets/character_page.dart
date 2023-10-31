@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
@@ -45,6 +46,7 @@ class CharacterPage extends StatelessWidget {
                 onSaved: (value) => update(sheet.copyWith(
                   characterLevel: int.parse(value ?? '0'),
                 )),
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                 border: InputBorder.none,
                 keyboardType: TextInputType.number,
               ),

@@ -3,6 +3,48 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/skills_model.dart';
 
+const ptBRSkills = [
+  'Atletismo',
+  'Prestidigitação',
+  'Furtividade',
+  'Acrobacia',
+  'Arcano',
+  'História',
+  'Investigação',
+  'Natureza',
+  'Religião',
+  'Intuição',
+  'Trato com animais',
+  'Medicina',
+  'Percepção',
+  'Sobrevivência',
+  'Atuação',
+  'Persuasão',
+  'Intimidação',
+  'Enganação',
+];
+
+const ptBRSkillsMap = {
+  'Atletismo': 'atletism',
+  'Prestidigitação': 'sleightOfHand',
+  'Furtividade': 'stealth',
+  'Acrobacia': 'acrobatics',
+  'Arcano': 'arcana',
+  'História': 'history',
+  'Investigação': 'investigation',
+  'Natureza': 'nature',
+  'Religião': 'religion',
+  'Intuição': 'insight',
+  'Trato com animais': 'animalHandling',
+  'Medicina': 'medicine',
+  'Percepção': 'perception',
+  'Sobrevivência': 'survival',
+  'Atuação': 'performance',
+  'Persuasão': 'persuasion',
+  'Intimidação': 'intimidation',
+  'Enganação': 'deception',
+};
+
 class SkillFloatingList extends StatefulWidget {
   const SkillFloatingList({required this.skills, super.key});
   final SkillsModel skills;
@@ -39,15 +81,18 @@ class _SkillFloatingList extends State<SkillFloatingList> {
               )
             ],
           ),
-          ...skills.toMap().entries.map((entry) {
+          ...ptBRSkills.map((ptSkill) {
+            final skillKey = ptBRSkillsMap[ptSkill]!;
+            final value = skills.toMap()[skillKey];
+
             return CheckboxMenuButton(
-              value: entry.value,
+              value: value,
               onChanged: (value) {
                 setState(() {
-                  skills = skills.copyWithMap({entry.key: value ?? false});
+                  skills = skills.copyWithMap({skillKey: value ?? false});
                 });
               },
-              child: Text(entry.key),
+              child: Text(ptSkill),
             );
           }),
         ]),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:repege/core/utils/validations/required_validation.dart';
+import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 
 class LifeTracker extends StatefulWidget {
@@ -63,6 +66,8 @@ class _LifeTrackerState extends State<LifeTracker> {
                   label: 'Temp',
                   value: widget.temporaryHp.toString(),
                   onFieldSubmitted: (value) => widget.onChangeTemporaryHp(int.parse(value)),
+                  validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                 ),
                 const SizedBox(width: 20),
                 TextFormFieldBottomSheet(
@@ -74,6 +79,8 @@ class _LifeTrackerState extends State<LifeTracker> {
                     }
                     widget.onChangeCurrentHp(int.parse(value));
                   },
+                  validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                 ),
                 Expanded(
                   child: Slider(
@@ -90,6 +97,8 @@ class _LifeTrackerState extends State<LifeTracker> {
                   label: 'Max',
                   value: widget.maxHp.toString(),
                   onFieldSubmitted: (value) => widget.onChangeMaxHp(int.parse(value)),
+                  validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                 ),
               ],
             ),

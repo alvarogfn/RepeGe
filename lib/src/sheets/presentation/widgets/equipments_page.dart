@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:repege/core/routes/routes_name.dart';
 import 'package:repege/core/services/injection_container.dart';
 import 'package:repege/core/widgets/card_title.dart';
-import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/src/equipments/data/models/equipment_model.dart';
 import 'package:repege/src/equipments/domain/bloc/equipment_bloc.dart';
 import 'package:repege/src/equipments/presentation/widgets/equipment_card.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
+import 'package:repege/src/sheets/presentation/widgets/currency_list.dart';
 
 class EquipmentsPage extends StatelessWidget {
   const EquipmentsPage(this.sheet, {super.key});
@@ -28,25 +28,9 @@ class EquipmentsPage extends StatelessWidget {
         children: [
           CardTitle(
             title: 'Bolsa',
-            child: GridView(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                mainAxisSpacing: 20,
-                mainAxisExtent: 40,
-              ),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: sheet.bag.toMap().entries.map((entry) {
-                return TextFormFieldBottomSheet(
-                  label: entry.key,
-                  value: entry.value.toString(),
-                  onFieldSubmitted: (value) {
-                    context
-                        .read<SheetUpdateCubit>()
-                        .update(sheet.copyWith(bag: sheet.bag.copyWithMap({entry.key: int.parse(value)})));
-                  },
-                );
-              }).toList(),
+            child: CurrencyList(
+              bag: sheet.bag,
+              onChange: (bag) => context.read<SheetUpdateCubit>().update(sheet.copyWith(bag: bag)),
             ),
           ),
           BlocProvider(
@@ -84,9 +68,9 @@ class EquipmentsPage extends StatelessWidget {
                                   final equipment = state.equipments[index];
                                   return EquipmentCard(
                                     equipment: equipment,
-                                    onDismissed: (_) => context.read<EquipmentBloc>().add(
-                                          EquipmentDeleteEvent(equipment),
-                                        ),
+                                    onDismissed: (_) {
+                                      context.read<EquipmentBloc>().add(EquipmentDeleteEvent(equipment));
+                                    },
                                   );
                                 },
                               ),

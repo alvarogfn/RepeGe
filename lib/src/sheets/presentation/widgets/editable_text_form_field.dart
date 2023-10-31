@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class EditableTextFormField extends StatefulWidget {
   const EditableTextFormField({
@@ -12,6 +13,8 @@ class EditableTextFormField extends StatefulWidget {
     this.margin,
     this.hintText,
     this.keyboardType,
+    this.inputFormatters,
+    this.validator,
   });
   final String? initialValue;
   final String? label;
@@ -22,6 +25,8 @@ class EditableTextFormField extends StatefulWidget {
   final InputBorder? border;
   final void Function(String value)? onChanged;
   final void Function(String? value)? onSaved;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String? value)? validator;
   @override
   State<EditableTextFormField> createState() => _EditableTextFormFieldState();
 }
@@ -55,6 +60,8 @@ class _EditableTextFormFieldState extends State<EditableTextFormField> {
           focusNode: focusNode,
           onSaved: widget.onSaved,
           keyboardType: widget.keyboardType,
+          inputFormatters: widget.inputFormatters,
+          validator: widget.validator,
           onFieldSubmitted: (_) => handleSave(),
           onTapOutside: (_) {
             setState(() => _readOnly = true);

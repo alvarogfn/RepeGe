@@ -41,15 +41,8 @@ class CampaignListItem extends StatelessWidget {
                           bloc.add(CampaignsDeleteEvent(campaign: campaign));
                         },
                       ),
-                    ] else ...[
-                      PopupMenuItem(
-                        child: const Text('Sair'),
-                        onTap: () {
-                          final bloc = context.read<CampaignsBloc>();
-                          bloc.add(CampaignsDeleteEvent(campaign: campaign));
-                        },
-                      ),
-                    ]
+                    ] else
+                      ...[]
                   ];
                 },
               ),

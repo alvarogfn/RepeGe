@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repege/core/utils/validations/required_validation.dart';
+import 'package:repege/core/utils/validations/validations.dart';
 import 'package:repege/core/widgets/card_title.dart';
 import 'package:repege/core/widgets/text_form_field_bottom_sheet.dart';
 import 'package:repege/core/widgets/full_screen_scroll.dart';
 import 'package:repege/src/sheets/data/models/sheet_model.dart';
 import 'package:repege/src/sheets/data/models/skills_model.dart';
 import 'package:repege/src/sheets/domain/cubit/sheet_update_cubit.dart';
+import 'package:repege/src/sheets/presentation/widgets/attributes_list.dart';
 import 'package:repege/src/sheets/presentation/widgets/life_tracker.dart';
 import 'package:repege/src/sheets/presentation/widgets/skill_floating_list.dart';
-import 'package:repege/src/sheets/presentation/widgets/title_form_field_bottom_sheet.dart';
 
 class StatusPage extends StatelessWidget {
   const StatusPage(this.sheet, {super.key});
@@ -49,16 +52,22 @@ class StatusPage extends StatelessWidget {
                       label: 'CA',
                       value: sheet.armorClass.toString(),
                       onFieldSubmitted: (value) => update(sheet.copyWith(armorClass: int.parse(value))),
+                      validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
+                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                     ),
                     TextFormFieldBottomSheet(
                       label: 'Iniciativa',
                       value: sheet.iniative.toString(),
                       onFieldSubmitted: (value) => update(sheet.copyWith(iniative: int.parse(value))),
+                      validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
+                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                     ),
                     TextFormFieldBottomSheet(
                       label: 'Deslocamento',
                       value: sheet.speed.toString(),
                       onFieldSubmitted: (value) => update(sheet.copyWith(speed: int.parse(value))),
+                      validator: (value) => Validator.validateWith(value, [RequiredValidation()]),
+                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
                     ),
                   ],
                 ),
@@ -78,31 +87,14 @@ class StatusPage extends StatelessWidget {
 
                   if (skills == null) return;
 
-                  if (context.mounted) {
-                    context.read<SheetUpdateCubit>().update(sheet.copyWith(skills: skills));
-                  }
+                  if (context.mounted) update(sheet.copyWith(skills: skills));
                 },
               ),
               child: SizedBox(
                 height: 100,
-                child: GridView(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 20,
-                    mainAxisExtent: 36,
-                  ),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: sheet.attributes.toMap().entries.map((attribute) {
-                    return AttributeFormFieldBottomSheet(
-                      label: attribute.key,
-                      value: attribute.value,
-                      title: ((attribute.value - 10) ~/ 2).toString(),
-                      onFieldSubmitted: (value) => update(
-                        sheet.copyWith(attributes: sheet.attributes.copyWithMap({attribute.key: value})),
-                      ),
-                    );
-                  }).toList(),
+                child: AttributesList(
+                  attributes: sheet.attributes,
+                  onChange: (attributes) => update(sheet.copyWith(attributes: attributes)),
                 ),
               ),
             ),

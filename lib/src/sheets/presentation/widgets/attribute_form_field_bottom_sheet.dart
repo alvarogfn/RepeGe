@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:repege/core/widgets/show_keyboard_bottom_sheet.dart';
 
@@ -6,7 +7,9 @@ class AttributeFormFieldBottomSheet extends StatefulWidget {
   const AttributeFormFieldBottomSheet({
     required this.label,
     required this.value,
+    this.inputFormatters,
     required this.title,
+    this.validator,
     this.onFieldSubmitted,
     this.onChanged,
     this.fieldLabel,
@@ -19,7 +22,9 @@ class AttributeFormFieldBottomSheet extends StatefulWidget {
   final String? fieldLabel;
   final void Function(int value)? onFieldSubmitted;
   final void Function(int value)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
+  final String? Function(String? value)? validator;
   @override
   State<AttributeFormFieldBottomSheet> createState() => _AttributeFormFieldBottomSheetState();
 }
@@ -65,6 +70,8 @@ class _AttributeFormFieldBottomSheetState extends State<AttributeFormFieldBottom
               decoration: InputDecoration(
                 labelText: widget.fieldLabel ?? widget.label,
               ),
+              inputFormatters: widget.inputFormatters,
+              validator: widget.validator,
               onChanged: (value) => widget.onChanged != null ? widget.onChanged!(int.tryParse(value) ?? 0) : null,
               onFieldSubmitted: (value) {
                 if (widget.onFieldSubmitted != null) widget.onFieldSubmitted!(int.tryParse(value) ?? 0);
